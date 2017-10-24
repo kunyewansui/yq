@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.server.dao.image.ImageCategoryDao">
+
+    <insert id="save" parameterType="imageCategory">
+        INSERT INTO shuttle_common.sc_image_category(id,`key`,`name`,pid,seq,display,lock)
+        VALUES (#{id},#{key},#{name},#{parent.id},#{seq},#{display},#{lock})
+        ON DUPLICATED KEY SET `name`=#{name},pid=#{parent.id},seq=#{seq},display=#{display},lock=#{lock}
+    </insert>
+
+    <delete id="remove" parameterType="imageCategory">
+        DELETE FROM shuttle_common.sc_image_category
+        WHERE id=#{id}
+    </delete>
+
+    <update id="update" parameterType="imageCategory">
+        UPDATE shuttle_common.sc_image_category
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="key!=null and key!=''">
+                ,`key`=#{key}
+            </if>
+            <if test="name!=null and name!=''">
+                ,`name`=#{name}
+            </if>
+            <if test="parent!=null and parent.id!=null">
+                ,pid=#{parent.id}
+            </if>
+            <if test="seq!=null">
+                ,seq=#{seq}
+            </if>
+            <if test="display!=null">
+                ,display=#{display}
+            </if>
+            <if test="lock!=null">
+                ,lock=#{lock}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateChildren" parameterType="imageCategory">
+        UPDATE shuttle_common.sc_image_category
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="display!=null">
+                ,display=#{display}
+            </if>
+            <if test="lock!=null">
+                ,lock=#{lock}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        <if test="children!=null and children.size>0">
+            WHERE id IN
+            <foreach collection="children" open="(" item="item" close=")" separator=",">
+                #{item.id}
+            </foreach>
+        </if>
+    </update>
+
+    <resultMap id="imageCategoryMap" type="imageCategory" autoMapping="true">
+        <association property="parent" javaType="imageCategory" autoMapping="true" columnPrefix="p_" />
+    </resultMap>
+
+    <select id="get" parameterType="imageCategory" resultMap="imageCategoryMap">
+        SELECT c.*,
+        c.pid AS p_id,p.name AS p_name
+        FROM shuttle_common.sc_image_category c
+        LEFT JOIN shuttle_common.sc_image_category p ON c.pid=p.id
+        WHERE c.id=#{id}
+    </select>
+
+    <select id="listCombo" parameterType="imageCategory" resultMap="imageCategoryMap">
+        SELECT * FROM shuttle_common.sc_image_category
+    </select>
+</mapper>
