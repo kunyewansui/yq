@@ -10,8 +10,7 @@
 <html>
 <head>
     <title>登录</title>
-    <%@include file="./common/head.jsp" %>
-    <%@include file="./common/validate.jsp" %>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/pagination.min.css">
 </head>
 <body>
 <div class="app app-header-fixed ">
@@ -42,6 +41,7 @@
             </form>
         </div>
     </div>
+    ${__pagination__}
 </div>
 <script>
     $("form[name='form']").validate({
