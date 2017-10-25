@@ -5,9 +5,14 @@
 <mapper namespace="com.xiaosuokeji.server.dao.image.ImageCategoryDao">
 
     <insert id="save" parameterType="imageCategory">
-        INSERT INTO shuttle_common.sc_image_category(id,`key`,`name`,pid,seq,display,lock)
-        VALUES (#{id},#{key},#{name},#{parent.id},#{seq},#{display},#{lock})
-        ON DUPLICATED KEY SET `name`=#{name},pid=#{parent.id},seq=#{seq},display=#{display},lock=#{lock}
+        INSERT INTO shuttle_common.sc_image_category(id,`key`,`name`,<if test="parent!=null">pid,</if>seq,display,`lock`)
+        VALUES (#{id},#{key},#{name},<if test="parent!=null">#{parent.id},</if>#{seq},#{display},#{lock})
+        ON DUPLICATE KEY UPDATE
+        `name`=#{name},
+        <if test="parent!=null">pid=#{parent.id},</if>
+        seq=#{seq},
+        display=#{display},
+        `lock`=#{lock}
     </insert>
 
     <delete id="remove" parameterType="imageCategory">
@@ -18,13 +23,13 @@
     <update id="update" parameterType="imageCategory">
         UPDATE shuttle_common.sc_image_category
         <trim prefix="SET" prefixOverrides=",">
-            <if test="key!=null and key!=''">
+            <if test="key!=null">
                 ,`key`=#{key}
             </if>
-            <if test="name!=null and name!=''">
+            <if test="name!=null">
                 ,`name`=#{name}
             </if>
-            <if test="parent!=null and parent.id!=null">
+            <if test="parent!=null">
                 ,pid=#{parent.id}
             </if>
             <if test="seq!=null">
@@ -33,28 +38,33 @@
             <if test="display!=null">
                 ,display=#{display}
             </if>
-            <if test="lock!=null">
-                ,lock=#{lock}
-            </if>
             ,update_time=NOW()
         </trim>
         WHERE id=#{id}
     </update>
 
-    <update id="updateChildren" parameterType="imageCategory">
+    <update id="batchUpdate" parameterType="imageCategory">
         UPDATE shuttle_common.sc_image_category
         <trim prefix="SET" prefixOverrides=",">
             <if test="display!=null">
                 ,display=#{display}
             </if>
-            <if test="lock!=null">
-                ,lock=#{lock}
-            </if>
             ,update_time=NOW()
         </trim>
-        <if test="children!=null and children.size>0">
+        <if test="list!=null and list.size>0">
             WHERE id IN
-            <foreach collection="children" open="(" item="item" close=")" separator=",">
+            <foreach collection="list" open="(" item="item" close=")" separator=",">
+                #{item.id}
+            </foreach>
+        </if>
+    </update>
+
+    <update id="batchUpdateLock" parameterType="imageCategory">
+        UPDATE shuttle_common.sc_image_category
+        SET `lock`=#{lock},update_time=NOW()
+        <if test="list!=null and list.size>0">
+            WHERE id IN
+            <foreach collection="list" open="(" item="item" close=")" separator=",">
                 #{item.id}
             </foreach>
         </if>
@@ -66,13 +76,39 @@
 
     <select id="get" parameterType="imageCategory" resultMap="imageCategoryMap">
         SELECT c.*,
-        c.pid AS p_id,p.name AS p_name
+        p.id AS p_id,p.name AS p_name
         FROM shuttle_common.sc_image_category c
         LEFT JOIN shuttle_common.sc_image_category p ON c.pid=p.id
         WHERE c.id=#{id}
     </select>
 
+    <sql id="listCondition">
+        FROM shuttle_common.sc_image_category c
+        LEFT JOIN shuttle_common.sc_image_category p ON c.pid=p.id
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="key!=null">
+                AND c.key=#{key}
+            </if>
+            <if test="parent!=null">
+                AND c.pid=#{parent.id}
+            </if>
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="imageCategory" resultMap="imageCategoryMap">
+        SELECT c.*,
+        p.id AS p_id,p.name AS p_name
+        <include refid="listCondition" />
+    </select>
+
     <select id="listCombo" parameterType="imageCategory" resultMap="imageCategoryMap">
-        SELECT * FROM shuttle_common.sc_image_category
+        SELECT id,`name`,pid AS p_id
+        FROM shuttle_common.sc_image_category
+        <include refid="XSBaseMapper.sort" />
+    </select>
+
+    <select id="count" parameterType="imageCategory" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition" />
     </select>
 </mapper>

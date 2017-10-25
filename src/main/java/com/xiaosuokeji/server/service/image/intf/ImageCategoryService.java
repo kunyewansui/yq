@@ -1,24 +1,25 @@
 package com.xiaosuokeji.server.service.image.intf;
 
+import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.server.model.image.ImageCategory;
 
 import java.util.List;
 
 /**
- * 图片分类Service<br/>
+ * 图片分类Service
  * Created by xuxiaowei on 2017/10/23.
  */
 public interface ImageCategoryService {
 
-    void save(ImageCategory imageCategory);
+    void save(ImageCategory imageCategory) throws XSBusinessException;
 
-    void remove(ImageCategory imageCategory);
+    void remove(ImageCategory imageCategory) throws XSBusinessException;
 
-    void update(ImageCategory imageCategory);
+    void update(ImageCategory imageCategory) throws XSBusinessException;
 
-    void updateChildren(ImageCategory imageCategory);
+    void updateLock(ImageCategory imageCategory) throws XSBusinessException;
 
-    ImageCategory get(ImageCategory imageCategory);
+    ImageCategory get(ImageCategory imageCategory) throws XSBusinessException;
 
-    List<ImageCategory> listCombo(ImageCategory imageCategory);
+    List<ImageCategory> tree(ImageCategory imageCategory);
 }
