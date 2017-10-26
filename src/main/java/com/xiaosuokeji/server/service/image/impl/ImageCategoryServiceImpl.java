@@ -6,6 +6,8 @@ import com.xiaosuokeji.framework.util.XSTreeUtil;
 import com.xiaosuokeji.framework.util.XSUuidUtil;
 import com.xiaosuokeji.server.constant.image.ImageCategoryConstant;
 import com.xiaosuokeji.server.dao.image.ImageCategoryDao;
+import com.xiaosuokeji.server.dao.image.ImageDao;
+import com.xiaosuokeji.server.model.image.Image;
 import com.xiaosuokeji.server.model.image.ImageCategory;
 import com.xiaosuokeji.server.service.image.intf.ImageCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
 
     @Autowired
     private ImageCategoryDao imageCategoryDao;
+
+    @Autowired
+    private ImageDao imageDao;
 
     @Override
     public void save(ImageCategory imageCategory) throws XSBusinessException {
@@ -58,6 +63,7 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
             throw new XSBusinessException(ImageCategoryConstant.IMAGE_CATEGORY_LOCKED);
         }
 
+        //校验该分类下是否存在子级
         existent = new ImageCategory();
         existent.setParent(imageCategory);
         Long count = imageCategoryDao.count(existent);
@@ -66,6 +72,12 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         }
 
         //校验该分类下是否存在图片
+        Image image = new Image();
+        image.setCategory(imageCategory);
+        Long imageCount = imageDao.count(image);
+        if (imageCount.compareTo(0L) > 0) {
+            throw new XSBusinessException(ImageCategoryConstant.IMAGE_CATEGORY_USED);
+        }
 
         imageCategoryDao.remove(imageCategory);
     }

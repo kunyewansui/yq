@@ -26,7 +26,7 @@ public class ImageCategoryController {
     @Autowired
     private ImageCategoryService imageCategoryService;
 
-    @RequestMapping(value = "/app/v1/image/category/insert", method = RequestMethod.POST)
+    @RequestMapping(value = "/app/v1/image/category/save", method = RequestMethod.POST)
     @ResponseBody
     public XSServiceResult appSave(@Validated(ImageCategory.Save.class) @RequestBody ImageCategory imageCategory)
             throws XSBusinessException {
