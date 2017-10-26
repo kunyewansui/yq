@@ -82,51 +82,78 @@ $(function () {
 });
 
 
-function enableForm(form) {
-    var inputs = form.find("input");
-    var selects = form.find("select");
-    var textareas = form.find("textarea");
-    var buttons = form.find("button");
-    var els = [];
-    $.each(inputs, function (index, element) {
-        els.push($(element));
-    });
-    $.each(selects, function (index, element) {
-        els.push($(element));
-    });
-    $.each(textareas, function (index, element) {
-        els.push($(element));
-    });
-    $.each(buttons, function (index, element) {
-        els.push($(element));
-    });
-    $.each(els, function (index, element) {
-        element.attr('disabled',false);
-    });
-};
+(function($){
+    $.fn.xsEnable = function(){
+        var inputs = this.find("input");
+        var selects = this.find("select");
+        var textareas = this.find("textarea");
+        var buttons = this.find("button");
+        var els = [];
+        $.each(inputs, function (index, element) {
+            els.push($(element));
+        });
+        $.each(selects, function (index, element) {
+            els.push($(element));
+        });
+        $.each(textareas, function (index, element) {
+            els.push($(element));
+        });
+        $.each(buttons, function (index, element) {
+            els.push($(element));
+        });
+        $.each(els, function (index, element) {
+            element.attr('disabled',false);
+        });
+    };
+    $.fn.xsDisable = function(){
+        var inputs = this.find("input");
+        var selects = this.find("select");
+        var textareas = this.find("textarea");
+        var buttons = this.find("button");
+        var els = [];
+        $.each(inputs, function (index, element) {
+            els.push($(element));
+        });
+        $.each(selects, function (index, element) {
+            els.push($(element));
+        });
+        $.each(textareas, function (index, element) {
+            els.push($(element));
+        });
+        $.each(buttons, function (index, element) {
+            els.push($(element));
+        });
+        $.each(els, function (index, element) {
+            element.attr('disabled',true);
+        });
+    };
+    $.fn.xsClean=function () {
+        var inputs = this.find("input");
+        var selects = this.find("select");
+        var textareas = this.find("textarea");
+        var buttons = this.find("button");
+        var els = [];
+        $.each(inputs, function (index, element) {
+            els.push($(element));
+        });
+        $.each(selects, function (index, element) {
+            els.push($(element));
+        });
+        $.each(textareas, function (index, element) {
+            els.push($(element));
+        });
+        $.each(buttons, function (index, element) {
+            els.push($(element));
+        });
+        $.each(els, function (index, element) {
+            element.val("");
+        });
+    };
+    $.fn.xsSetInput=function (name,val) {
+        return $(this.find("[name='"+name+"']")[0]).val(val);
+    }
+})(jQuery);
 
-function disableForm(form) {
-    var inputs = form.find("input");
-    var selects = form.find("select");
-    var textareas = form.find("textarea");
-    var buttons = form.find("button");
-    var els = [];
-    $.each(inputs, function (index, element) {
-        els.push($(element));
-    });
-    $.each(selects, function (index, element) {
-        els.push($(element));
-    });
-    $.each(textareas, function (index, element) {
-        els.push($(element));
-    });
-    $.each(buttons, function (index, element) {
-        els.push($(element));
-    });
-    $.each(els, function (index, element) {
-        element.attr('disabled',true);
-    });
-};
 
 function doPost(url, data, success, error) {
     if (error === undefined || error === null) {
