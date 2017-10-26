@@ -7,16 +7,27 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html>
+<html lang="cmn-hans">
 <head>
     <title>登录</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/pagination.min.css">
+    <%@include file="./common/head.jsp"%>
+    <%@include file="./common/validate.jsp"%>
+    <style>
+        label.error{
+            position: absolute;
+            top: 0;
+            right: 12px;
+            line-height: 48px;
+            margin: 0;
+            color: #f05050;
+        }
+    </style>
 </head>
 <body>
 <div class="app app-header-fixed ">
     <div class="container w-xxl w-auto-xs">
         <div class="text-center m-t-lg">
-            <img  style="width: 215px" src="<%=request.getContextPath()%>/admin/assets/image/logo.png"/>
+            <%--<img  style="width: 215px" src="<%=request.getContextPath()%>/admin/assets/image/logo.png"/>--%>
         </div>
         <div class="m-b-lg">
             <div class="text-center">
@@ -41,16 +52,22 @@
             </form>
         </div>
     </div>
-    ${__pagination__}
 </div>
 <script>
+    var submitBtn=$("button[type='submit']");
     $("form[name='form']").validate({
         rules: {
+            username:{
+                required:true
+            }
         },
         messages: {
+            username:{
+                required:"qin"
+            }
         },
         submitHandler: function (form) {
-            $("button[type='submit']").attr("disabled",true);
+            submitBtn.attr("disabled",true);
             doPost("<%=request.getContextPath()%>/admin/login", $(form).serialize(),
                 function (data) {
                     if (data.status) {
@@ -58,10 +75,10 @@
                     } else {
                         $("#errorText").html(data.msg);
                     }
-                    $("button[type='submit']").attr("disabled",false);
+                    submitBtn.attr("disabled",false);
                 }, function (XMLHttpRequest, textStatus) {
+                    submitBtn.attr("disabled",false);
                     alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
-                    $("button[type='submit']").attr("disabled",false);
                 });
         }
     });

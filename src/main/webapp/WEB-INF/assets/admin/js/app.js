@@ -10,7 +10,7 @@ $(function () {
         var a_href = $(this).context.href.trim();
         if (a_href !== "" && a_href !== $(this).context.origin + "/" && c_href.indexOf(a_href) === 0) {
             var nexStr = c_href.substr(a_href.length, 1);
-            if (nexStr === "" || nexStr === "?" || nexStr === "#"|| nexStr === "/")
+            if (nexStr === "" || nexStr === "?" || nexStr === "#" || nexStr === "/")
                 $(this).parent("li").addClass("active");
         }
     });
@@ -79,14 +79,61 @@ $(function () {
         }
     });
 
-    // Datepicker
-    $(".datepicker").each(function (i, el) {
-        $(el).datepicker();
-    });
 });
 
 
+function enableForm(form) {
+    var inputs = form.find("input");
+    var selects = form.find("select");
+    var textareas = form.find("textarea");
+    var buttons = form.find("button");
+    var els = [];
+    $.each(inputs, function (index, element) {
+        els.push($(element));
+    });
+    $.each(selects, function (index, element) {
+        els.push($(element));
+    });
+    $.each(textareas, function (index, element) {
+        els.push($(element));
+    });
+    $.each(buttons, function (index, element) {
+        els.push($(element));
+    });
+    $.each(els, function (index, element) {
+        element.attr('disabled',false);
+    });
+};
+
+function disableForm(form) {
+    var inputs = form.find("input");
+    var selects = form.find("select");
+    var textareas = form.find("textarea");
+    var buttons = form.find("button");
+    var els = [];
+    $.each(inputs, function (index, element) {
+        els.push($(element));
+    });
+    $.each(selects, function (index, element) {
+        els.push($(element));
+    });
+    $.each(textareas, function (index, element) {
+        els.push($(element));
+    });
+    $.each(buttons, function (index, element) {
+        els.push($(element));
+    });
+    $.each(els, function (index, element) {
+        element.attr('disabled',true);
+    });
+};
+
 function doPost(url, data, success, error) {
+    if (error === undefined || error === null) {
+        error = function (XMLHttpRequest, textStatus) {
+            alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
+        }
+    }
     $.ajax({
         type: 'POST',
         url: url,
@@ -97,18 +144,6 @@ function doPost(url, data, success, error) {
     })
 }
 
-function doPost(url, data, success) {
-    $.ajax({
-        type: 'POST',
-        url: url,
-        data: data,
-        dataType: 'json',
-        success: success,
-        error: function (XMLHttpRequest, textStatus) {
-            alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
-        }
-    })
-}
 
 function uploadFile(url, formData, success, error) {
     $.ajax({

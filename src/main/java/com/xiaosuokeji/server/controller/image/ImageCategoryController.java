@@ -73,10 +73,4 @@ public class ImageCategoryController {
         return XSServiceResult.build().data(imageCategoryService.tree(imageCategory));
     }
 
-    @RequestMapping(value = "/app/v1/image/category/list", method = RequestMethod.GET)
-    @XSPagination
-    public String appList(ImageCategory imageCategory, Model model) {
-        model.addAttribute("pageModel", XSPageModel.build(null, 19L));
-        return "login";
-    }
 }
