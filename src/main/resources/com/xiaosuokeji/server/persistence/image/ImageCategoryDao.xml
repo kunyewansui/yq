@@ -12,7 +12,8 @@
         <if test="parent!=null">pid=#{parent.id},</if>
         seq=#{seq},
         display=#{display},
-        `lock`=#{lock}
+        `lock`=#{lock},
+        update_time=NOW()
     </insert>
 
     <delete id="remove" parameterType="imageCategory">
@@ -71,7 +72,7 @@
     </update>
 
     <resultMap id="imageCategoryMap" type="imageCategory" autoMapping="true">
-        <association property="parent" javaType="imageCategory" autoMapping="true" columnPrefix="p_" />
+        <association property="parent" javaType="imageCategory" autoMapping="true" columnPrefix="p_"/>
     </resultMap>
 
     <select id="get" parameterType="imageCategory" resultMap="imageCategoryMap">
@@ -98,7 +99,7 @@
     <select id="list" parameterType="imageCategory" resultMap="imageCategoryMap">
         SELECT c.*,
         p.id AS p_id,p.name AS p_name
-        <include refid="listCondition" />
+        <include refid="listCondition"/>
     </select>
 
     <select id="listCombo" parameterType="imageCategory" resultMap="imageCategoryMap">
@@ -109,11 +110,11 @@
                 AND display=#{display}
             </if>
         </trim>
-        <include refid="XSBaseMapper.sort" />
+        <include refid="XSBaseMapper.sort"/>
     </select>
 
     <select id="count" parameterType="imageCategory" resultType="long">
         SELECT COUNT(*)
-        <include refid="listCondition" />
+        <include refid="listCondition"/>
     </select>
 </mapper>

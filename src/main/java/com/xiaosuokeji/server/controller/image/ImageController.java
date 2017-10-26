@@ -4,8 +4,9 @@ import com.xiaosuokeji.framework.annotation.XSExceptionHandler;
 import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
+import com.xiaosuokeji.server.annotation.UserAuth;
 import com.xiaosuokeji.server.model.image.Image;
-import com.xiaosuokeji.server.service.image.intf.ImageService;
+import com.xiaosuokeji.server.service.intf.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -61,6 +62,7 @@ public class ImageController {
 
     @RequestMapping(value = "/app/v1/image/listCombo", method = RequestMethod.POST)
     @ResponseBody
+    @UserAuth
     public XSServiceResult appListCombo(@RequestBody Image image) {
         return XSServiceResult.build().data(imageService.listCombo(image));
     }

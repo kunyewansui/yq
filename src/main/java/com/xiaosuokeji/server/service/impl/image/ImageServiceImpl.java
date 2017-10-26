@@ -1,12 +1,12 @@
-package com.xiaosuokeji.server.service.image.impl;
+package com.xiaosuokeji.server.service.impl.image;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.framework.util.XSUuidUtil;
-import com.xiaosuokeji.server.constant.image.ImageConstant;
+import com.xiaosuokeji.server.constant.image.ImageConsts;
 import com.xiaosuokeji.server.dao.image.ImageDao;
 import com.xiaosuokeji.server.model.image.Image;
-import com.xiaosuokeji.server.service.image.intf.ImageService;
+import com.xiaosuokeji.server.service.intf.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +42,7 @@ public class ImageServiceImpl implements ImageService {
     public Image get(Image image) throws XSBusinessException {
         Image existent = imageDao.get(image);
         if (existent == null) {
-            throw new XSBusinessException(ImageConstant.IMAGE_NOT_EXIST);
+            throw new XSBusinessException(ImageConsts.IMAGE_NOT_EXIST);
         }
         return existent;
     }

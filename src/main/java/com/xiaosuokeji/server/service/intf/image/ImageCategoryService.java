@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.service.image.intf;
+package com.xiaosuokeji.server.service.intf.image;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.server.model.image.ImageCategory;

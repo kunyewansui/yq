@@ -3,10 +3,10 @@ package com.xiaosuokeji.server.constant.image;
 import com.xiaosuokeji.framework.model.XSStatusPair;
 
 /**
- * 图片分类Constant
+ * 图片分类Constants
  * Created by xuxiaowei on 2017/10/23.
  */
-public class ImageCategoryConstant {
+public class ImageCategoryConsts {
 
     public static XSStatusPair IMAGE_CATEGORY_EXIST = XSStatusPair.build(10000, "图片分类已存在");
 

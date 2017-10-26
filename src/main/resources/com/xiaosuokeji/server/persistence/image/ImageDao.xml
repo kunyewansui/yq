@@ -41,7 +41,7 @@
     </update>
 
     <resultMap id="imageMap" type="image" autoMapping="true">
-        <association property="category" javaType="imageCategory" autoMapping="true" columnPrefix="c_" />
+        <association property="category" javaType="imageCategory" autoMapping="true" columnPrefix="c_"/>
     </resultMap>
 
     <select id="get" parameterType="image" resultMap="imageMap">
@@ -71,9 +71,9 @@
     <select id="list" parameterType="image" resultMap="imageMap">
         SELECT i.*,
         c.id AS c_id,c.name AS c_name
-        <include refid="listCondition" />
-        <include refid="XSBaseMapper.sort" />
-        <include refid="XSBaseMapper.limit" />
+        <include refid="listCondition"/>
+        <include refid="XSBaseMapper.sort"/>
+        <include refid="XSBaseMapper.limit"/>
     </select>
 
     <select id="listCombo" parameterType="image" resultType="image">
@@ -87,11 +87,11 @@
                 AND display=#{display}
             </if>
         </trim>
-        <include refid="XSBaseMapper.sort" />
+        <include refid="XSBaseMapper.sort"/>
     </select>
 
     <select id="count" parameterType="image" resultType="long">
         SELECT COUNT(*)
-        <include refid="listCondition" />
+        <include refid="listCondition"/>
     </select>
 </mapper>

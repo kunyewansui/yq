@@ -1,15 +1,15 @@
-package com.xiaosuokeji.server.service.image.impl;
+package com.xiaosuokeji.server.service.impl.image;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.intf.XSTreeable;
 import com.xiaosuokeji.framework.util.XSTreeUtil;
 import com.xiaosuokeji.framework.util.XSUuidUtil;
-import com.xiaosuokeji.server.constant.image.ImageCategoryConstant;
+import com.xiaosuokeji.server.constant.image.ImageCategoryConsts;
 import com.xiaosuokeji.server.dao.image.ImageCategoryDao;
 import com.xiaosuokeji.server.dao.image.ImageDao;
 import com.xiaosuokeji.server.model.image.Image;
 import com.xiaosuokeji.server.model.image.ImageCategory;
-import com.xiaosuokeji.server.service.image.intf.ImageCategoryService;
+import com.xiaosuokeji.server.service.intf.image.ImageCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +37,7 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         existent.setKey(imageCategory.getKey());
         Long count = imageCategoryDao.count(existent);
         if (count.compareTo(0L) > 0) {
-            throw new XSBusinessException(ImageCategoryConstant.IMAGE_CATEGORY_EXIST);
+            throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_EXIST);
         }
 
         //展示及锁定状态必须与父级一致
@@ -60,7 +60,7 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
     public void remove(ImageCategory imageCategory) throws XSBusinessException {
         ImageCategory existent = get(imageCategory);
         if (existent.getLock().equals(1)) {
-            throw new XSBusinessException(ImageCategoryConstant.IMAGE_CATEGORY_LOCKED);
+            throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_LOCKED);
         }
 
         //校验该分类下是否存在子级
@@ -68,7 +68,7 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         existent.setParent(imageCategory);
         Long count = imageCategoryDao.count(existent);
         if (count.compareTo(0L) > 0) {
-            throw new XSBusinessException(ImageCategoryConstant.IMAGE_CATEGORY_USED);
+            throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_USED);
         }
 
         //校验该分类下是否存在图片
@@ -76,7 +76,7 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         image.setCategory(imageCategory);
         Long imageCount = imageDao.count(image);
         if (imageCount.compareTo(0L) > 0) {
-            throw new XSBusinessException(ImageCategoryConstant.IMAGE_CATEGORY_USED);
+            throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_USED);
         }
 
         imageCategoryDao.remove(imageCategory);
@@ -92,7 +92,7 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
             if (existents.size() > 0) {
                 boolean isSelf = existents.get(0).getId().equals(imageCategory.getId());
                 if (!isSelf) {
-                    throw new XSBusinessException(ImageCategoryConstant.IMAGE_CATEGORY_EXIST);
+                    throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_EXIST);
                 }
             }
         }
@@ -142,7 +142,7 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
     public ImageCategory get(ImageCategory imageCategory) throws XSBusinessException {
         ImageCategory existent = imageCategoryDao.get(imageCategory);
         if (existent == null) {
-            throw new XSBusinessException(ImageCategoryConstant.IMAGE_CATEGORY_NOT_EXIST);
+            throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_NOT_EXIST);
         }
         return existent;
     }
