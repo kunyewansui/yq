@@ -149,9 +149,8 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
 
     @Override
     public List<ImageCategory> tree(ImageCategory imageCategory) {
-        ImageCategory existent = new ImageCategory();
-        existent.setDefaultSort("seq", "DESC");
-        List<ImageCategory> list = imageCategoryDao.listCombo(existent);
+        imageCategory.setDefaultSort("seq", "DESC");
+        List<ImageCategory> list = imageCategoryDao.listCombo(imageCategory);
         XSTreeUtil.buildTree(list);
         List<ImageCategory> trees = new ArrayList<>();
         //如果未指定父级则返回所有分类，否则返回指定父级下的所有分类
