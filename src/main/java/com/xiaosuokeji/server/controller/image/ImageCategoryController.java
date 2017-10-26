@@ -2,22 +2,17 @@ package com.xiaosuokeji.server.controller.image;
 
 import com.xiaosuokeji.framework.annotation.XSExceptionHandler;
 import com.xiaosuokeji.framework.annotation.XSLog;
-import com.xiaosuokeji.framework.annotation.XSPagination;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
-import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.image.ImageCategory;
 import com.xiaosuokeji.server.service.image.intf.ImageCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 图片分类Controller
@@ -31,7 +26,7 @@ public class ImageCategoryController {
     @Autowired
     private ImageCategoryService imageCategoryService;
 
-    @RequestMapping(value = "/app/v1/image/category/insert", method = RequestMethod.POST)
+    @RequestMapping(value = "/app/v1/image/category/save", method = RequestMethod.POST)
     @ResponseBody
     public XSServiceResult appSave(@Validated(ImageCategory.Save.class) @RequestBody ImageCategory imageCategory)
             throws XSBusinessException {
@@ -72,5 +67,4 @@ public class ImageCategoryController {
     public XSServiceResult appTree(@RequestBody ImageCategory imageCategory) {
         return XSServiceResult.build().data(imageCategoryService.tree(imageCategory));
     }
-
 }

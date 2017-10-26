@@ -104,6 +104,11 @@
     <select id="listCombo" parameterType="imageCategory" resultMap="imageCategoryMap">
         SELECT id,`name`,pid AS p_id
         FROM shuttle_common.sc_image_category
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="display!=null">
+                AND display=#{display}
+            </if>
+        </trim>
         <include refid="XSBaseMapper.sort" />
     </select>
 

@@ -26,8 +26,8 @@
             <if test="link!=null">
                 ,link=#{link}
             </if>
-            <if test="parent!=null">
-                ,pid=#{parent.id}
+            <if test="category!=null and category.id!=null">
+                ,category_id=#{category.id}
             </if>
             <if test="seq!=null">
                 ,seq=#{seq}
@@ -40,67 +40,53 @@
         WHERE id=#{id}
     </update>
 
-    <update id="batchUpdate" parameterType="image">
-        UPDATE shuttle_common.sc_image
-        <trim prefix="SET" prefixOverrides=",">
-            <if test="display!=null">
-                ,display=#{display}
-            </if>
-            ,update_time=NOW()
-        </trim>
-        <if test="list!=null and list.size>0">
-            WHERE id IN
-            <foreach collection="list" open="(" item="item" close=")" separator=",">
-                #{item.id}
-            </foreach>
-        </if>
-    </update>
-
-    <update id="batchUpdateLock" parameterType="image">
-        UPDATE shuttle_common.sc_image
-        SET `lock`=#{lock},update_time=NOW()
-        <if test="list!=null and list.size>0">
-            WHERE id IN
-            <foreach collection="list" open="(" item="item" close=")" separator=",">
-                #{item.id}
-            </foreach>
-        </if>
-    </update>
-
     <resultMap id="imageMap" type="image" autoMapping="true">
-        <association property="parent" javaType="image" autoMapping="true" columnPrefix="p_" />
+        <association property="category" javaType="imageCategory" autoMapping="true" columnPrefix="c_" />
     </resultMap>
 
     <select id="get" parameterType="image" resultMap="imageMap">
-        SELECT c.*,
-        p.id AS p_id,p.name AS p_name
-        FROM shuttle_common.sc_image c
-        LEFT JOIN shuttle_common.sc_image p ON c.pid=p.id
-        WHERE c.id=#{id}
+        SELECT i.*,
+        c.id AS c_id,c.name AS c_name
+        FROM shuttle_common.sc_image i
+        LEFT JOIN shuttle_common.sc_image_category c ON i.category_id=c.id
+        WHERE i.id=#{id}
     </select>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_image c
-        LEFT JOIN shuttle_common.sc_image p ON c.pid=p.id
+        FROM shuttle_common.sc_image i
+        LEFT JOIN shuttle_common.sc_image_category c ON i.category_id=c.id
         <trim prefix="WHERE" prefixOverrides="AND|OR">
-            <if test="key!=null">
-                AND c.key=#{key}
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND i.name LIKE CONCAT('%',#{dynamic.name},'%')
             </if>
-            <if test="parent!=null">
-                AND c.pid=#{parent.id}
+            <if test="category!=null and category.id!=null">
+                AND i.category_id=#{category.id}
+            </if>
+            <if test="display!=null">
+                AND i.display=#{display}
             </if>
         </trim>
     </sql>
 
     <select id="list" parameterType="image" resultMap="imageMap">
-        SELECT c.*,
-        p.id AS p_id,p.name AS p_name
+        SELECT i.*,
+        c.id AS c_id,c.name AS c_name
         <include refid="listCondition" />
+        <include refid="XSBaseMapper.sort" />
+        <include refid="XSBaseMapper.limit" />
     </select>
 
-    <select id="listCombo" parameterType="image" resultMap="imageMap">
-        SELECT id,`name`,pid AS p_id
+    <select id="listCombo" parameterType="image" resultType="image">
+        SELECT id,`name`,url,link
         FROM shuttle_common.sc_image
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="category!=null and category.id!=null">
+                AND category_id=#{category.id}
+            </if>
+            <if test="display!=null">
+                AND display=#{display}
+            </if>
+        </trim>
         <include refid="XSBaseMapper.sort" />
     </select>
 
