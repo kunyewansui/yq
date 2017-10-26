@@ -11,4 +11,5 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/app.css">
 
 <script src="<%=request.getContextPath()%>/assets/admin/js/jquery-v2.4.4.min.js"></script>
+<script src="<%=request.getContextPath()%>/assets/admin/js/bootstrap.min.js"></script>
 <script src="<%=request.getContextPath()%>/assets/admin/js/app.js"></script>
