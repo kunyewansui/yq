@@ -5257,6 +5257,10 @@ custom
     cursor: default;
     background: #FFFFFF;
 }
+.form-control[disabled] {
+    cursor: not-allowed !important;
+    background-color: #eee !important;
+}
 
 .datepicker {
     margin: 0;
