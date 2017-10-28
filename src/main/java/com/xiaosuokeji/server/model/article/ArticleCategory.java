@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.model.image;
+package com.xiaosuokeji.server.model.article;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xiaosuokeji.framework.intf.XSTreeable;
@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 图片分类
- * Created by xuxiaowei on 2017/10/23.
+ * 文章分类
+ * Created by xuxiaowei on 2017/10/28.
  */
-public class ImageCategory extends BaseModel implements XSTreeable<String> {
+public class ArticleCategory extends BaseModel implements XSTreeable<String> {
 
     /**
      * id
@@ -35,9 +35,22 @@ public class ImageCategory extends BaseModel implements XSTreeable<String> {
     private String name;
 
     /**
+     * 预览前缀
+     */
+    @NotNull(message = "预览前缀不能为空", groups = Save.class)
+    @Length(min = 1, max = 255, message = "预览前缀长度为1-255个字符", groups = {Save.class, Update.class})
+    private String prefix;
+
+    /**
+     * 图标
+     */
+    @Length(max = 255, message = "图标长度最多为255个字符", groups = {Save.class, Update.class})
+    private String icon;
+
+    /**
      * 父级
      */
-    private ImageCategory parent;
+    private ArticleCategory parent;
 
     /**
      * 顺序
@@ -97,10 +110,6 @@ public class ImageCategory extends BaseModel implements XSTreeable<String> {
         return children;
     }
 
-    public void setChildren(List<XSTreeable<String>> children) {
-        this.children = children;
-    }
-
     public String getId() {
         return id;
     }
@@ -125,11 +134,27 @@ public class ImageCategory extends BaseModel implements XSTreeable<String> {
         this.name = name;
     }
 
-    public ImageCategory getParent() {
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public ArticleCategory getParent() {
         return parent;
     }
 
-    public void setParent(ImageCategory parent) {
+    public void setParent(ArticleCategory parent) {
         this.parent = parent;
     }
 
@@ -155,6 +180,10 @@ public class ImageCategory extends BaseModel implements XSTreeable<String> {
 
     public void setLock(Integer lock) {
         this.lock = lock;
+    }
+
+    public void setChildren(List<XSTreeable<String>> children) {
+        this.children = children;
     }
 
     public List<XSTreeable<String>> getList() {

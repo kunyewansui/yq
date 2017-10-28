@@ -55,6 +55,10 @@ public class Image extends BaseModel {
      */
     private Integer display;
 
+    public interface Save {}
+
+    public interface Update {}
+
     public String getId() {
         return id;
     }
@@ -109,11 +113,5 @@ public class Image extends BaseModel {
 
     public void setDisplay(Integer display) {
         this.display = display;
-    }
-
-    public interface Save {
-    }
-
-    public interface Update {
     }
 }
