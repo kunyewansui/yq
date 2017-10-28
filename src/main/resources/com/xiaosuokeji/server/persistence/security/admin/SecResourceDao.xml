@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.server.security.admin.dao.SecResourceDao">
+
+    <insert id="save" parameterType="secResource">
+        INSERT INTO shuttle_common.sc_security_resource(`key`,<if test="parent!=null">pid,</if>`type`,`name`,url,method,icon,seq,assign,log)
+        VALUES (#{key},<if test="parent!=null">#{parent.id},</if>#{type},#{name},#{url},#{method},#{icon},#{seq},#{assign},#{log})
+        ON DUPLICATE KEY UPDATE
+        <if test="parent!=null">pid=#{parent.id},</if>
+        `type`=#{type},
+        `name`=#{name},
+        url=#{url},
+        method=#{method},
+        icon=#{icon},
+        seq=#{seq},
+        assign=#{assign},
+        log=#{log},
+        update_time=NOW()
+    </insert>
+
+    <delete id="remove" parameterType="secResource">
+        DELETE FROM shuttle_common.sc_security_resource
+        WHERE id=#{id}
+    </delete>
+
+    <update id="update" parameterType="secResource">
+        UPDATE shuttle_common.sc_security_resource
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="key!=null">
+                ,`key`=#{key}
+            </if>
+            <if test="parent!=null">
+                ,pid=#{parent.id}
+            </if>
+            <if test="type!=null">
+                ,`type`=#{type}
+            </if>
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="url!=null">
+                ,url=#{url}
+            </if>
+            <if test="method!=null">
+                ,method=#{method}
+            </if>
+            <if test="icon!=null">
+                ,icon=#{icon}
+            </if>
+            <if test="seq!=null">
+                ,seq=#{seq}
+            </if>
+            <if test="assign!=null">
+                ,assign=#{assign}
+            </if>
+            <if test="log!=null">
+                ,log=#{log}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <resultMap id="secResourceMap" type="secResource" autoMapping="true">
+        <association property="parent" javaType="secResource" autoMapping="true" columnPrefix="p_"/>
+    </resultMap>
+
+    <select id="get" parameterType="secResource" resultMap="secResourceMap">
+        SELECT r.*,
+        p.id AS p_id,p.name AS p_name
+        FROM shuttle_common.sc_security_resource r
+        LEFT JOIN shuttle_common.sc_security_resource p ON r.pid=p.id
+        WHERE r.id=#{id}
+    </select>
+
+    <sql id="listCondition">
+        FROM shuttle_common.sc_security_resource r
+        LEFT JOIN shuttle_common.sc_security_resource p ON r.pid=p.id
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="key!=null and key!=''">
+                AND `key`=#{key}
+            </if>
+            <if test="parent!=null and parent.id!=null">
+                AND pid=#{parent.id}
+            </if>
+            <if test="type!=null">
+                AND `type`=#{type}
+            </if>
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
+            <if test="dynamic!=null and dynamic.url!=null and dynamic.url!=''">
+                AND url LIKE CONCAT('%',#{dynamic.url},'%')
+            </if>
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="secResource" resultMap="secResourceMap">
+        SELECT r.*,
+        p.id AS p_id,p.name AS p_name
+        <include refid="listCondition"/>
+        <include refid="XSBaseMapper.sort"/>
+        <include refid="XSBaseMapper.limit"/>
+    </select>
+
+    <select id="listCombo" resultMap="secResourceMap">
+        SELECT id,`name`,`type`,pid AS p_id
+        FROM shuttle_common.sc_security_resource
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="parent!=null and parent.id!=null">
+                AND pid=#{parent.id}
+            </if>
+            <if test="type!=null">
+                AND `type`=#{type}
+            </if>
+        </trim>
+        <include refid="XSBaseMapper.sort"/>
+        <include refid="XSBaseMapper.limit"/>
+    </select>
+
+    <select id="listByRequest" parameterType="secResource" resultType="secResource">
+        SELECT *
+        FROM shuttle_common.sc_security_resource
+        WHERE url=#{url} AND method=#{method} AND `type`=2
+    </select>
+
+    <select id="listRole" parameterType="secResource" resultType="secRole">
+        SELECT DISTINCT r.id,r.name
+        FROM shuttle_common.sc_security_role_res rr
+        JOIN shuttle_common.sc_security_resource r ON rr.resource_id=r.id
+        <if test="list!=null and list.size>0">
+            WHERE rr.resource_id IN
+            <foreach collection="list" open="(" item="item" close=")" separator=",">
+                #{item.id}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="count" parameterType="secResource" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition"/>
+    </select>
+
+    <select id="countRole" parameterType="secResource" resultType="long">
+        SELECT COUNT(*)
+        FROM shuttle_common.sc_security_role_res rr
+        JOIN shuttle_common.sc_security_role r ON rr.role_id=r.id
+        WHERE rr.resource_id=#{id} AND r.superior=0
+    </select>
+</mapper>

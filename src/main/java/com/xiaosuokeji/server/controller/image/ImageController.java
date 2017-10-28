@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @XSLog
 @XSExceptionHandler
 public class ImageController {
-    
+
     @Autowired
     private ImageService imageService;
 

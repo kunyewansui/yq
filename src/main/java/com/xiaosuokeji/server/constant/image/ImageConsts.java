@@ -3,7 +3,7 @@ package com.xiaosuokeji.server.constant.image;
 import com.xiaosuokeji.framework.model.XSStatusPair;
 
 /**
- * 图片Constants
+ * 图片Consts
  * Created by xuxiaowei on 2017/10/26.
  */
 public class ImageConsts {

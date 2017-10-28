@@ -1,22 +1,22 @@
-package com.xiaosuokeji.server.model.user;
+package com.xiaosuokeji.server.security.app.model;
 
-import com.xiaosuokeji.framework.model.XSGenericModel;
+import com.xiaosuokeji.server.model.base.BaseModel;
 
 /**
- * 用户
+ * 令牌
  * Created by xuxiaowei on 2017/10/26.
  */
-public class User extends XSGenericModel {
+public class Token extends BaseModel {
 
     /**
      * id
      */
     private String id;
 
-    public User() {
+    public Token() {
     }
 
-    public User(String id) {
+    public Token(String id) {
         this.id = id;
     }
 

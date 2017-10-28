@@ -26,6 +26,47 @@ public class ImageCategoryController {
     @Autowired
     private ImageCategoryService imageCategoryService;
 
+    @RequestMapping(value = "/admin/image/category", method = RequestMethod.GET)
+    public String manage() {
+        return "admin/content/imageCategory";
+    }
+
+    @RequestMapping(value = "/admin/image/category/tree", method = RequestMethod.POST)
+    @ResponseBody
+    public XSServiceResult adminTree(ImageCategory imageCategory) {
+        imageCategory = imageCategory == null ? new ImageCategory() : imageCategory;
+        return XSServiceResult.build().data(imageCategoryService.tree(imageCategory));
+    }
+
+    @RequestMapping(value = "/admin/image/category/get", method = RequestMethod.POST)
+    @ResponseBody
+    public XSServiceResult adminGet(ImageCategory imageCategory) throws XSBusinessException {
+        return XSServiceResult.build().data(imageCategoryService.get(imageCategory));
+    }
+
+
+    @RequestMapping(value = "/admin/image/category/save", method = RequestMethod.POST)
+    @ResponseBody
+    public XSServiceResult adminSave(@Validated(ImageCategory.Save.class) ImageCategory imageCategory) throws XSBusinessException {
+        imageCategoryService.save(imageCategory);
+        return XSServiceResult.build();
+    }
+
+    @RequestMapping(value = "/admin/image/category/remove", method = RequestMethod.POST)
+    @ResponseBody
+    public XSServiceResult adminRemove(ImageCategory imageCategory) throws XSBusinessException {
+        imageCategoryService.remove(imageCategory);
+        return XSServiceResult.build();
+    }
+
+    @RequestMapping(value = "/admin/image/category/update", method = RequestMethod.POST)
+    @ResponseBody
+    public XSServiceResult adminUpdate(@Validated(ImageCategory.Update.class) ImageCategory imageCategory)
+            throws XSBusinessException {
+        imageCategoryService.update(imageCategory);
+        return XSServiceResult.build();
+    }
+
     @RequestMapping(value = "/app/v1/image/category/save", method = RequestMethod.POST)
     @ResponseBody
     public XSServiceResult appSave(@Validated(ImageCategory.Save.class) @RequestBody ImageCategory imageCategory)

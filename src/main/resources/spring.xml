@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:task="http://www.springframework.org/schema/task"
+       xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="
      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
@@ -17,7 +17,8 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
-    <context:property-placeholder location="classpath:common.properties,classpath:jdbc.properties" file-encoding="UTF-8"/>
+    <context:property-placeholder location="classpath:common.properties,classpath:jdbc.properties"
+                                  file-encoding="UTF-8"/>
 
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>
@@ -34,7 +35,8 @@
         </tx:attributes>
     </tx:advice>
     <aop:config proxy-target-class="true">
-        <aop:pointcut id="allServiceMethod" expression="@annotation(org.springframework.transaction.annotation.Transactional)"/>
+        <aop:pointcut id="allServiceMethod"
+                      expression="@annotation(org.springframework.transaction.annotation.Transactional)"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="allServiceMethod" order="1"/>
     </aop:config>
 
@@ -50,7 +52,7 @@
         <property name="configLocation" value="classpath:mybatis.xml"/>
     </bean>
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.xiaosuokeji.server.dao"/>
+        <property name="basePackage" value="com.xiaosuokeji.server.dao com.xiaosuokeji.server.security.*.dao"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
 

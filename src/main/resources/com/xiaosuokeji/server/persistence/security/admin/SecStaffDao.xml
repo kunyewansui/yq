@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.server.security.admin.dao.SecStaffDao">
+
+    <insert id="save" parameterType="secStaff">
+        INSERT INTO shuttle_common.sc_security_staff(username,password,status,`name`,mobile,email,qq,superior)
+        VALUES (#{username},#{password},#{status},#{name},#{mobile},#{email},#{qq},0)
+        ON DUPLICATE KEY UPDATE
+        password=#{password},
+        status=#{status},
+        `name`=#{name},
+        mobile=#{mobile},
+        email=#{email},
+        qq=#{qq},
+        superior=0,
+        update_time=NOW()
+    </insert>
+
+    <insert id="saveStaffRole" parameterType="secStaff">
+        INSERT IGNORE INTO shuttle_common.sc_security_staff_role
+        VALUES
+        <foreach collection="roleList" item="item" separator=",">
+            (#{id},#{item.id})
+        </foreach>
+    </insert>
+
+    <delete id="remove" parameterType="secStaff">
+        DELETE FROM shuttle_common.sc_security_staff
+        WHERE id=#{id} AND superior=0
+    </delete>
+
+    <delete id="removeStaffRole" parameterType="secStaff">
+        DELETE FROM shuttle_common.sc_security_staff_role
+        WHERE staff_id=#{id}
+        <if test="roleList!=null and roleList.size>0">
+            AND role_id IN
+            <foreach collection="roleList" item="item" separator="," open="(" close=")">
+                #{item.id}
+            </foreach>
+        </if>
+    </delete>
+
+    <update id="update" parameterType="secStaff">
+        UPDATE shuttle_common.sc_security_staff
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="username!=null">
+                ,username=#{username}
+            </if>
+            <if test="password!=null">
+                ,password=#{password}
+            </if>
+            <if test="status!=null">
+                ,status=#{status}
+            </if>
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="mobile!=null">
+                ,mobile=#{mobile}
+            </if>
+            <if test="email!=null">
+                ,email=#{email}
+            </if>
+            <if test="qq!=null">
+                ,qq=#{qq}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        WHERE id=#{id} AND superior=0
+    </update>
+
+    <select id="get" parameterType="secStaff" resultType="secStaff">
+        SELECT *
+        FROM shuttle_common.sc_security_staff
+        WHERE id=#{id} AND superior=0
+    </select>
+    
+    <select id="getByUsername" parameterType="secStaff" resultType="secStaff">
+        SELECT *
+        FROM shuttle_common.sc_security_staff
+        WHERE username=#{username}
+    </select>
+
+    <sql id="listCondition">
+        FROM shuttle_common.sc_security_staff
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="username!=null and username!=''">
+                AND username=#{username}
+            </if>
+            <if test="dynamic!=null and dynamic.username!=null and dynamic.username!=''">
+                AND username LIKE CONCAT('%',#{username},'%')
+            </if>
+            <if test="status!=null">
+                AND status=#{status}
+            </if>
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND `name` LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="dynamic!=null and dynamic.mobile!=null and dynamic.mobile!=''">
+                AND mobile LIKE CONCAT('%',#{mobile},'%')
+            </if>
+            AND superior=0
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="secStaff" resultType="secStaff">
+        SELECT *
+        <include refid="listCondition"/>
+        <include refid="XSBaseMapper.sort"/>
+        <include refid="XSBaseMapper.limit"/>
+    </select>
+
+    <select id="listRole" parameterType="secStaff" resultType="secRole">
+        SELECT r.id,r.name,r.status
+        FROM shuttle_common.sc_security_staff_role sr
+        JOIN shuttle_common.sc_security_role r ON sr.role_id=r.id
+        WHERE sr.staff_id=#{id}
+    </select>
+
+    <select id="listOrganization" parameterType="secStaff" resultType="secOrganization">
+        SELECT o.id,o.name,o.status
+        FROM shuttle_common.sc_security_staff_org so
+        JOIN shuttle_common.sc_security_organization o ON so.organization_id=o.id
+        WHERE so.staff_id=#{id}
+    </select>
+
+    <select id="count" parameterType="secStaff" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition"/>
+    </select>
+</mapper>

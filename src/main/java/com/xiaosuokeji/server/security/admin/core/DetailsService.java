@@ -1,0 +1,46 @@
+package com.xiaosuokeji.server.security.admin.core;
+
+import com.xiaosuokeji.server.security.admin.constant.SecStaffConsts;
+import com.xiaosuokeji.server.security.admin.model.SecRole;
+import com.xiaosuokeji.server.security.admin.model.SecStaff;
+import com.xiaosuokeji.server.security.admin.service.intf.SecStaffService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+/**
+ * 系统用户登录Service
+ * Created by xuxiaowei on 2017/10/27.
+ */
+@Service("userDetailService")
+public class DetailsService implements UserDetailsService {
+
+    @Autowired
+    private SecStaffService secStaffService;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        SecStaff staff = secStaffService.getByUsername(new SecStaff(username));
+        if (staff == null) {
+            throw new UsernameNotFoundException(SecStaffConsts.SEC_STAFF_NOT_EXIST.getMsg());
+        }
+        if (!staff.isEnabled()) {
+            throw new DisabledException(SecStaffConsts.SEC_STAFF_NOT_ENABLE.getMsg());
+        }
+
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        for (SecRole role : staff.getRoleList()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+        }
+        staff.setAuthorityList(authorities);
+        return staff;
+    }
+}

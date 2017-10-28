@@ -93,9 +93,9 @@ public class ImageCategory extends BaseModel implements XSTreeable<String> {
         return children;
     }
 
-    public interface Save{}
-
-    public interface Update{}
+    public void setChildren(List<XSTreeable<String>> children) {
+        this.children = children;
+    }
 
     public String getId() {
         return id;
@@ -153,15 +153,17 @@ public class ImageCategory extends BaseModel implements XSTreeable<String> {
         this.lock = lock;
     }
 
-    public void setChildren(List<XSTreeable<String>> children) {
-        this.children = children;
-    }
-
     public List<XSTreeable<String>> getList() {
         return list;
     }
 
     public void setList(List<XSTreeable<String>> list) {
         this.list = list;
+    }
+
+    public interface Save {
+    }
+
+    public interface Update {
     }
 }

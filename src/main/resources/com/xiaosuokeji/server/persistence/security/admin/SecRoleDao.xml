@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.server.security.admin.dao.SecRoleDao">
+
+    <insert id="save" parameterType="secRole">
+        INSERT INTO shuttle_common.sc_security_resource(`name`,status,superior,`desc`)
+        VALUES (#{name},#{status},0,#{desc})
+        ON DUPLICATE KEY UPDATE
+        status=#{status},
+        superior=0,
+        `desc`=#{desc},
+        update_time=NOW()
+    </insert>
+
+    <insert id="saveRoleRes" parameterType="secRole">
+        INSERT IGNORE INTO shuttle_common.sc_security_role_res
+        VALUES
+        <foreach collection="resourceList" item="item" separator=",">
+            (#{id},#{item.id})
+        </foreach>
+    </insert>
+
+    <delete id="remove" parameterType="secRole">
+        DELETE FROM shuttle_common.sc_security_resource
+        WHERE id=#{id} AND superior=0
+    </delete>
+
+    <delete id="removeRoleRes" parameterType="secRole">
+        DELETE FROM shuttle_common.sc_security_role_res
+        WHERE role_id=#{id}
+        <if test="resourceList!=null and resourceList.size>0">
+            AND resource_id IN
+            <foreach collection="resourceList" item="item" separator="," open="(" close=")">
+                #{item.id}
+            </foreach>
+        </if>
+    </delete>
+
+    <update id="update" parameterType="secRole">
+        UPDATE shuttle_common.sc_security_resource
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="status!=null">
+                ,status=#{status}
+            </if>
+            <if test="desc!=null">
+                ,`desc`=#{desc}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        WHERE id=#{id} AND superior=0
+    </update>
+
+    <select id="get" parameterType="secRole" resultType="secRole">
+        SELECT *
+        FROM shuttle_common.sc_security_resource
+        WHERE id=#{id} AND superior=0
+    </select>
+
+    <sql id="listCondition">
+        FROM shuttle_common.sc_security_resource
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="name!=null and name!=''">
+                AND `name`=#{name}
+            </if>
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND `name` LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="status!=null">
+                AND status=#{status}
+            </if>
+            AND superior=0
+        </trim>
+    </sql>
+
+    <select id="listRole" parameterType="secRole" resultType="secRole">
+        SELECT *
+        <include refid="listCondition"/>
+        <include refid="XSBaseMapper.sort"/>
+        <include refid="XSBaseMapper.limit"/>
+    </select>
+
+    <select id="listCombo" resultType="secRole">
+        SELECT id,`name`
+        FROM shuttle_common.sc_security_resource
+        WHERE superior=0
+    </select>
+
+    <select id="listResource" parameterType="secRole" resultType="secResource">
+        SELECT r.id
+        FROM shuttle_common.sc_security_role_res rr
+        JOIN shuttle_common.sc_security_resource r ON rr.resource_id=r.id
+        WHERE rr.role_id=#{id}
+    </select>
+
+    <select id="count" parameterType="secRole" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition"/>
+    </select>
+
+    <select id="countStaff" parameterType="secRole" resultType="long">
+        SELECT COUNT(*)
+        FROM shuttle_common.sc_security_staff_role
+        WHERE role_id=#{id}
+    </select>
+
+    <select id="countOrganization" parameterType="secRole" resultType="long">
+        SELECT COUNT(*)
+        FROM shuttle_common.sc_security_org_role
+        WHERE role_id=#{id}
+    </select>
+</mapper>
