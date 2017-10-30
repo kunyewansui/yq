@@ -9,6 +9,7 @@
 
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/bootstrap.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/app.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/pagination.min.css">
 
 <script src="<%=request.getContextPath()%>/assets/admin/js/jquery-v2.4.4.min.js"></script>
 <script src="<%=request.getContextPath()%>/assets/admin/js/bootstrap.min.js"></script>

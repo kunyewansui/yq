@@ -56,5 +56,6 @@
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
 
+    <bean id="xsHttpClientService" class="com.xiaosuokeji.framework.http.XSHttpClientService"></bean>
     <task:annotation-driven/>
 </beans>
