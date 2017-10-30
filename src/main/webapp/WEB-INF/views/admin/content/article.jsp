@@ -25,7 +25,9 @@
         </div>
         <div class="wrapper-md">
             <div class="col-xs-12 col-md-5 col-lg-3">
+                <h4>文章分类</h4>
                 <div id="tree">
+                    <p style="text-align: center">加载中...</p>
                 </div>
             </div>
             <div class="col-xs-12 col-md-7 col-lg-9">
@@ -120,11 +122,13 @@
 
 <script id="treeData" type="text/plain">
     ${categoryTree}
+
+
 </script>
 
 <script>
     $(function () {
-        var treeData=JSON.parse($("#treeData").text());
+        var treeData = JSON.parse($("#treeData").text());
         console.log(treeData);
         $('#tree').treeview({
             data: treeData,

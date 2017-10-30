@@ -81,7 +81,6 @@ $(function () {
 
 });
 
-
 (function($){
     $.fn.xsEnable = function(){
         var inputs = this.find("input");
@@ -171,34 +170,12 @@ function doPost(url, data, success, error) {
     })
 }
 
-
-function uploadFile(url, formData, success, error) {
-    $.ajax({
-        type: 'POST',
-        url: url,
-        cache: false,
-        data: formData,
-        processData: false,
-        contentType: false,
-        dataType: 'json',
-    }).done(success).fail(error);
-}
-
-function uploadFile(url, formData, success) {
-    $.ajax({
-        type: 'POST',
-        url: url,
-        cache: false,
-        data: formData,
-        processData: false,
-        contentType: false,
-        dataType: 'json',
-    }).done(success).fail(function (res) {
-        alert("请求失败：" + res.statusText + "\n错误码：" + res.status);
-    });
-}
-
 function doGet(url, data, success, error) {
+    if (error === undefined || error === null) {
+        error = function (XMLHttpRequest, textStatus) {
+            alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
+        }
+    }
     $.ajax({
         type: 'GET',
         url: url,
@@ -208,4 +185,30 @@ function doGet(url, data, success, error) {
         error: error
     })
 }
+
+function uploadFile(url, formData, success, error) {
+    if (error === undefined || error === null) {
+        error = function (res) {
+            alert("请求失败：" + res.statusText + "\n错误码：" + res.status);
+        }
+    }
+    $.ajax({
+        type: 'POST',
+        url: url,
+        cache: false,
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json'
+    }).done(success).fail(error);
+}
+
+function imageUpload(url,folder,file,success,error) {
+    var formData=new FormData();
+    formData.append("folders",folder);
+    formData.append("files",file);
+    uploadFile(url,formData,success,error);
+}
+
+
 

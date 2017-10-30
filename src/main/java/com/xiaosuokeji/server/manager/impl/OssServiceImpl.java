@@ -1,17 +1,19 @@
 package com.xiaosuokeji.server.manager.impl;
 
 import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.OSSObject;
 import com.xiaosuokeji.framework.http.XSHttpClientService;
-import com.xiaosuokeji.framework.model.XSStatusPair;
 import com.xiaosuokeji.server.manager.intf.OssService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -20,6 +22,8 @@ import java.util.*;
 /**
  * Created by gustinlau on 10/30/17.
  */
+@Service("ossService")
+@Order()
 public class OssServiceImpl implements OssService {
 
     private static final Logger logger = LoggerFactory.getLogger(OssServiceImpl.class);
@@ -42,7 +46,7 @@ public class OssServiceImpl implements OssService {
     @Override
     public List<String> imageUpload(String[] folders, MultipartFile[] files, Boolean withSize) {
         OSSClient client = new OSSClient(endPoint, accessKeyId, accessKeySecret);
-        ArrayList<String> list = null;
+        ArrayList<String> list;
         try {
             int sum = folders.length;
             InputStream inputStream;
@@ -50,12 +54,11 @@ public class OssServiceImpl implements OssService {
             for (int i = 0; i < sum; i++) {
                 String newName = rename(files[i].getOriginalFilename());//新文件名
                 inputStream = files[i].getInputStream();
-
                 client.putObject(bucketName, folders[i] + "/" + newName, inputStream);
-                String url = bucketName + "/" + folders[i] + "/" + newName;
+                String url = domain + "/" + folders[i] + "/" + newName;
                 if (withSize) {
                     //获取图片的高和宽并且拼接在图片的url
-                    JSONObject info = xsHttpClientService.makeHttpRequest(url + "?x-oss-process=image/info", HttpMethod.GET);
+                    JSONObject info = new JSONObject(xsHttpClientService.makeHttpRequest(url + "?x-oss-process=image/info", "GET").getEntity().getContent());
                     url += "?x-oss-process=image/resize,w_" + info.getJSONObject("ImageWidth").getString("value") + ",h_" +
                             info.getJSONObject("ImageHeight").getString("value");
                 }
@@ -83,42 +86,44 @@ public class OssServiceImpl implements OssService {
 
     @Override
     public List<String> fileUpload(String folder, MultipartFile[] files) {
-        return null;
+        OSSClient client = new OSSClient(endPoint, accessKeyId, accessKeySecret);
+        ArrayList<String> list;
+        try {
+            int sum = files.length;
+            InputStream inputStream;
+            list = new ArrayList<>();
+            for (int i = 0; i < sum; i++) {
+                String newName = rename(files[i].getOriginalFilename());//新文件名
+                inputStream = files[i].getInputStream();
+                client.putObject(bucketName, folder + "/" + newName, inputStream);
+                String url = domain + "/" + folder + "/" + newName;
+                list.add(url);
+            }
+        } catch (Exception e) {
+            logger.error("error:", e);
+            list = null;
+        } finally {
+            client.shutdown();
+        }
+        return list;
     }
 
     @Override
-    public void fileDownload(String fileName, OutputStream out) {
-
-    }
-
-    /**
-     * 去掉url的参数
-     *
-     * @param url
-     * @return
-     */
-    public static String imageUrlReplace(String url) {
-        if (url != null) {
-            StringBuilder resetedUrl = new StringBuilder();
-            if (url.contains(",")) {
-                String urls[] = url.split(",");
-                for (String u : urls) {
-                    if (u.contains("?"))
-                        resetedUrl.append(u.substring(0, u.indexOf("?"))).append(",");
-                    else
-                        resetedUrl.append(u).append(",");
-                }
-                resetedUrl.subSequence(0, resetedUrl.length() - 1);
-            } else {
-                if (url.contains("?"))
-                    resetedUrl.append(url.substring(0, url.indexOf("?")));
-                else
-                    resetedUrl.append(url);
+    public void fileDownload(String fileName, OutputStream out) throws IOException {
+        OSSClient client = new OSSClient(endPoint, accessKeyId, accessKeySecret);
+        InputStream in = null;
+        try {
+            OSSObject ossObject = client.getObject(bucketName, fileName);
+            in = ossObject.getObjectContent();
+            byte[] buf = new byte[1024];
+            int size;
+            while ((size = in.read(buf, 0, buf.length)) != -1) {
+                out.write(buf, 0, size);
             }
-
-            return resetedUrl.toString();
-        } else {
-            return "";
+            in.close();
+        } finally {
+            client.shutdown();
+            if (in !=null) in.close();
         }
     }
 
