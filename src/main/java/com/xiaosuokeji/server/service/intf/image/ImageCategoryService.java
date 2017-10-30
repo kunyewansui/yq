@@ -21,5 +21,5 @@ public interface ImageCategoryService {
 
     ImageCategory get(ImageCategory imageCategory) throws XSBusinessException;
 
-    List<ImageCategory> tree(ImageCategory imageCategory);
+    List tree(ImageCategory imageCategory);
 }
