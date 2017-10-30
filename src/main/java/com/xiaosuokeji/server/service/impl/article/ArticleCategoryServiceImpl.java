@@ -138,27 +138,10 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
     }
 
     @Override
-    public List<ArticleCategory> tree(ArticleCategory articleCategory) {
+    public List tree(ArticleCategory articleCategory) {
         articleCategory.setDefaultSort("seq", "DESC");
         List<ArticleCategory> list = articleCategoryDao.listCombo(articleCategory);
         XSTreeUtil.buildTree(list);
-        List<ArticleCategory> trees = new ArrayList<>();
-        //如果未指定父级则返回所有分类，否则返回指定父级下的所有分类
-        if (articleCategory.getParent() != null && articleCategory.getParent().getId() != null) {
-            for (ArticleCategory item : list) {
-                boolean isChild = item.getParent() != null && item.getParent().getId() != null &&
-                        item.getParent().getId().equals(articleCategory.getParent().getId());
-                if (isChild) {
-                    trees.add(item);
-                }
-            }
-        } else {
-            for (ArticleCategory item : list) {
-                if (item.getParent() == null) {
-                    trees.add(item);
-                }
-            }
-        }
-        return trees;
+        return XSTreeUtil.getSubTrees(list, articleCategory.getParent());
     }
 }

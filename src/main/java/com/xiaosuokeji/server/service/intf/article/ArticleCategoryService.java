@@ -21,5 +21,5 @@ public interface ArticleCategoryService {
 
     ArticleCategory get(ArticleCategory articleCategory) throws XSBusinessException;
 
-    List<ArticleCategory> tree(ArticleCategory articleCategory);
+    List tree(ArticleCategory articleCategory);
 }
