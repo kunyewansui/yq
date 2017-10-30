@@ -210,5 +210,12 @@ function imageUpload(url,folder,file,success,error) {
     uploadFile(url,formData,success,error);
 }
 
+function putImageIntoImageUploader(id,url) {
+    eval('images_'+id+'.splice(0,images_'+id+'.length)');
+    eval('images_'+id+'.push("'+url+'")');
+    eval('$url_'+id+'.val("'+url+'")');
+    eval('updatePreviewDiv_'+id+'()');
+}
+
 
 
