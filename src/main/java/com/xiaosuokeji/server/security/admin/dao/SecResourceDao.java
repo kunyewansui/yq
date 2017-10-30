@@ -13,15 +13,27 @@ public interface SecResourceDao {
 
     int save(SecResource secResource);
 
+    /**
+     * 赋予超级管理员指定资源
+     * @param secResource 参数id
+     * @return 受影响行数
+     */
+    int saveSuperiorRes(SecResource secResource);
+
     int remove(SecResource secResource);
+
+    /**
+     * 删除超级管理员指定资源
+     * @param secResource 参数id
+     * @return 受影响行数
+     */
+    int removeSuperiorRes(SecResource secResource);
 
     int update(SecResource secResource);
 
     SecResource get(SecResource secResource);
 
     List<SecResource> list(SecResource secResource);
-
-    List<SecResource> listCombo(SecResource secResource);
 
     /**
      * 获取指定请求的资源列表

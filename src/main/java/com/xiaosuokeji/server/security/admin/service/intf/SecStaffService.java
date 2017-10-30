@@ -25,7 +25,7 @@ public interface SecStaffService {
 
     XSPageModel listAndCount(SecStaff secStaff);
 
-    List<SecRole> listRole(SecStaff secStaff);
+    List<SecRole> listRole(SecStaff secStaff) throws XSBusinessException;
 
     void authorizeRole(SecStaff secStaff) throws XSBusinessException;
 }

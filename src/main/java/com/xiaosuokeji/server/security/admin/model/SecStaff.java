@@ -71,11 +71,6 @@ public class SecStaff extends BaseModel implements UserDetails {
     private String qq;
 
     /**
-     * 超级管理员，0否，1是
-     */
-    private Integer superior;
-
-    /**
      * 角色列表
      */
     private List<SecRole> roleList;
@@ -94,8 +89,7 @@ public class SecStaff extends BaseModel implements UserDetails {
 
     public interface Update {}
 
-    public SecStaff() {
-    }
+    public SecStaff() {}
 
     public SecStaff(Long id) {
         this.id = id;
@@ -115,17 +109,9 @@ public class SecStaff extends BaseModel implements UserDetails {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Override
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     @Override
@@ -169,6 +155,14 @@ public class SecStaff extends BaseModel implements UserDetails {
         this.id = id;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -207,14 +201,6 @@ public class SecStaff extends BaseModel implements UserDetails {
 
     public void setQq(String qq) {
         this.qq = qq;
-    }
-
-    public Integer getSuperior() {
-        return superior;
-    }
-
-    public void setSuperior(Integer superior) {
-        this.superior = superior;
     }
 
     public List<SecRole> getRoleList() {

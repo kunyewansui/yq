@@ -38,18 +38,26 @@ public class SecStaffServiceImpl implements SecStaffService {
     }
 
     @Override
+    @Transactional
     public void remove(SecStaff secStaff) throws XSBusinessException {
-        secStaffDao.remove(secStaff);
+        SecStaff existent = secStaffDao.get(secStaff);
+        secStaffDao.removeStaffOrganization(existent);
+        secStaffDao.removeStaffRole(existent);
+        secStaffDao.remove(existent);
     }
 
     @Override
     public void update(SecStaff secStaff) throws XSBusinessException {
-        if (secStaff.getName() != null) {
+        get(secStaff);
+        if (secStaff.getUsername() != null) {
             SecStaff existent = new SecStaff();
             existent.setUsername(secStaff.getUsername());
-            Long count = secStaffDao.count(existent);
-            if (count.compareTo(0L) > 0) {
-                throw new XSBusinessException(SecStaffConsts.SEC_STAFF_EXIST);
+            List<SecStaff> existents = secStaffDao.list(existent);
+            if (existents.size() > 0) {
+                boolean isSelf = existents.get(0).getId().equals(secStaff.getId());
+                if (!isSelf) {
+                    throw new XSBusinessException(SecStaffConsts.SEC_STAFF_EXIST);
+                }
             }
         }
         secStaffDao.update(secStaff);
@@ -61,22 +69,15 @@ public class SecStaffServiceImpl implements SecStaffService {
         if (existent == null) {
             throw new XSBusinessException(SecStaffConsts.SEC_STAFF_NOT_EXIST);
         }
-        return secStaffDao.get(secStaff);
+        return existent;
     }
 
     @Override
     public SecStaff getByUsername(SecStaff secStaff) {
         SecStaff existent = secStaffDao.getByUsername(secStaff);
-        if (existent != null) {
-            //获取角色列表并删除被禁用的角色
-            List<SecRole> roleList = secStaffDao.listRole(secStaff);
-            for (Iterator<SecRole> iterator = roleList.iterator(); iterator.hasNext();) {
-                if (iterator.next().getStatus().equals(0)) {
-                    iterator.remove();
-                }
-            }
+        if (existent != null && existent.isEnabled()) {
             //获取组织列表并校验组织状态，若员工不属于任何组织或只要其所处的任意一个组织启用即可
-            List<SecOrganization> organizationList = secStaffDao.listOrganization(secStaff);
+            List<SecOrganization> organizationList = secStaffDao.listOrganization(existent);
             if (organizationList.size() > 0) {
                 int i = 0;
                 for (; i < organizationList.size(); ++i) {
@@ -88,28 +89,77 @@ public class SecStaffServiceImpl implements SecStaffService {
                     existent.setStatus(0);
                 }
             }
+            if (existent.isEnabled()) {
+                existent.setOrganizationList(organizationList);
+                //获取角色列表并删除被禁用的角色
+                List<SecRole> roleList = secStaffDao.listRole(existent);
+                for (Iterator<SecRole> iterator = roleList.iterator(); iterator.hasNext();) {
+                    if (iterator.next().getStatus().equals(0)) {
+                        iterator.remove();
+                    }
+                }
+                if (organizationList.size() > 0) {
+                    //获取启用的组织列表
+                    List<SecOrganization> enabledOrg = new ArrayList<>();
+                    for (SecOrganization item : organizationList) {
+                        if (item.getStatus().equals(1)) {
+                            enabledOrg.add(item);
+                        }
+                    }
+                    if (enabledOrg.size() > 0) {
+                        //获取启用的组织的角色列表并删除被禁用的角色
+                        SecStaff existOrg = new SecStaff();
+                        existOrg.setOrganizationList(enabledOrg);
+                        List<SecRole> orgRoleList = secStaffDao.listRoleByOrganization(existOrg);
+                        for (Iterator<SecRole> iterator = orgRoleList.iterator(); iterator.hasNext();) {
+                            if (iterator.next().getStatus().equals(0)) {
+                                iterator.remove();
+                            }
+                        }
+                        //将组织拥有的角色加入到角色列表
+                        for (Iterator<SecRole> iterator = orgRoleList.iterator(); iterator.hasNext();) {
+                            for (SecRole item : roleList) {
+                                if (iterator.next().getId().equals(item.getId())) {
+                                    iterator.remove();
+                                }
+                            }
+                        }
+                        roleList.addAll(orgRoleList);
+                    }
+                }
+                existent.setRoleList(roleList);
+            }
         }
         return existent;
     }
 
     @Override
     public XSPageModel listAndCount(SecStaff secStaff) {
-        secStaff.setDefaultSort("create_time", "DESC");
+        secStaff.setDefaultSort("id", "DESC");
         return XSPageModel.build(secStaffDao.list(secStaff), secStaffDao.count(secStaff));
     }
 
     @Override
-    public List<SecRole> listRole(SecStaff secStaff) {
-        return secStaffDao.listRole(secStaff);
+    public List<SecRole> listRole(SecStaff secStaff) throws XSBusinessException {
+        SecStaff existent = get(secStaff);
+        List<SecRole> roleList = secStaffDao.listRoleCombo(new SecRole());
+        List<SecRole> ownedRoleList = secStaffDao.listRole(existent);
+        for (Iterator<SecRole> iterator = roleList.iterator(); iterator.hasNext();) {
+            SecRole item = iterator.next();
+            for (SecRole owned : ownedRoleList) {
+                if (item.getId().equals(owned.getId())) {
+                    item.setChecked(1);
+                    break;
+                }
+            }
+        }
+        return roleList;
     }
 
     @Override
     @Transactional
     public void authorizeRole(SecStaff secStaff) throws XSBusinessException {
-        SecStaff existent = secStaffDao.get(secStaff);
-        if (existent == null) {
-            throw new XSBusinessException(SecStaffConsts.SEC_STAFF_NOT_EXIST);
-        }
+        SecStaff existent = get(secStaff);
         secStaffDao.removeStaffRole(existent);
         secStaffDao.saveStaffRole(secStaff);
     }

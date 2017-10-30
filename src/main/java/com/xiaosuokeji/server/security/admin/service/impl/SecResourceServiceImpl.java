@@ -11,6 +11,7 @@ import com.xiaosuokeji.server.security.admin.service.intf.SecResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class SecResourceServiceImpl implements SecResourceService {
     private SecResourceDao secResourceDao;
 
     @Override
+    @Transactional
     public void save(SecResource secResource) throws XSBusinessException {
         SecResource existent = new SecResource();
         existent.setKey(secResource.getKey());
@@ -36,24 +38,26 @@ public class SecResourceServiceImpl implements SecResourceService {
             throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_EXIST);
         }
         secResourceDao.save(secResource);
+        secResourceDao.saveSuperiorRes(secResource);
     }
 
     @Override
+    @Transactional
     public void remove(SecResource secResource) throws XSBusinessException {
-        get(secResource);
-        SecResource existent = new SecResource();
-        existent.setParent(secResource);
-        Long count = secResourceDao.count(existent);
-        if (count.compareTo(0L) > 0) {
+        SecResource existent = get(secResource);
+        SecResource children = new SecResource();
+        children.setParent(secResource);
+        Long childrenCount = secResourceDao.count(children);
+        if (childrenCount.compareTo(0L) > 0) {
             throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_USED);
         }
         //校验是否存在角色拥有该资源
-        existent = new SecResource(secResource.getId());
         Long roleCount = secResourceDao.countRole(existent);
         if (roleCount.compareTo(0L) > 0) {
             throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_USED);
         }
-        secResourceDao.remove(secResource);
+        secResourceDao.removeSuperiorRes(existent);
+        secResourceDao.remove(existent);
     }
 
     @Override

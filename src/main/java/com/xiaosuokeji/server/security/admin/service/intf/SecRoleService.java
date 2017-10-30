@@ -23,9 +23,7 @@ public interface SecRoleService {
 
     XSPageModel listAndCount(SecRole secRole);
 
-    List<SecRole> listCombo(SecRole secRole);
-
-    List<SecResource> treeResource(SecRole secRole) throws XSBusinessException;
+    List treeResource(SecRole secRole) throws XSBusinessException;
 
     void authorizeResource(SecRole secRole) throws XSBusinessException;
 }
