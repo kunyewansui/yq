@@ -11,6 +11,7 @@ import com.xiaosuokeji.server.security.admin.model.SecRole;
 import com.xiaosuokeji.server.security.admin.service.intf.SecRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,38 +105,13 @@ public class SecRoleServiceImpl implements SecRoleService {
     }
 
     @Override
+    @Transactional
     public void authorizeResource(SecRole secRole) throws XSBusinessException {
         SecRole existent = secRoleDao.get(secRole);
         if (existent == null) {
             throw new XSBusinessException(SecRoleConsts.SEC_ROLE_NOT_EXIST);
         }
-        List<SecResource> oldResList = secRoleDao.listResource(secRole);
-        List<SecResource> newResList = new ArrayList<>();
-        List<SecResource> noChangedResList = new ArrayList<>();
-        //查询出新增的资源列表和未变动的资源列表
-        if (secRole.getResourceList() != null) {
-            for (int i = 0; i < secRole.getResourceList().size(); ++i) {
-                int j = 0;
-                for (; j < oldResList.size(); ++j) {
-                    if (secRole.getResourceList().get(i).getId().equals(oldResList.get(j).getId())) {
-                        noChangedResList.add(oldResList.get(j));
-                        break;
-                    }
-                }
-                if (j >= oldResList.size()) newResList.add(secRole.getResourceList().get(i));
-            }
-        }
-        //新增资源
-        if (newResList.size() > 0) {
-            secRole.setResourceList(newResList);
-            secRoleDao.saveRoleRes(secRole);
-        }
-        //从旧资源中去除未变动的资源从而获取需要删除的资源
-        oldResList.removeAll(noChangedResList);
-        //删除资源
-        if (oldResList.size() > 0) {
-            secRole.setResourceList(oldResList);
-            secRoleDao.removeRoleRes(secRole);
-        }
+        secRoleDao.removeRoleRes(existent);
+        secRoleDao.saveRoleRes(secRole);
     }
 }

@@ -10,6 +10,7 @@ import com.xiaosuokeji.server.security.admin.model.SecStaff;
 import com.xiaosuokeji.server.security.admin.service.intf.SecStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -103,38 +104,13 @@ public class SecStaffServiceImpl implements SecStaffService {
     }
 
     @Override
+    @Transactional
     public void authorizeRole(SecStaff secStaff) throws XSBusinessException {
         SecStaff existent = secStaffDao.get(secStaff);
         if (existent == null) {
             throw new XSBusinessException(SecStaffConsts.SEC_STAFF_NOT_EXIST);
         }
-        List<SecRole> oldRoleList = secStaffDao.listRole(secStaff);
-        List<SecRole> newRoleList = new ArrayList<>();
-        List<SecRole> noChangedRoleList = new ArrayList<>();
-        //查询出新增的资源列表和未变动的资源列表
-        if (secStaff.getRoleList() != null) {
-            for (int i = 0; i < secStaff.getRoleList().size(); ++i) {
-                int j = 0;
-                for (; j < oldRoleList.size(); ++j) {
-                    if (secStaff.getRoleList().get(i).getId().equals(oldRoleList.get(j).getId())) {
-                        noChangedRoleList.add(oldRoleList.get(j));
-                        break;
-                    }
-                }
-                if (j >= oldRoleList.size()) newRoleList.add(secStaff.getRoleList().get(i));
-            }
-        }
-        //新增资源
-        if (newRoleList.size() > 0) {
-            secStaff.setRoleList(newRoleList);
-            secStaffDao.saveStaffRole(secStaff);
-        }
-        //从旧资源中去除未变动的资源从而获取需要删除的资源
-        oldRoleList.removeAll(noChangedRoleList);
-        //删除资源
-        if (oldRoleList.size() > 0) {
-            secStaff.setRoleList(oldRoleList);
-            secStaffDao.removeStaffRole(secStaff);
-        }
+        secStaffDao.removeStaffRole(existent);
+        secStaffDao.saveStaffRole(secStaff);
     }
 }
