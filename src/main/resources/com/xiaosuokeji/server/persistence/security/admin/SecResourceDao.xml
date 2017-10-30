@@ -5,8 +5,10 @@
 <mapper namespace="com.xiaosuokeji.server.security.admin.dao.SecResourceDao">
 
     <insert id="save" parameterType="secResource">
-        INSERT INTO shuttle_common.sc_security_resource(`key`,<if test="parent!=null">pid,</if>`type`,`name`,url,method,icon,seq,assign,log)
-        VALUES (#{key},<if test="parent!=null">#{parent.id},</if>#{type},#{name},#{url},#{method},#{icon},#{seq},#{assign},#{log})
+        INSERT INTO shuttle_common.sc_security_resource(`key`,<if test="parent!=null">pid,</if>`type`,`name`,url,method,
+        icon,seq,assign,log)
+        VALUES (#{key},<if test="parent!=null">#{parent.id},</if>#{type},#{name},#{url},#{method},
+        #{icon},#{seq},#{assign},#{log})
         ON DUPLICATE KEY UPDATE
         <if test="parent!=null">pid=#{parent.id},</if>
         `type`=#{type},
@@ -79,20 +81,23 @@
         FROM shuttle_common.sc_security_resource r
         LEFT JOIN shuttle_common.sc_security_resource p ON r.pid=p.id
         <trim prefix="WHERE" prefixOverrides="AND|OR">
-            <if test="key!=null and key!=''">
-                AND `key`=#{key}
+            <if test="dynamic!=null and dynamic.key!=null and dynamic.key!=''">
+                AND r.key LIKE CONCAT('%',#{dynamic.key},'%')
             </if>
-            <if test="parent!=null and parent.id!=null">
-                AND pid=#{parent.id}
+            <if test="dynamic!=null and dynamic.pkey!=null and dynamic.pkey!=''">
+                AND p.key LIKE CONCAT('%',#{dynamic.pkey},'%')
             </if>
             <if test="type!=null">
-                AND `type`=#{type}
+                AND r.type=#{type}
             </if>
             <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
-                AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
+                AND r.name LIKE CONCAT('%',#{dynamic.name},'%')
             </if>
             <if test="dynamic!=null and dynamic.url!=null and dynamic.url!=''">
-                AND url LIKE CONCAT('%',#{dynamic.url},'%')
+                AND r.url LIKE CONCAT('%',#{dynamic.url},'%')
+            </if>
+            <if test="dynamic!=null and dynamic.method!=null and dynamic.method!=''">
+                AND r.method LIKE CONCAT('%',#{dynamic.method},'%')
             </if>
         </trim>
     </sql>
@@ -106,7 +111,7 @@
     </select>
 
     <select id="listCombo" resultMap="secResourceMap">
-        SELECT id,`name`,`type`,pid AS p_id
+        SELECT id,`name`,pid AS p_id
         FROM shuttle_common.sc_security_resource
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="parent!=null and parent.id!=null">
@@ -129,7 +134,7 @@
     <select id="listRole" parameterType="secResource" resultType="secRole">
         SELECT DISTINCT r.id,r.name
         FROM shuttle_common.sc_security_role_res rr
-        JOIN shuttle_common.sc_security_resource r ON rr.resource_id=r.id
+        JOIN shuttle_common.sc_security_role r ON rr.role_id=r.id
         <if test="list!=null and list.size>0">
             WHERE rr.resource_id IN
             <foreach collection="list" open="(" item="item" close=")" separator=",">

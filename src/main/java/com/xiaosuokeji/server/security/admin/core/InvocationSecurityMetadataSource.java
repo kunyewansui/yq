@@ -47,7 +47,7 @@ public class InvocationSecurityMetadataSource implements FilterInvocationSecurit
         }
 
         Collection<ConfigAttribute> attributes = new ArrayList<>();
-        List<SecRole> roleList = secResourceService.listRole(new SecResource(url, method));
+        List<SecRole> roleList = secResourceService.listRoleByRequest(new SecResource(url, method));
         for (SecRole role : roleList) {
             attributes.add(new SecurityConfig("ROLE_" + role.getName()));
         }

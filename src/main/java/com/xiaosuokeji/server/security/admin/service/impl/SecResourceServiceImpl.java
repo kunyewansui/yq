@@ -9,8 +9,10 @@ import com.xiaosuokeji.server.security.admin.model.SecResource;
 import com.xiaosuokeji.server.security.admin.model.SecRole;
 import com.xiaosuokeji.server.security.admin.service.intf.SecResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -38,6 +40,7 @@ public class SecResourceServiceImpl implements SecResourceService {
 
     @Override
     public void remove(SecResource secResource) throws XSBusinessException {
+        get(secResource);
         SecResource existent = new SecResource();
         existent.setParent(secResource);
         Long count = secResourceDao.count(existent);
@@ -55,12 +58,16 @@ public class SecResourceServiceImpl implements SecResourceService {
 
     @Override
     public void update(SecResource secResource) throws XSBusinessException {
+        get(secResource);
         if (secResource.getKey() != null) {
             SecResource existent = new SecResource();
             existent.setKey(secResource.getKey());
-            Long count = secResourceDao.count(existent);
-            if (count.compareTo(0L) > 0) {
-                throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_EXIST);
+            List<SecResource> existents = secResourceDao.list(existent);
+            if (existents.size() > 0) {
+                boolean isSelf = existents.get(0).getId().equals(secResource.getId());
+                if (!isSelf) {
+                    throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_EXIST);
+                }
             }
         }
         secResourceDao.update(secResource);
@@ -82,38 +89,7 @@ public class SecResourceServiceImpl implements SecResourceService {
     }
 
     @Override
-    public List<SecResource> tree(SecResource secResource) {
-        secResource.setDefaultSort("seq", "DESC");
-        List<SecResource> list = secResourceDao.listCombo(secResource);
-        //不展示url类型的资源
-        for (Iterator<SecResource> iterator = list.iterator(); iterator.hasNext();) {
-            if (iterator.next().getType().equals(2)) {
-                iterator.remove();
-            }
-        }
-        XSTreeUtil.buildTree(list);
-        List<SecResource> trees = new ArrayList<>();
-        //如果未指定父级则返回所有分类，否则返回指定父级下的所有分类
-        if (secResource.getParent() != null && secResource.getParent().getId() != null) {
-            for (SecResource item : list) {
-                boolean isChild = item.getParent() != null && item.getParent().getId() != null &&
-                        item.getParent().getId().equals(secResource.getParent().getId());
-                if (isChild) {
-                    trees.add(item);
-                }
-            }
-        } else {
-            for (SecResource item : list) {
-                if (item.getParent() == null) {
-                    trees.add(item);
-                }
-            }
-        }
-        return trees;
-    }
-
-    @Override
-    public List<SecRole> listRole(SecResource secResource) {
+    public List<SecRole> listRoleByRequest(SecResource secResource) {
         List<SecResource> resourceList = secResourceDao.listByRequest(secResource);
         if (resourceList.size() > 0) {
             SecResource existent = new SecResource();

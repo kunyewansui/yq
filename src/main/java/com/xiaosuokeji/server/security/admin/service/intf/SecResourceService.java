@@ -23,7 +23,5 @@ public interface SecResourceService {
 
     XSPageModel listAndCount(SecResource secResource);
 
-    List<SecResource> tree(SecResource secResource);
-
-    List<SecRole> listRole(SecResource secResource);
+    List<SecRole> listRoleByRequest(SecResource secResource);
 }
