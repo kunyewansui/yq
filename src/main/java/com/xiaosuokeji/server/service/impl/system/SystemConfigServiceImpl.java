@@ -1,6 +1,7 @@
 package com.xiaosuokeji.server.service.impl.system;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
+import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.framework.util.XSUuidUtil;
 import com.xiaosuokeji.server.constant.system.SystemConfigConsts;
 import com.xiaosuokeji.server.dao.system.SystemConfigDao;
@@ -35,13 +36,14 @@ public class SystemConfigServiceImpl implements SystemConfigService {
     }
 
     @Override
-    public void remove(SystemConfig systemConfig) {
-        systemConfigDao.remove(systemConfig);
+    public void remove(SystemConfig systemConfig) throws XSBusinessException {
+        SystemConfig existent = get(systemConfig);
+        systemConfigDao.remove(existent);
     }
 
     @Override
-    @Transactional
     public void update(SystemConfig systemConfig) throws XSBusinessException {
+        get(systemConfig);
         if (systemConfig.getKey() != null) {
             SystemConfig existent = new SystemConfig();
             existent.setKey(systemConfig.getKey());
@@ -66,7 +68,8 @@ public class SystemConfigServiceImpl implements SystemConfigService {
     }
 
     @Override
-    public List<SystemConfig> listCombo(SystemConfig systemConfig) {
-        return systemConfigDao.listCombo(systemConfig);
+    public XSPageModel<SystemConfig> listAndCount(SystemConfig systemConfig) {
+        systemConfig.setDefaultSort("create_time", "DESC");
+        return XSPageModel.build(systemConfigDao.list(systemConfig), systemConfigDao.count(systemConfig));
     }
 }

@@ -44,8 +44,11 @@
     <sql id="listCondition">
         FROM shuttle_common.sc_system_config
         <trim prefix="WHERE" prefixOverrides="AND|OR">
-            <if test="key!=null">
+            <if test="key!=null and key!=''">
                 AND `key`=#{key}
+            </if>
+            <if test="dynamic!=null and dynamic.key!=null and dynamic.key!=''">
+                AND `key`=#{dynamic.key}
             </if>
         </trim>
     </sql>
@@ -55,12 +58,6 @@
         <include refid="listCondition"/>
         <include refid="XSBaseMapper.sort"/>
         <include refid="XSBaseMapper.limit"/>
-    </select>
-
-    <select id="listCombo" parameterType="systemConfig" resultType="systemConfig">
-        SELECT id,`name`
-        FROM shuttle_common.sc_system_config
-        <include refid="XSBaseMapper.sort"/>
     </select>
 
     <select id="count" parameterType="systemConfig" resultType="long">
