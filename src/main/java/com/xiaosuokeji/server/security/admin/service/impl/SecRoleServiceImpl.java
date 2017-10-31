@@ -8,8 +8,10 @@ import com.xiaosuokeji.server.security.admin.dao.SecResourceDao;
 import com.xiaosuokeji.server.security.admin.dao.SecRoleDao;
 import com.xiaosuokeji.server.security.admin.model.SecResource;
 import com.xiaosuokeji.server.security.admin.model.SecRole;
+import com.xiaosuokeji.server.security.admin.model.SecStaff;
 import com.xiaosuokeji.server.security.admin.service.intf.SecRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,7 +89,7 @@ public class SecRoleServiceImpl implements SecRoleService {
     }
 
     @Override
-    public List treeResource(SecRole secRole) throws XSBusinessException {
+    public List treeResource(SecRole secRole, SecStaff secStaff) throws XSBusinessException {
         SecRole existent = get(secRole);
         SecResource existentRes = new SecResource();
         existentRes.setDefaultSort("seq", "DESC");
@@ -107,14 +109,35 @@ public class SecRoleServiceImpl implements SecRoleService {
                 }
             }
         }
+        //非超级管理员不能够操作不可分配资源
+        if (!secStaff.getId().equals(1)) {
+            for (Iterator<SecResource> iterator = resourceList.iterator(); iterator.hasNext();) {
+                if (iterator.next().getAssign().equals(0)) {
+                    iterator.remove();
+                }
+            }
+        }
         XSTreeUtil.buildTree(resourceList);
         return XSTreeUtil.getSubTrees(resourceList, null);
     }
 
     @Override
     @Transactional
-    public void authorizeResource(SecRole secRole) throws XSBusinessException {
+    public void authorizeResource(SecRole secRole, SecStaff secStaff) throws XSBusinessException {
         SecRole existent = get(secRole);
+        //非超级管理员不能够操作不可分配资源
+        if (!secStaff.getId().equals(1)) {
+            List<SecResource> resourceList = secRoleDao.listResourceCombo(new SecResource());
+            for (Iterator<SecResource> iterator = secRole.getResourceList().iterator(); iterator.hasNext();) {
+                SecResource secResource = iterator.next();
+                for (SecResource item : resourceList) {
+                    if (secResource.getId().equals(item.getId()) && item.getAssign().equals(0)) {
+                        iterator.remove();
+                        break;
+                    }
+                }
+            }
+        }
         secRoleDao.removeRoleRes(existent);
         secRoleDao.saveRoleRes(secRole);
     }

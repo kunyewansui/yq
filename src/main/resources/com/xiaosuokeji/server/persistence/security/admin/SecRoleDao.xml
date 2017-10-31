@@ -85,7 +85,7 @@
     </select>
 
     <select id="listResourceCombo" resultType="secResource">
-        SELECT id,`name`,pid AS p_id
+        SELECT id,`name`,assign,pid AS p_id
         FROM shuttle_common.sc_security_resource
         <include refid="XSBaseMapper.sort"/>
     </select>
