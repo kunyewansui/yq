@@ -64,6 +64,10 @@ public class SecOrganization extends BaseModel implements XSTreeable<Long> {
      */
     private Integer checked;
 
+    public interface Save {}
+
+    public interface Update {}
+
     @Override
     public Long getNodeId() {
         return id;
@@ -152,11 +156,5 @@ public class SecOrganization extends BaseModel implements XSTreeable<Long> {
 
     public void setChecked(Integer checked) {
         this.checked = checked;
-    }
-
-    public interface Save {
-    }
-
-    public interface Update {
     }
 }

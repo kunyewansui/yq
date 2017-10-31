@@ -36,8 +36,8 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
             msg = SecStaffConsts.SEC_STAFF_PASSWORD_ERROR.getMsg();
         }
         else if (exception instanceof InternalAuthenticationServiceException) {
-            code = SecStaffConsts.SEC_STAFF_NOT_ENABLED.getCode();
-            msg = SecStaffConsts.SEC_STAFF_NOT_ENABLED.getMsg();
+            code = SecStaffConsts.SEC_STAFF_NOT_ENABLE.getCode();
+            msg = SecStaffConsts.SEC_STAFF_NOT_ENABLE.getMsg();
         }
         else if (exceptionMsg.contains("principal exceeded")) {
             code = SecStaffConsts.SEC_STAFF_CONCURRENT_BEYOND.getCode();

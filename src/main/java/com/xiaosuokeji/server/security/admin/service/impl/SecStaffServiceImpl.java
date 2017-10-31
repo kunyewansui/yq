@@ -2,6 +2,7 @@ package com.xiaosuokeji.server.security.admin.service.impl;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
+import com.xiaosuokeji.framework.util.XSTreeUtil;
 import com.xiaosuokeji.server.security.admin.constant.SecStaffConsts;
 import com.xiaosuokeji.server.security.admin.dao.SecStaffDao;
 import com.xiaosuokeji.server.security.admin.model.SecOrganization;
@@ -162,5 +163,31 @@ public class SecStaffServiceImpl implements SecStaffService {
         SecStaff existent = get(secStaff);
         secStaffDao.removeStaffRole(existent);
         secStaffDao.saveStaffRole(secStaff);
+    }
+
+    @Override
+    public List treeOrganization(SecStaff secStaff) throws XSBusinessException {
+        SecStaff existent = get(secStaff);
+        List<SecOrganization> orgList = secStaffDao.listOrganizationCombo(new SecOrganization());
+        List<SecOrganization> ownedOrgList = secStaffDao.listOrganization(existent);
+        for (Iterator<SecOrganization> iterator = orgList.iterator(); iterator.hasNext();) {
+            SecOrganization item = iterator.next();
+            for (SecOrganization owned : ownedOrgList) {
+                if (item.getId().equals(owned.getId())) {
+                    item.setChecked(1);
+                    break;
+                }
+            }
+        }
+        XSTreeUtil.buildTree(orgList);
+        return XSTreeUtil.getSubTrees(orgList, null);
+    }
+
+    @Override
+    @Transactional
+    public void authorizeOrganization(SecStaff secStaff) throws XSBusinessException {
+        SecStaff existent = get(secStaff);
+        secStaffDao.removeStaffOrganization(existent);
+        secStaffDao.saveStaffOrganization(secStaff);
     }
 }

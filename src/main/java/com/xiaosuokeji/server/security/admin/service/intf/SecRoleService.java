@@ -23,7 +23,18 @@ public interface SecRoleService {
 
     XSPageModel listAndCount(SecRole secRole);
 
+    /**
+     * 获取指定角色的资源树
+     * @param secRole 参数id
+     * @return 资源树
+     * @throws XSBusinessException 角色不存在
+     */
     List treeResource(SecRole secRole) throws XSBusinessException;
 
+    /**
+     * 授予指定角色资源
+     * @param secRole 参数id，resourceList
+     * @throws XSBusinessException 角色不存在
+     */
     void authorizeResource(SecRole secRole) throws XSBusinessException;
 }

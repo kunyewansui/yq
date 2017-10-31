@@ -23,5 +23,10 @@ public interface SecResourceService {
 
     XSPageModel listAndCount(SecResource secResource);
 
+    /**
+     * 获取指定请求的角色列表
+     * @param secResource 参数url，method
+     * @return 角色列表
+     */
     List<SecRole> listRoleByRequest(SecResource secResource);
 }

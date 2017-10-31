@@ -26,6 +26,14 @@
         </foreach>
     </insert>
 
+    <insert id="saveStaffOrganization" parameterType="secStaff">
+        INSERT IGNORE INTO shuttle_common.sc_security_staff_org
+        VALUES
+        <foreach collection="organizationList" item="item" separator=",">
+            (#{id},#{item.id})
+        </foreach>
+    </insert>
+
     <delete id="remove" parameterType="secStaff">
         DELETE FROM shuttle_common.sc_security_staff
         WHERE id=#{id} AND superior=0
@@ -126,6 +134,7 @@
     <select id="listRoleCombo" resultType="secRole">
         SELECT id,`name`,pid AS p_id
         FROM shuttle_common.sc_security_role
+        WHERE superior=0
     </select>
 
     <select id="listRole" parameterType="secStaff" resultType="secRole">
@@ -143,6 +152,11 @@
         <foreach collection="organizationList" item="item" open="(" close=")" separator=",">
             #{item.id}
         </foreach>
+    </select>
+
+    <select id="listOrganizationCombo" resultType="secOrganization">
+        SELECT id,`name`,pid AS p_id
+        FROM shuttle_common.sc_security_organization
     </select>
 
     <select id="listOrganization" parameterType="secStaff" resultType="secOrganization">

@@ -6,11 +6,15 @@ import com.xiaosuokeji.framework.util.XSTreeUtil;
 import com.xiaosuokeji.server.security.admin.constant.SecOrganizationConsts;
 import com.xiaosuokeji.server.security.admin.dao.SecOrganizationDao;
 import com.xiaosuokeji.server.security.admin.model.SecOrganization;
+import com.xiaosuokeji.server.security.admin.model.SecRole;
+import com.xiaosuokeji.server.security.admin.model.SecStaff;
 import com.xiaosuokeji.server.security.admin.service.intf.SecOrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -36,25 +40,36 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
     }
 
     @Override
+    @Transactional
     public void remove(SecOrganization secOrganization) throws XSBusinessException {
-        SecOrganization existent = new SecOrganization();
-        existent.setParent(secOrganization);
-        Long count = secOrganizationDao.count(existent);
-        if (count.compareTo(0L) > 0) {
+        SecOrganization existent = get(secOrganization);
+        SecOrganization children = new SecOrganization();
+        children.setParent(secOrganization);
+        Long childrenCount = secOrganizationDao.count(children);
+        if (childrenCount.compareTo(0L) > 0) {
             throw new XSBusinessException(SecOrganizationConsts.SEC_ORGANIZATION_USED);
         }
-        secOrganizationDao.remove(secOrganization);
+        Long staffCount = secOrganizationDao.countStaff(existent);
+        if (staffCount.compareTo(0L) > 0) {
+            throw new XSBusinessException(SecOrganizationConsts.SEC_ORGANIZATION_USED);
+        }
+        secOrganizationDao.removeOrganizationRole(existent);
+        secOrganizationDao.remove(existent);
     }
 
     @Override
     public void update(SecOrganization secOrganization) throws XSBusinessException {
+        SecOrganization existent = get(secOrganization);
         if (secOrganization.getName() != null || secOrganization.getParent() != null) {
-            SecOrganization existent = new SecOrganization();
-            existent.setName(secOrganization.getName());
-            existent.setParent(secOrganization.getParent());
-            Long count = secOrganizationDao.count(existent);
-            if (count.compareTo(0L) > 0) {
-                throw new XSBusinessException(SecOrganizationConsts.SEC_ORGANIZATION_EXIST);
+            SecOrganization existOrg = new SecOrganization();
+            existOrg.setName(secOrganization.getName() == null ? existent.getName() : secOrganization.getName());
+            existOrg.setParent(secOrganization.getParent() == null ? existent.getParent() : secOrganization.getParent());
+            List<SecOrganization> existents = secOrganizationDao.list(existOrg);
+            if (existents.size() > 0) {
+                boolean isSelf = existents.get(0).getId().equals(existent.getId());
+                if (!isSelf) {
+                    throw new XSBusinessException(SecOrganizationConsts.SEC_ORGANIZATION_EXIST);
+                }
             }
         }
         secOrganizationDao.update(secOrganization);
@@ -66,37 +81,37 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
         if (existent == null) {
             throw new XSBusinessException(SecOrganizationConsts.SEC_ORGANIZATION_NOT_EXIST);
         }
-        return secOrganizationDao.get(secOrganization);
+        return existent;
     }
 
     @Override
     public XSPageModel listAndCount(SecOrganization secOrganization) {
-        secOrganization.setDefaultSort("create_time", "DESC");
+        secOrganization.setDefaultSort("id", "DESC");
         return XSPageModel.build(secOrganizationDao.list(secOrganization), secOrganizationDao.count(secOrganization));
     }
 
     @Override
-    public List<SecOrganization> tree(SecOrganization secOrganization) {
-        secOrganization.setDefaultSort("seq", "DESC");
-        List<SecOrganization> list = secOrganizationDao.listCombo(secOrganization);
-        XSTreeUtil.buildTree(list);
-        List<SecOrganization> trees = new ArrayList<>();
-        //如果未指定父级则返回所有分类，否则返回指定父级下的所有分类
-        if (secOrganization.getParent() != null && secOrganization.getParent().getId() != null) {
-            for (SecOrganization item : list) {
-                boolean isChild = item.getParent() != null && item.getParent().getId() != null &&
-                        item.getParent().getId().equals(secOrganization.getParent().getId());
-                if (isChild) {
-                    trees.add(item);
-                }
-            }
-        } else {
-            for (SecOrganization item : list) {
-                if (item.getParent() == null) {
-                    trees.add(item);
+    public List<SecRole> listRole(SecOrganization secOrganization) throws XSBusinessException {
+        SecOrganization existent = get(secOrganization);
+        List<SecRole> roleList = secOrganizationDao.listRoleCombo(new SecRole());
+        List<SecRole> ownedRoleList = secOrganizationDao.listRole(existent);
+        for (Iterator<SecRole> iterator = roleList.iterator(); iterator.hasNext();) {
+            SecRole item = iterator.next();
+            for (SecRole owned : ownedRoleList) {
+                if (item.getId().equals(owned.getId())) {
+                    item.setChecked(1);
+                    break;
                 }
             }
         }
-        return trees;
+        return roleList;
+    }
+
+    @Override
+    @Transactional
+    public void authorizeRole(SecOrganization secOrganization) throws XSBusinessException {
+        SecOrganization existent = get(secOrganization);
+        secOrganizationDao.removeOrganizationRole(existent);
+        secOrganizationDao.saveOrganizationRole(secOrganization);
     }
 }
