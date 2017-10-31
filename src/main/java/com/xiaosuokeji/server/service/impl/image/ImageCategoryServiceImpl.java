@@ -46,7 +46,8 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
                 imageCategory.setDisplay(parent.getDisplay());
                 imageCategory.setLock(parent.getLock());
             }
-        } else {
+        }
+        else {
             imageCategory.setLock(0);
         }
         imageCategory.setId(XSUuidUtil.generate());
@@ -101,7 +102,8 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
             if (imageCategory.getDisplay().equals(0)) {
                 List<XSTreeable<String>> subTreeList = XSTreeUtil.listSubTree(map.get(imageCategory.getId()));
                 existent.setList(subTreeList);
-            } else {
+            }
+            else {
                 List<XSTreeable<String>> treePath = XSTreeUtil.getTreePath(map, map.get(imageCategory.getId()));
                 existent.setList(treePath);
             }
@@ -120,7 +122,8 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
             latest.setLock(1);
             List<XSTreeable<String>> treePath = XSTreeUtil.getTreePath(map, map.get(imageCategory.getId()));
             latest.setList(treePath);
-        } else {
+        }
+        else {
             latest.setLock(0);
             List<XSTreeable<String>> subTreeList = XSTreeUtil.listSubTree(map.get(imageCategory.getId()));
             latest.setList(subTreeList);

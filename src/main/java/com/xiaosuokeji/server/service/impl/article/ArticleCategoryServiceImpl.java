@@ -46,7 +46,8 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
                 articleCategory.setDisplay(parent.getDisplay());
                 articleCategory.setLock(parent.getLock());
             }
-        } else {
+        }
+        else {
             articleCategory.setLock(0);
         }
         articleCategory.setId(XSUuidUtil.generate());
@@ -101,7 +102,8 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
             if (articleCategory.getDisplay().equals(0)) {
                 List<XSTreeable<String>> subTreeList = XSTreeUtil.listSubTree(map.get(articleCategory.getId()));
                 existent.setList(subTreeList);
-            } else {
+            }
+            else {
                 List<XSTreeable<String>> treePath = XSTreeUtil.getTreePath(map, map.get(articleCategory.getId()));
                 existent.setList(treePath);
             }
@@ -120,7 +122,8 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
             latest.setLock(1);
             List<XSTreeable<String>> treePath = XSTreeUtil.getTreePath(map, map.get(articleCategory.getId()));
             latest.setList(treePath);
-        } else {
+        }
+        else {
             latest.setLock(0);
             List<XSTreeable<String>> subTreeList = XSTreeUtil.listSubTree(map.get(articleCategory.getId()));
             latest.setList(subTreeList);

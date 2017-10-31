@@ -13,8 +13,7 @@ public class Token extends BaseModel {
      */
     private String id;
 
-    public Token() {
-    }
+    public Token() {}
 
     public Token(String id) {
         this.id = id;
