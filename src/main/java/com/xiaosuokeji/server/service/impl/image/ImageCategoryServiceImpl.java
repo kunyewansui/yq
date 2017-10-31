@@ -39,16 +39,17 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         if (count.compareTo(0L) > 0) {
             throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_EXIST);
         }
-        //展示及锁定状态必须与父级一致
+        //父级隐藏则子级必须隐藏，父级锁定则子级必须锁定
         if (imageCategory.getParent() != null) {
             ImageCategory parent = imageCategoryDao.get(imageCategory.getParent());
             if (parent != null) {
-                imageCategory.setDisplay(parent.getDisplay());
-                imageCategory.setLock(parent.getLock());
+                if (parent.getDisplay().equals(0)) {
+                    imageCategory.setDisplay(0);
+                }
+                if (parent.getLock().equals(1)) {
+                    imageCategory.setLock(1);
+                }
             }
-        }
-        else {
-            imageCategory.setLock(0);
         }
         imageCategory.setId(XSUuidUtil.generate());
         imageCategoryDao.save(imageCategory);

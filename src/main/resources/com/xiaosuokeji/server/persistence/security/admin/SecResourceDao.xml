@@ -75,6 +75,22 @@
         WHERE id=#{id}
     </update>
 
+    <update id="batchUpdate" parameterType="secResource">
+        UPDATE shuttle_common.sc_security_resource
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="assign!=null">
+                ,assign=#{assign}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        <if test="treeableList!=null and treeableList.size>0">
+            WHERE id IN
+            <foreach collection="treeableList" open="(" item="item" close=")" separator=",">
+                #{item.id}
+            </foreach>
+        </if>
+    </update>
+
     <resultMap id="secResourceMap" type="secResource" autoMapping="true">
         <association property="parent" javaType="secResource" autoMapping="true" columnPrefix="p_"/>
     </resultMap>
@@ -121,6 +137,12 @@
         <include refid="listCondition"/>
         <include refid="XSBaseMapper.sort"/>
         <include refid="XSBaseMapper.limit"/>
+    </select>
+
+    <select id="listCombo" resultType="secResource">
+        SELECT id,`name`,pid AS p_id
+        FROM shuttle_common.sc_security_resource
+        <include refid="XSBaseMapper.sort"/>
     </select>
 
     <select id="listByRequest" parameterType="secResource" resultType="secResource">

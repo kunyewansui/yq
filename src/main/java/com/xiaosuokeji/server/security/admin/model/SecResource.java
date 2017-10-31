@@ -96,6 +96,11 @@ public class SecResource extends BaseModel implements XSTreeable<Long> {
      */
     private List<SecResource> list;
 
+    /**
+     * 资源列表
+     */
+    private List<XSTreeable<Long>> treeableList;
+
     public interface Save {}
 
     public interface Update {}
@@ -243,5 +248,13 @@ public class SecResource extends BaseModel implements XSTreeable<Long> {
 
     public void setList(List<SecResource> list) {
         this.list = list;
+    }
+
+    public List<XSTreeable<Long>> getTreeableList() {
+        return treeableList;
+    }
+
+    public void setTreeableList(List<XSTreeable<Long>> treeableList) {
+        this.treeableList = treeableList;
     }
 }

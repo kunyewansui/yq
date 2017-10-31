@@ -31,9 +31,13 @@ public interface SecResourceDao {
 
     int update(SecResource secResource);
 
+    int batchUpdate(SecResource secResource);
+
     SecResource get(SecResource secResource);
 
     List<SecResource> list(SecResource secResource);
+
+    List<SecResource> listCombo(SecResource secResource);
 
     /**
      * 获取指定请求的资源列表

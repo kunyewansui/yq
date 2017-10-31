@@ -1,6 +1,7 @@
 package com.xiaosuokeji.server.security.admin.service.impl;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
+import com.xiaosuokeji.framework.intf.XSTreeable;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.framework.util.XSTreeUtil;
 import com.xiaosuokeji.server.security.admin.constant.SecResourceConsts;
@@ -17,6 +18,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统资源ServiceImpl
@@ -36,6 +38,15 @@ public class SecResourceServiceImpl implements SecResourceService {
         Long count = secResourceDao.count(existent);
         if (count.compareTo(0L) > 0) {
             throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_EXIST);
+        }
+        //父级不可分配则子级不可分配
+        if (secResource.getParent() != null) {
+            SecResource parent = secResourceDao.get(secResource.getParent());
+            if (parent != null) {
+                if (parent.getAssign().equals(0)) {
+                    secResource.setAssign(0);
+                }
+            }
         }
         secResourceDao.save(secResource);
         secResourceDao.saveSuperiorRes(secResource);
@@ -61,20 +72,37 @@ public class SecResourceServiceImpl implements SecResourceService {
     }
 
     @Override
+    @Transactional
     public void update(SecResource secResource) throws XSBusinessException {
-        get(secResource);
+        SecResource existent = get(secResource);
         if (secResource.getKey() != null) {
-            SecResource existent = new SecResource();
-            existent.setKey(secResource.getKey());
-            List<SecResource> existents = secResourceDao.list(existent);
+            SecResource existRes = new SecResource();
+            existRes.setKey(secResource.getKey());
+            List<SecResource> existents = secResourceDao.list(existRes);
             if (existents.size() > 0) {
-                boolean isSelf = existents.get(0).getId().equals(secResource.getId());
+                boolean isSelf = existents.get(0).getId().equals(existent.getId());
                 if (!isSelf) {
                     throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_EXIST);
                 }
             }
         }
         secResourceDao.update(secResource);
+        if (secResource.getAssign() != null) {
+            List<SecResource> list = secResourceDao.listCombo(new SecResource());
+            Map<Long, XSTreeable<Long>> map = XSTreeUtil.buildTree(list);
+            SecResource latestRes = new SecResource();
+            latestRes.setAssign(secResource.getAssign());
+            //不可分配则所有子级也不可分配，可分配则所有父级也可分配
+            if (secResource.getAssign().equals(0)) {
+                List<XSTreeable<Long>> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
+                latestRes.setTreeableList(subTreeList);
+            }
+            else {
+                List<XSTreeable<Long>> treePath = XSTreeUtil.getTreePath(map, map.get(existent.getId()));
+                latestRes.setTreeableList(treePath);
+            }
+            secResourceDao.batchUpdate(latestRes);
+        }
     }
 
     @Override
