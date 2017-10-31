@@ -1,6 +1,7 @@
 package com.xiaosuokeji.server.security.admin.service.impl;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
+import com.xiaosuokeji.framework.intf.XSTreeable;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.framework.util.XSTreeUtil;
 import com.xiaosuokeji.server.security.admin.constant.SecOrganizationConsts;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统组织ServiceImpl
@@ -35,6 +37,15 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
         Long count = secOrganizationDao.count(existent);
         if (count.compareTo(0L) > 0) {
             throw new XSBusinessException(SecOrganizationConsts.SEC_ORGANIZATION_EXIST);
+        }
+        //父级禁用则子级禁用
+        if (secOrganization.getParent() != null) {
+            SecOrganization parent = secOrganizationDao.get(secOrganization.getParent());
+            if (parent != null) {
+                if (parent.getStatus().equals(0)) {
+                    secOrganization.setStatus(0);
+                }
+            }
         }
         secOrganizationDao.save(secOrganization);
     }
@@ -58,6 +69,7 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
     }
 
     @Override
+    @Transactional
     public void update(SecOrganization secOrganization) throws XSBusinessException {
         SecOrganization existent = get(secOrganization);
         if (secOrganization.getName() != null || secOrganization.getParent() != null) {
@@ -73,6 +85,22 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
             }
         }
         secOrganizationDao.update(secOrganization);
+        if (secOrganization.getStatus() != null) {
+            List<SecOrganization> list = secOrganizationDao.listCombo(new SecOrganization());
+            Map<Long, XSTreeable<Long>> map = XSTreeUtil.buildTree(list);
+            SecOrganization latestOrg = new SecOrganization();
+            latestOrg.setStatus(secOrganization.getStatus());
+            //禁用则所有子级也禁用，启用所有父级也启用
+            if (secOrganization.getStatus().equals(0)) {
+                List<XSTreeable<Long>> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
+                latestOrg.setTreeableList(subTreeList);
+            }
+            else {
+                List<XSTreeable<Long>> treePath = XSTreeUtil.getTreePath(map, map.get(existent.getId()));
+                latestOrg.setTreeableList(treePath);
+            }
+            secOrganizationDao.batchUpdate(latestOrg);
+        }
     }
 
     @Override

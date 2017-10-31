@@ -57,6 +57,22 @@
         WHERE id=#{id}
     </update>
 
+    <update id="batchUpdate" parameterType="secOrganization">
+        UPDATE shuttle_common.sc_security_organization
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="status!=null">
+                ,status=#{status}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        <if test="treeableList!=null and treeableList.size>0">
+            WHERE id IN
+            <foreach collection="treeableList" open="(" item="item" close=")" separator=",">
+                #{item.id}
+            </foreach>
+        </if>
+    </update>
+
     <resultMap id="secOrganizationMap" type="secOrganization" autoMapping="true">
         <association property="parent" javaType="secOrganization" autoMapping="true" columnPrefix="p_"/>
     </resultMap>
@@ -94,6 +110,12 @@
         <include refid="listOrganizationCondition"/>
         <include refid="XSBaseMapper.sort"/>
         <include refid="XSBaseMapper.limit"/>
+    </select>
+
+    <select id="listCombo" resultType="secOrganization">
+        SELECT id,`name`,pid AS p_id
+        FROM shuttle_common.sc_security_organization
+        <include refid="XSBaseMapper.sort"/>
     </select>
 
     <select id="listRoleCombo" resultType="secRole">

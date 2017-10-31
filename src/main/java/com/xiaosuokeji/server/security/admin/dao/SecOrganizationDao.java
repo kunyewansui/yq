@@ -21,9 +21,13 @@ public interface SecOrganizationDao {
 
     int update(SecOrganization secOrganization);
 
+    int batchUpdate(SecOrganization secOrganization);
+
     SecOrganization get(SecOrganization secOrganization);
 
     List<SecOrganization> list(SecOrganization secOrganization);
+
+    List<SecOrganization> listCombo(SecOrganization secOrganization);
 
     /**
      * 获取角色列表
