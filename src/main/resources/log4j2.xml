@@ -9,5 +9,8 @@
         <Root level="debug" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Root>
+        <Logger name="org.apache.http.impl.conn.PoolingHttpClientConnectionManager" level="INFO" additivity="false">
+            <appender-ref ref="Console" />
+        </Logger>
     </Loggers>
 </Configuration>
