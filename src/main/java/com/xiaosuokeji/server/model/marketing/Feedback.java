@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.model.system;
+package com.xiaosuokeji.server.model.marketing;
 
 import com.xiaosuokeji.framework.model.XSGenericModel;
 import org.hibernate.validator.constraints.Length;

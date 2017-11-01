@@ -13,7 +13,7 @@ import java.util.List;
  * 图片分类
  * Created by xuxiaowei on 2017/10/23.
  */
-public class ImageCategory extends BaseModel implements XSTreeable<String> {
+public class ImageCategory extends BaseModel implements XSTreeable<String, ImageCategory> {
 
     /**
      * id
@@ -58,12 +58,12 @@ public class ImageCategory extends BaseModel implements XSTreeable<String> {
     /**
      * 子级列表
      */
-    private List<XSTreeable<String>> children;
+    private List<ImageCategory> children;
 
     /**
      * 分类列表
      */
-    private List<XSTreeable<String>> list;
+    private List<ImageCategory> list;
 
     public interface Save {}
 
@@ -85,20 +85,16 @@ public class ImageCategory extends BaseModel implements XSTreeable<String> {
     }
 
     @Override
-    public void addChild(XSTreeable<String> child) {
+    public void addChild(ImageCategory imageCategory) {
         if (children == null) {
             children = new ArrayList<>();
         }
-        children.add(child);
+        children.add(imageCategory);
     }
 
     @Override
-    public List<XSTreeable<String>> getChildren() {
+    public List<ImageCategory> getChildren() {
         return children;
-    }
-
-    public void setChildren(List<XSTreeable<String>> children) {
-        this.children = children;
     }
 
     public String getId() {
@@ -157,11 +153,15 @@ public class ImageCategory extends BaseModel implements XSTreeable<String> {
         this.lock = lock;
     }
 
-    public List<XSTreeable<String>> getList() {
+    public void setChildren(List<ImageCategory> children) {
+        this.children = children;
+    }
+
+    public List<ImageCategory> getList() {
         return list;
     }
 
-    public void setList(List<XSTreeable<String>> list) {
+    public void setList(List<ImageCategory> list) {
         this.list = list;
     }
 }

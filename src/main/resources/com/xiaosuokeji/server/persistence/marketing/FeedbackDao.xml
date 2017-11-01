@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.xiaosuokeji.server.dao.system.FeedbackDao">
+<mapper namespace="com.xiaosuokeji.server.dao.marketing.FeedbackDao">
 
     <insert id="save" parameterType="feedback">
         INSERT INTO shuttle_common.sc_feedback(id,`name`,`mobile`,`title`,`content`)

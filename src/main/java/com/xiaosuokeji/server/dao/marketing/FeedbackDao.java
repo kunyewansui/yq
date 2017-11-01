@@ -1,7 +1,7 @@
-package com.xiaosuokeji.server.dao.system;
+package com.xiaosuokeji.server.dao.marketing;
 
 
-import com.xiaosuokeji.server.model.system.Feedback;
+import com.xiaosuokeji.server.model.marketing.Feedback;
 
 import java.util.List;
 

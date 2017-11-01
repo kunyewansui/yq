@@ -1,11 +1,11 @@
-package com.xiaosuokeji.server.service.impl.system;
+package com.xiaosuokeji.server.service.impl.marketing;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.constant.system.FeedbackConsts;
-import com.xiaosuokeji.server.dao.system.FeedbackDao;
-import com.xiaosuokeji.server.model.system.Feedback;
-import com.xiaosuokeji.server.service.intf.system.FeedbackService;
+import com.xiaosuokeji.server.dao.marketing.FeedbackDao;
+import com.xiaosuokeji.server.model.marketing.Feedback;
+import com.xiaosuokeji.server.service.intf.marketing.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

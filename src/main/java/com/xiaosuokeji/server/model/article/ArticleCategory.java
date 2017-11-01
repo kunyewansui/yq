@@ -13,7 +13,7 @@ import java.util.List;
  * 文章分类
  * Created by xuxiaowei on 2017/10/28.
  */
-public class ArticleCategory extends BaseModel implements XSTreeable<String> {
+public class ArticleCategory extends BaseModel implements XSTreeable<String, ArticleCategory> {
 
     /**
      * id
@@ -71,12 +71,12 @@ public class ArticleCategory extends BaseModel implements XSTreeable<String> {
     /**
      * 子级列表
      */
-    private List<XSTreeable<String>> children;
+    private List<ArticleCategory> children;
 
     /**
      * 分类列表
      */
-    private List<XSTreeable<String>> list;
+    private List<ArticleCategory> list;
 
     public interface Save {}
 
@@ -98,15 +98,15 @@ public class ArticleCategory extends BaseModel implements XSTreeable<String> {
     }
 
     @Override
-    public void addChild(XSTreeable<String> child) {
+    public void addChild(ArticleCategory articleCategory) {
         if (children == null) {
             children = new ArrayList<>();
         }
-        children.add(child);
+        children.add(articleCategory);
     }
 
     @Override
-    public List<XSTreeable<String>> getChildren() {
+    public List<ArticleCategory> getChildren() {
         return children;
     }
 
@@ -182,15 +182,15 @@ public class ArticleCategory extends BaseModel implements XSTreeable<String> {
         this.lock = lock;
     }
 
-    public void setChildren(List<XSTreeable<String>> children) {
+    public void setChildren(List<ArticleCategory> children) {
         this.children = children;
     }
 
-    public List<XSTreeable<String>> getList() {
+    public List<ArticleCategory> getList() {
         return list;
     }
 
-    public void setList(List<XSTreeable<String>> list) {
+    public void setList(List<ArticleCategory> list) {
         this.list = list;
     }
 }

@@ -85,17 +85,17 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
         secOrganizationDao.update(secOrganization);
         if (secOrganization.getStatus() != null) {
             List<SecOrganization> list = secOrganizationDao.listCombo(new SecOrganization());
-            Map<Long, XSTreeable<Long>> map = XSTreeUtil.buildTree(list);
+            Map<Long, SecOrganization> map = XSTreeUtil.buildTree(list);
             SecOrganization latestOrg = new SecOrganization();
             latestOrg.setStatus(secOrganization.getStatus());
             //禁用则所有子级也禁用，启用所有父级也启用
             if (secOrganization.getStatus().equals(0)) {
-                List<XSTreeable<Long>> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
-                latestOrg.setTreeableList(subTreeList);
+                List<SecOrganization> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
+                latestOrg.setList(subTreeList);
             }
             else {
-                List<XSTreeable<Long>> treePath = XSTreeUtil.getTreePath(map, map.get(existent.getId()));
-                latestOrg.setTreeableList(treePath);
+                List<SecOrganization> treePath = XSTreeUtil.getTreePath(map, map.get(existent.getId()));
+                latestOrg.setList(treePath);
             }
             secOrganizationDao.batchUpdate(latestOrg);
         }

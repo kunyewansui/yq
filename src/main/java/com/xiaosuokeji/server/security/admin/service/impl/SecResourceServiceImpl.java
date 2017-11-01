@@ -86,17 +86,17 @@ public class SecResourceServiceImpl implements SecResourceService {
         secResourceDao.update(secResource);
         if (secResource.getAssign() != null) {
             List<SecResource> list = secResourceDao.listCombo(new SecResource());
-            Map<Long, XSTreeable<Long>> map = XSTreeUtil.buildTree(list);
+            Map<Long, SecResource> map = XSTreeUtil.buildTree(list);
             SecResource latestRes = new SecResource();
             latestRes.setAssign(secResource.getAssign());
             //不可分配则所有子级也不可分配，可分配则所有父级也可分配
             if (secResource.getAssign().equals(0)) {
-                List<XSTreeable<Long>> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
-                latestRes.setTreeableList(subTreeList);
+                List<SecResource> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
+                latestRes.setList(subTreeList);
             }
             else {
-                List<XSTreeable<Long>> treePath = XSTreeUtil.getTreePath(map, map.get(existent.getId()));
-                latestRes.setTreeableList(treePath);
+                List<SecResource> treePath = XSTreeUtil.getTreePath(map, map.get(existent.getId()));
+                latestRes.setList(treePath);
             }
             secResourceDao.batchUpdate(latestRes);
         }
