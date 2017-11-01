@@ -170,13 +170,12 @@ $(function () {
         var jsonObject;
         var _this = this;
         var setSub = function (sk, obj) {
+            var keys = sk.split('.');
             for (var k2 in obj) {
-                if (obj.hasOwnProperty(k2)) {
-                    if (obj[k2] instanceof Object) {
-                        setSub(sk+"."+k2, obj[k2]);
-                    } else {
-                        _this.xsSetInput(sk + "." + k2, obj[k2]);
-                    }
+                if (obj[k2] instanceof Object) {
+                    setSub(keys.concat(k2).join('.'), obj[k2]);
+                } else {
+                    _this.xsSetInput(keys.join('.') + "." + k2, obj[k2]);
                 }
             }
         };
@@ -189,7 +188,7 @@ $(function () {
         for (var k in jsonObject) {
             if (jsonObject.hasOwnProperty(k)) {
                 if (jsonObject[k] instanceof Object) {
-                    setSub(k,jsonObject[k]);
+                    setSub(k, jsonObject[k]);
                 } else {
                     this.xsSetInput(k, jsonObject[k]);
                 }
