@@ -200,13 +200,9 @@
     function getCategory(id) {
         doPost("<%=request.getContextPath()%>/admin/content/article/category/get", {id: id}, function (data) {
             if (data.status) {
+                $form.xsClean();
                 var category = data.data;
-                $form.xsSetInput("id", category.id);
-                $form.xsSetInput("name", category.name);
-                $form.xsSetInput("key", category.key);
-                $form.xsSetInput("seq", category.seq);
-                $form.xsSetInput("display", category.display);
-                $form.xsSetInput("prefix", category.prefix);
+                $form.xsSetForm(category);
                 if (category.parent !== undefined) {
                     $form.xsSetInput("parent.id", category.parent.id);
                     $form.xsSetInput("parent.name", category.parent.name);
