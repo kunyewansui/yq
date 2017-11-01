@@ -12,7 +12,7 @@
             <nav class="navi">
                 <ul id="a_nav" class="nav">
                     <li>
-                        <a href="<%=request.getContextPath()%>/admin/content/article/index">
+                        <a href="<%=request.getContextPath()%>/admin/content/article/article">
                             <i class="fa fa-empire"></i>
                             <span>文章管理</span>
                         </a>

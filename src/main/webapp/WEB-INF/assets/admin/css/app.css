@@ -5289,6 +5289,7 @@ div.img-preview > label {
     border: 1px solid #ddd;
     position: relative;
     margin-right: 2px;
+    background: #fff;
 }
 
 div.img-preview > label > img,
@@ -5357,45 +5358,21 @@ div.img-preview > label:hover > .delete {
 
 }
 
-/*aranl*/
-.waterfallItems {
-    width: 200px;
-    margin-bottom:10px;
-    text-align:center;
-    padding: 1px;
-    float: left;  // 必须要有，使 div 先横向排列，然后 Masonry 插件才能生效
-display: none; // 优化显示需求
-border: 1px solid #DDD;
-    /*background: #EEE;*/
-    -moz-box-shadow:0 1px 3px rgba(0, 0, 0, .1);
-    -webkil-box-shadow:0 1px 3px rgba(0, 0, 0, .1);
-    box-shadow:0 1px 3px rgba(0, 0, 0, .1);
-}
-.waterfallItems > img {
+.xs-loading{
+    position: fixed;
+    left: 0;
+    top: 0;
     width: 100%;
+    height: 100%;
+    background: rgba(20,20,20,0.8);
+    z-index: 99999;
 }
-.waterfallItems > a {
-    display: none;
-}
-.waterfallItems:hover > a{
+
+.xs-loading i{
     position: absolute;
-    width: 100%;
-    background: rgba(23, 23, 23, 0.4);
-    font-style: inherit;
-    color: #f05050;
-    bottom: 0px;
-    text-align: center;
-    display: block;
-}
-.col-center{
-    float: none;
-    display: block;
-    margin: 0 auto;
-}
-.col-center-block {
-    float: none;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top:110px;
+    color: #FFF;
+    font-size: 48px;
+    left: 50%;
+    top: 50%;
+    margin: -24px 0 0 -24px;
 }

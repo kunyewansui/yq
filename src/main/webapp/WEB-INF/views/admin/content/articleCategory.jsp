@@ -72,7 +72,6 @@
                             </div>
                             <div class="col-xs-9">
                                 <select name="display" class="form-control">
-                                    <option value=""></option>
                                     <option value="1">是</option>
                                     <option value="0">否</option>
                                 </select>
@@ -84,22 +83,40 @@
                             </div>
                             <div class="col-xs-9">
                                 <input name="parent.id" type="hidden">
-                                <input name="parent.name" type="text" class="form-control" readonly>
+                                <input name="parent.name" type="text" class="form-control" readonly
+                                       onclick="showCategoryTree(1)">
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <div class="col-xs-3 text-right">
-                                <label class="control-label required">顺序：</label>
+                                <label class="control-label required">预览前缀：</label>
                             </div>
                             <div class="col-xs-9">
-                                <input name="seq" type="text" class="form-control">
+                                <input name="prefix" type="text" class="form-control">
                             </div>
                         </div>
-
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label">图标：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <jsp:include page="../common/imageUploader.jsp">
+                                    <jsp:param name="id" value="updateIcon"/>
+                                    <jsp:param name="name" value="icon"/>
+                                    <jsp:param name="folder" value="article"/>
+                                </jsp:include>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <div class="col-xs-12 text-right">
-                                <button class="btn btn-info" type="button" onclick="saveCategory()">保存</button>
+                                <a id="lockCategory" class="btn btn-danger" style="display:none" type="button"
+                                        onclick="lockCategory(1)"><i class="fa fa-lock"></i> 锁定
+                                </a>
+                                <a id="unlockCategory" class="btn btn-success" style="display:none" type="button"
+                                        onclick="lockCategory(0)"><i class="fa fa-unlock-alt"></i>解锁
+                                </a>
+                                <button class="btn btn-info" type="button" onclick="updateCategory()">保存</button>
                                 <button class="btn btn-danger" type="button" onclick="deleteCategory()">删除</button>
                             </div>
                         </div>
@@ -112,26 +129,68 @@
     </div>
 </div>
 
-
 <script>
     var $form = $("form[name=saveForm]");
     var treeData;
+    var selectedId;
+    var categoryTreeCallBackType;
     $(function () {
-        updateTree();
+        updateTree(true, false);
     });
 
-    function updateTree() {
-        $form.xsClean();
-        $form.xsDisable();
+    function updateTree(reset, remove) {
+        if (reset) {
+            $form.xsClean();
+            $form.xsDisable();
+        }
+        if (remove) {
+            $("#tree").treeview("remove");
+            $("#categoryTree").treeview("remove");
+        }
         doPost("<%=request.getContextPath()%>/admin/content/article/category/tree", {}, function (data) {
             if (data.status) {
                 treeData = data.data;
                 $('#tree').treeview({
                     data: treeData,
-                    onNodeSelected: function (event, data) {
-                        getCategory(data.id);
+                    onNodeSelected: function (event, node) {
+                        if (selectedId !== node.id) {
+                            selectedId = node.id;
+                            getCategory(selectedId);
+                        }
+                    },
+                    toggle: false
+                });
+
+                if (selectedId !== undefined) {
+                    $("#tree").treeview("selectNode", selectedId);
+                }
+
+                $("#categoryTree").treeview({
+                    data: [{
+                        "name": "无",
+                        "id": "null",
+                        "children": treeData
+                    }],
+                    onNodeSelected: function (event, node) {
+                        if (categoryTreeCallBackType === 0) {//新增
+                            $createForm.xsSetInput("parent.name", node.name);
+                            $createForm.xsSetInput("parent.id", node.id);
+                            $("#categoryModel").modal('hide');
+                            $("#categoryTree").treeview("unselectNode", $("#categoryTree").treeview("getSelected")[0].id);
+                        } else {//修改
+                            if (selectedId === node.id) {
+                                alert("不能选自己作为父级");
+                                $("#categoryTree").treeview("unselectNode", $("#categoryTree").treeview("getSelected")[0].id);
+                            } else {
+                                $form.xsSetInput("parent.name", node.name);
+                                $form.xsSetInput("parent.id", node.id);
+                                $("#categoryModel").modal('hide');
+                                $("#categoryTree").treeview("unselectNode", $("#categoryTree").treeview("getSelected")[0].id);
+                            }
+                        }
                     }
                 });
+
             } else {
                 alert(data.msg);
             }
@@ -146,38 +205,71 @@
                 $form.xsSetInput("name", category.name);
                 $form.xsSetInput("key", category.key);
                 $form.xsSetInput("seq", category.seq);
+                $form.xsSetInput("display", category.display);
+                $form.xsSetInput("prefix", category.prefix);
                 if (category.parent !== undefined) {
                     $form.xsSetInput("parent.id", category.parent.id);
                     $form.xsSetInput("parent.name", category.parent.name);
+                } else {
+                    $form.xsSetInput("parent.name", "无");
                 }
-                $form.xsEnable();
+                if (category.icon !== undefined && category.icon !== "") {
+                    putImageIntoImageUploader('updateIcon', category.icon);
+                } else {
+                    cleanImageInUploader('updateIcon');
+                }
+                if (category.lock === 0) {
+                    $("#lockCategory").css("display", '');
+                    $("#unlockCategory").css("display", 'none');
+                    $form.xsEnable();
+                } else {
+                    $("#lockCategory").css("display", 'none');
+                    $("#unlockCategory").css("display", '');
+                    $form.xsDisable();
+                }
             } else {
                 alert(data.msg);
+                $form.xsEnable();
             }
         })
     }
 
-
-    function saveCategory() {
-        <%--doPost("<%=request.getContextPath()%>/image/category/save", {id: id}, function (data) {--%>
-        <%--if (data.status) {--%>
-        <%--var category = data.data;--%>
-        <%--getElementInForm.call($form, "id").val(category.id);--%>
-        <%--getElementInForm.call($form, "name").val(category.name);--%>
-        <%--getElementInForm.call($form, "key").val(category.key);--%>
-        <%--getElementInForm.call($form, "seq").val(category.seq);--%>
-        <%--if (category.parent !== undefined) {--%>
-        <%--getElementInForm.call($form, "parent.id").val(category.parent.id);--%>
-        <%--getElementInForm.call($form, "parent.name").val(category.parent.name);--%>
-        <%--}--%>
-        <%--enableForm.call($form);--%>
-        <%--} else {--%>
-        <%--alert(data.msg);--%>
-        <%--}--%>
-        <%--});--%>
+    function updateCategory() {
+        doPost("<%=request.getContextPath()%>/admin/content/article/category/update",
+            {
+                id: selectedId,
+                name: $form.xsGetInput("name"),
+                key: $form.xsGetInput("key"),
+                seq: $form.xsGetInput("seq"),
+                display: $form.xsGetInput("display"),
+                icon: $form.xsGetInput("icon"),
+                prefix: $form.xsGetInput("prefix"),
+                "parent.id": $form.xsGetInput('parent.id') === "null" ? undefined : $form.xsGetInput('parent.id')
+            },
+            function (data) {
+                if (data.status) {
+                    updateTree(false, true);
+                    alert("更新成功");
+                } else {
+                    alert(data.msg);
+                }
+            });
     }
 
-
+    function lockCategory(lock) {
+        doPost("<%=request.getContextPath()%>/admin/content/article/category/lock",
+            {
+                id: selectedId
+            },
+            function (data) {
+                if (data.status) {
+                    getCategory(selectedId);
+                    alert(lock===1?"锁定成功":"解锁成功");
+                } else {
+                    alert(data.msg);
+                }
+            });
+    }
 </script>
 
 
@@ -185,7 +277,14 @@
 <script>
     function deleteCategory() {
         showDeleteModel(null, function () {
-            alert("confirm");
+            doPost("<%=request.getContextPath()%>/admin/content/article/category/remove", {id: selectedId}, function (data) {
+                if (data.status) {
+                    selectedId = "";
+                    updateTree(true, true);
+                } else {
+                    alert(data.msg);
+                }
+            });
         });
     }
 </script>
@@ -214,7 +313,8 @@
                             <label class="control-label required">顺序：</label>
                         </div>
                         <div class="col-xs-9">
-                            <input name="seq" type="number" min="0" step="1" class="form-control">
+                            <input name="seq" type="number" min="0" step="1" class="form-control" value="0"
+                                   data-value="0">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -223,12 +323,13 @@
                         </div>
                         <div class="col-xs-9">
                             <input name="parent.id" type="hidden">
-                            <input name="parent.name" type="text" class="form-control" readonly>
+                            <input type="text" name="parent.name" class="form-control" readonly data-value="无" value="无"
+                                   onclick="showCategoryTree(0)">
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-xs-3 text-right">
-                            <label class="control-label required">KEY：</label>
+                            <label class="control-label required">Key：</label>
                         </div>
                         <div class="col-xs-9">
                             <input name="key" type="text" class="form-control">
@@ -240,7 +341,6 @@
                         </div>
                         <div class="col-xs-9">
                             <select name="display" class="form-control">
-                                <option value=""></option>
                                 <option value="1">是</option>
                                 <option value="0">否</option>
                             </select>
@@ -252,8 +352,8 @@
                         </div>
                         <div class="col-xs-9">
                             <jsp:include page="../common/imageUploader.jsp">
-                                <jsp:param name="id" value="test"/>
-                                <jsp:param name="name" value="url"/>
+                                <jsp:param name="id" value="createIcon"/>
+                                <jsp:param name="name" value="icon"/>
                                 <jsp:param name="folder" value="article"/>
                             </jsp:include>
                         </div>
@@ -270,60 +370,118 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-danger">确定</button>
+                    <button id="createSubmit" type="submit" class="btn btn-danger">确定</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 <script>
-    $createForm = $("form[name=createForm]");
-    $createForm.validate({
+    var $createForm = $("form[name=createForm]");
+    var $createSubmit = $("#createSubmit");
+    var createValidator = $createForm.validate({
         rules: {
             name: {
+                required: true,
+                notEmpty: true
+            },
+            seq: {
                 required: true
+            },
+            key: {
+                required: true,
+                notEmpty: true
+            },
+            prefix: {
+                required: true,
+                notEmpty: true
             }
         },
         messages: {
             name: {
-                required: "qin"
+                required: "名称不能为空",
+                notEmpty: "名称不能为空"
+            },
+            seq: {
+                required: "顺序不能为空"
+            },
+            key: {
+                required: "Key不能为空",
+                notEmpty: "Key不能为空"
+            },
+            prefix: {
+                required: "预览前缀不能为空",
+                notEmpty: "预览前缀不能为空"
             }
         },
-        submitHandler: function (form) {
-            <%--submitBtn.attr("disabled",true);--%>
-            <%--doPost("<%=request.getContextPath()%>/admin/login", $(form).serialize(),--%>
-            <%--function (data) {--%>
-            <%--if (data.status) {--%>
-            <%--window.location.href = "<%=request.getContextPath()%>/admin/index"--%>
-            <%--} else {--%>
-            <%--$("#errorText").html(data.msg);--%>
-            <%--}--%>
-            <%--submitBtn.attr("disabled",false);--%>
-            <%--}, function (XMLHttpRequest, textStatus) {--%>
-            <%--submitBtn.attr("disabled",false);--%>
-            <%--alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);--%>
-            <%--});--%>
+        submitHandler: function () {
+            $createSubmit.attr("disabled", true);
+            doPost("<%=request.getContextPath()%>/admin/content/article/category/save",
+                {
+                    name: $createForm.xsGetInput('name'),
+                    seq: $createForm.xsGetInput('seq'),
+                    "parent.id": $createForm.xsGetInput('parent.id') === "null" ? undefined : $createForm.xsGetInput('parent.id'),
+                    key: $createForm.xsGetInput('key'),
+                    display: $createForm.xsGetInput('display'),
+                    icon: $createForm.xsGetInput('icon'),
+                    prefix: $createForm.xsGetInput('prefix')
+                },
+                function (data) {
+                    $createSubmit.attr("disabled", false);
+                    if (data.status) {
+                        cleanImageInUploader('createIcon');
+                        $createForm.xsClean();
+                        $("#createModel").modal("hide");
+                        setTimeout(function () {
+                            alert("新增成功");
+                            updateTree(false);
+                        }, 380);
+
+                    } else {
+                        alert(data.msg);
+                    }
+                }, function (XMLHttpRequest, textStatus) {
+                    $createSubmit.attr("disabled", false);
+                    alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
+                });
         }
     });
     function showCreateModal() {
         $("#createModel").modal("show");
     }
-    <%--function createCategory() {--%>
-    <%--doPost("<%=request.getContextPath()%>/image/category/save", $createForm.serialize(), function (data) {--%>
-    <%--if (data.status) {--%>
-    <%--updateTree();--%>
-    <%--alert("新增成功");--%>
-    <%--} else {--%>
-    <%--alert(data.msg);--%>
-    <%--}--%>
-    <%--}, function () {--%>
-    <%--$createForm.reset()();--%>
-    <%--alert(123);--%>
-    <%--});--%>
-
-
-    <%--}--%>
+    $(function () {
+        $("#createModel").on('hide.bs.modal', function () {
+            cleanImageInUploader('createIcon');
+            $createForm.xsClean();
+            createValidator.resetForm();
+        })
+    });
 </script>
 
+<%--分类树--%>
+<div class="modal fade" id="categoryModel" data-backdrop="static" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">文章分类</h4>
+            </div>
+            <div class="modal-body">
+                <div id="categoryTree">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function showCategoryTree(type) {
+        categoryTreeCallBackType = type;
+        $("#categoryTree").treeview('expandAll');
+        $("#categoryModel").modal('show');
+    }
+
+</script>
 </body>
 </html>

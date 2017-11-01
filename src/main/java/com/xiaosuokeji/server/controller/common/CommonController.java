@@ -26,6 +26,17 @@ public class CommonController {
     OssService ossService;
 
     /**
+     * UEditor 入口
+     *
+     * @return
+     */
+    @RequestMapping("/admin/ueditor/controller")
+    public String controller() {
+        return "admin/common/_ueditor";
+    }
+
+
+    /**
      * 文件上传
      *
      * @param folders

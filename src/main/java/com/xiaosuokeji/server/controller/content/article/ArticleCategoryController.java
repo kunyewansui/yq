@@ -5,7 +5,6 @@ import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.article.ArticleCategory;
-import com.xiaosuokeji.server.model.image.ImageCategory;
 import com.xiaosuokeji.server.service.intf.article.ArticleCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,7 @@ public class ArticleCategoryController {
     //region Admin
 
     @RequestMapping(value = "/admin/content/article/category", method = RequestMethod.GET)
-    public String index(){
+    public String index() {
         return "admin/content/articleCategory";
     }
 
@@ -63,7 +62,17 @@ public class ArticleCategoryController {
     @ResponseBody
     public XSServiceResult adminUpdate(@Validated(ArticleCategory.Update.class) ArticleCategory articleCategory)
             throws XSBusinessException {
+        if (articleCategory.getParent() == null)
+            articleCategory.setParent(new ArticleCategory());
         articleCategoryService.update(articleCategory);
+        return XSServiceResult.build();
+    }
+
+    @RequestMapping(value = "/admin/content/article/category/lock", method = RequestMethod.POST)
+    @ResponseBody
+    public XSServiceResult adminLock( ArticleCategory articleCategory)
+            throws XSBusinessException {
+        articleCategoryService.updateLock(articleCategory);
         return XSServiceResult.build();
     }
 
