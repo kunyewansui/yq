@@ -17,7 +17,7 @@
         </button>
         <a href="<%=request.getContextPath()%>/" class="navbar-brand text-lt hidden-xs" style="display: block;margin: 0 auto">
             <img style="display: block;margin: 8px auto 0 auto;max-height: 36px;max-width: 150px;"
-                 src="<%=request.getContextPath()%>/assets/admin/logo.png"/>
+                 src="<%=request.getContextPath()%>/assets/admin/img/logo.png"/>
         </a>
     </div>
     <div class="collapse pos-rlt navbar-collapse box-shadow bg-white-only">
