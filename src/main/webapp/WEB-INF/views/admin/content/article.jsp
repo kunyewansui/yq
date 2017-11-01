@@ -145,7 +145,8 @@
                                             下架
                                         </button>
                                     </c:if>
-                                    <a href="<%=request.getContextPath()%>/admin/content/article/article/update?id=${article.id}" class="btn btn-info btn-xs">
+                                    <a href="<%=request.getContextPath()%>/admin/content/article/article/update?id=${article.id}"
+                                       class="btn btn-info btn-xs">
                                         编辑
                                     </a>
                                     <button class="btn btn-danger btn-xs"
@@ -171,6 +172,7 @@
     "children":${categoryTree}
 }]
 
+
 </script>
 
 <script>
@@ -179,18 +181,21 @@
         var treeData = JSON.parse($("#treeData").text());
         $('#tree').treeview({
             data: treeData,
-            onNodeSelected: function (event, data) {
-                $("#searchForm input[name='category.id']").val(data.id);
-                $searchForm.submit();
+            onNodeSelected: function (event, node) {
+                if (node.id !== '${search.category.id}') {
+                    $("#searchForm input[name='category.id']").val(node.id);
+                    $searchForm.submit();
+                }
             },
             selectedId: '${search.category.id}'
         });
+        $("#tree").treeview('selectNode', '${search.category.id}');
     });
 
-    function updateArticle(id,status){
+    function updateArticle(id, status) {
         doPost('<%=request.getContextPath()%>/admin/content/article/article/update',
             {
-                id:id,
+                id: id,
                 display: status
             }, function (data) {
                 if (data.status) {
