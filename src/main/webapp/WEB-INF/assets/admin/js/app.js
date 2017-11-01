@@ -142,9 +142,9 @@ $(function () {
         var textareas = this.find("textarea");
         var els = [];
         $.each(inputs, function (index, element) {
-            if ($(element).attr('type') === 'button' || $(element).attr('type') === 'submit'||$(element).data('ignore'))
+            if ($(element).attr('type') === 'button' || $(element).attr('type') === 'submit' || $(element).data('ignore'))
                 return true;
-            if($(element).data('value')){
+            if ($(element).data('value')) {
                 $(element).val($(element).data('value'));
                 return true;
             }
@@ -166,6 +166,38 @@ $(function () {
     $.fn.xsGetInput = function (name) {
         return $(this.find("[name='" + name + "']")[0]).val();
     };
+    $.fn.xsSetForm = function (json) {
+        var jsonObject;
+        var _this = this;
+        var setSub = function (sk, obj) {
+            for (var k2 in obj) {
+                if (obj.hasOwnProperty(k2)) {
+                    if (obj[k2] instanceof Object) {
+                        setSub(k2, obj[k2]);
+                    } else {
+                        _this.xsSetInput(sk + "." + k2, obj[k2]);
+                    }
+                }
+            }
+        };
+
+        if (json instanceof String) {
+            jsonObject = JSON.parse(json);
+        } else {
+            jsonObject = json;
+        }
+        for (var k in jsonObject) {
+            if (jsonObject.hasOwnProperty(k)) {
+                if (jsonObject[k] instanceof Object) {
+                    setSub(k,jsonObject[k]);
+                } else {
+                    this.xsSetInput(k, jsonObject[k]);
+                }
+
+            }
+
+        }
+    }
 })(jQuery);
 
 $(function () {
@@ -176,7 +208,7 @@ $(function () {
 });
 
 function doPost(url, data, success, error) {
-    var time=setTimeout(function () {
+    var time = setTimeout(function () {
         showLoadingView()
     },800);
     var e,s;
@@ -186,14 +218,14 @@ function doPost(url, data, success, error) {
             hideLoadingView();
             alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
         }
-    }else{
-        e=function (XMLHttpRequest, textStatus) {
+    } else {
+        e = function (XMLHttpRequest, textStatus) {
             clearTimeout(time);
             hideLoadingView();
             error(XMLHttpRequest, textStatus);
         }
     }
-    s=function (data) {
+    s = function (data) {
         clearTimeout(time);
         hideLoadingView();
         success(data);
@@ -261,7 +293,7 @@ function uploadFile(url, formData, success, error) {
 function showLoadingView() {
     hideLoadingView();
     var __xsLoadingView__ = $('<div>', {id: "xsLoadingView", class: "xs-loading"});
-    __xsLoadingView__.append($('<i>', {class:'fa fa-spinner fa-pulse'}));
+    __xsLoadingView__.append($('<i>', {class: 'fa fa-spinner fa-pulse'}));
     $('body').append(__xsLoadingView__);
 }
 
