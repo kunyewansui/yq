@@ -209,8 +209,8 @@ $(function () {
 function doPost(url, data, success, error) {
     var time = setTimeout(function () {
         showLoadingView()
-    }, 1200);
-    var e, s;
+    },800);
+    var e,s;
     if (error === undefined || error === null) {
         e = function (XMLHttpRequest, textStatus) {
             clearTimeout(time);
@@ -239,21 +239,38 @@ function doPost(url, data, success, error) {
     })
 }
 
-// function doGet(url, data, success, error) {
-//     if (error === undefined || error === null) {
-//         error = function (XMLHttpRequest, textStatus) {
-//             alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
-//         }
-//     }
-//     $.ajax({
-//         type: 'GET',
-//         url: url,
-//         data: data,
-//         dataType: 'json',
-//         success: success,
-//         error: error
-//     })
-// }
+function doGet(url, data, success, error) {
+    var time=setTimeout(function () {
+        showLoadingView()
+    },800);
+    var e,s;
+    if (error === undefined || error === null) {
+        e = function (XMLHttpRequest, textStatus) {
+            clearTimeout(time);
+            hideLoadingView();
+            alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
+        }
+    }else{
+        e=function (XMLHttpRequest, textStatus) {
+            clearTimeout(time);
+            hideLoadingView();
+            error(XMLHttpRequest, textStatus);
+        }
+    }
+    s=function (data) {
+        clearTimeout(time);
+        hideLoadingView();
+        success(data);
+    };
+    $.ajax({
+        type: 'GET',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: s,
+        error: e
+    })
+}
 
 function uploadFile(url, formData, success, error) {
     if (error === undefined || error === null) {
