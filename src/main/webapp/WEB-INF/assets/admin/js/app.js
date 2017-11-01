@@ -173,7 +173,7 @@ $(function () {
             for (var k2 in obj) {
                 if (obj.hasOwnProperty(k2)) {
                     if (obj[k2] instanceof Object) {
-                        setSub(k2, obj[k2]);
+                        setSub(sk+"."+k2, obj[k2]);
                     } else {
                         _this.xsSetInput(sk + "." + k2, obj[k2]);
                     }
