@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.server.dao.system.FeedbackDao">
+
+    <insert id="save" parameterType="feedback">
+        INSERT INTO shuttle_common.sc_feedback(id,`name`,`mobile`,`title`,`content`)
+        VALUES (#{id},#{name},#{mobile},#{title},#{content})
+    </insert>
+
+    <delete id="remove" parameterType="feedback">
+        DELETE FROM shuttle_common.sc_feedback
+        WHERE id=#{id}
+    </delete>
+
+     <select id="get" parameterType="feedback" resultType="feedback">
+        SELECT *
+        FROM shuttle_common.sc_feedback
+        WHERE id=#{id}
+    </select>
+
+    <sql id="listCondition">
+        FROM shuttle_common.sc_feedback
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
+            <if test="dynamic!=null and dynamic.content!=null and dynamic.content!=''">
+                AND `content` LIKE CONCAT('%',#{dynamic.content},'%')
+            </if>
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="feedback" resultType="feedback">
+        SELECT *
+        <include refid="listCondition"/>
+        <include refid="XSBaseMapper.sort"/>
+        <include refid="XSBaseMapper.limit"/>
+    </select>
+
+    <select id="count" parameterType="feedback" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition"/>
+    </select>
+</mapper>

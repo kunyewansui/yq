@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.controller.content.article;
+package com.xiaosuokeji.server.controller.content;
 
 import com.xiaosuokeji.framework.annotation.XSExceptionHandler;
 import com.xiaosuokeji.framework.annotation.XSLog;
@@ -52,9 +52,9 @@ public class ArticleController {
     }
 
     @RequestMapping(value = "/admin/content/article/article/update", method = RequestMethod.GET)
-    public String update(Model model, HttpServletRequest request, Article article) throws Exception {
+    public String update(Model model, HttpServletRequest request, Article article)throws Exception {
         model.addAttribute("backUrl", request.getHeader("Referer"));
-        try{
+        try {
             model.addAttribute("article", articleService.get(article));
         } catch (XSBusinessException e) {
             model.addAttribute("article", null);
@@ -79,7 +79,7 @@ public class ArticleController {
 
     @RequestMapping(value = "/admin/content/article/update", method = RequestMethod.POST)
     @ResponseBody
-    public XSServiceResult adminUpdate(Article article) throws XSBusinessException {
+    public XSServiceResult adminUpdate(@Validated(Article.Update.class) Article article) throws XSBusinessException {
         articleService.update(article);
         return XSServiceResult.build();
     }
