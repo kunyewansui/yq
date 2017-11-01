@@ -6,5 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<script href="<%=request.getContextPath()%>/assets/admin/js/bootstrap-datepicker.js"></script>
-<script href="<%=request.getContextPath()%>/assets/admin/js/app.datepicker.js"></script>
+<script src="<%=request.getContextPath()%>/assets/admin/js/bootstrap-datepicker.js"></script>
+<script src="<%=request.getContextPath()%>/assets/admin/js/app.datepicker.js"></script>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/datepicker.min.css">

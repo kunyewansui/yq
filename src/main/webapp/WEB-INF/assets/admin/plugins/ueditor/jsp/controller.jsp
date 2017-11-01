@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	import="com.xiaosuokeji.feelschool.admin.ueditor.ActionEnter"
+	import="com.xiaosuokeji.framework.ueditor.ActionEnter"
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%

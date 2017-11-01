@@ -6,14 +6,24 @@ $(function () {
     //Nav
     var c_href = window.location.href;
     var nav = $("#a_nav");
+    var navLinks = nav.find("a");
+    var haveActive = false;
+
     nav.find("a").each(function () {
         var a_href = $(this).context.href.trim();
         if (a_href !== "" && a_href !== $(this).context.origin + "/" && c_href.indexOf(a_href) === 0) {
             var nexStr = c_href.substr(a_href.length, 1);
-            if (nexStr === "" || nexStr === "?" || nexStr === "#" || nexStr === "/")
+            if (nexStr === "" || nexStr === "?" || nexStr === "#" || nexStr === "/") {
                 $(this).parent("li").addClass("active");
+                haveActive = true;
+                return false;
+            }
         }
     });
+
+    if (!haveActive && navLinks.length > 0) {
+        navLinks[0].click();
+    }
 
     nav.find("li").each(function () {
         var $this = $(this);
@@ -81,9 +91,8 @@ $(function () {
 
 });
 
-
-(function($){
-    $.fn.xsEnable = function(){
+(function ($) {
+    $.fn.xsEnable = function () {
         var inputs = this.find("input");
         var selects = this.find("select");
         var textareas = this.find("textarea");
@@ -102,10 +111,10 @@ $(function () {
             els.push($(element));
         });
         $.each(els, function (index, element) {
-            element.attr('disabled',false);
+            element.attr('disabled', false);
         });
     };
-    $.fn.xsDisable = function(){
+    $.fn.xsDisable = function () {
         var inputs = this.find("input");
         var selects = this.find("select");
         var textareas = this.find("textarea");
@@ -124,88 +133,142 @@ $(function () {
             els.push($(element));
         });
         $.each(els, function (index, element) {
-            element.attr('disabled',true);
+            element.attr('disabled', true);
         });
     };
-    $.fn.xsClean=function () {
+    $.fn.xsClean = function () {
         var inputs = this.find("input");
         var selects = this.find("select");
         var textareas = this.find("textarea");
-        var buttons = this.find("button");
         var els = [];
         $.each(inputs, function (index, element) {
+            if ($(element).attr('type') === 'button' || $(element).attr('type') === 'submit'||$(element).data('ignore'))
+                return true;
+            if($(element).data('value')){
+                $(element).val($(element).data('value'));
+                return true;
+            }
             els.push($(element));
         });
         $.each(selects, function (index, element) {
             els.push($(element));
         });
         $.each(textareas, function (index, element) {
-            els.push($(element));
-        });
-        $.each(buttons, function (index, element) {
             els.push($(element));
         });
         $.each(els, function (index, element) {
             element.val("");
         });
     };
-    $.fn.xsSetInput=function (name,val) {
-        return $(this.find("[name='"+name+"']")[0]).val(val);
-    }
+    $.fn.xsSetInput = function (name, val) {
+        $(this.find("[name='" + name + "']")[0]).val(val);
+    };
+    $.fn.xsGetInput = function (name) {
+        return $(this.find("[name='" + name + "']")[0]).val();
+    };
 })(jQuery);
 
+$(function () {
+    $('select[data-value]').each(function (i, e) {
+        var $e = $(e);
+        $e.val($e.data('value'));
+    })
+});
 
 function doPost(url, data, success, error) {
+    var time=setTimeout(function () {
+        showLoadingView()
+    },1200);
+    var e,s;
     if (error === undefined || error === null) {
-        error = function (XMLHttpRequest, textStatus) {
+        e = function (XMLHttpRequest, textStatus) {
+            clearTimeout(time);
+            hideLoadingView();
             alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
+        }
+    }else{
+        e=function (XMLHttpRequest, textStatus) {
+            clearTimeout(time);
+            hideLoadingView();
+            error(XMLHttpRequest, textStatus);
+        }
+    }
+    s=function (data) {
+        clearTimeout(time);
+        hideLoadingView();
+        success(data);
+    };
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: s,
+        error: e
+    })
+}
+
+// function doGet(url, data, success, error) {
+//     if (error === undefined || error === null) {
+//         error = function (XMLHttpRequest, textStatus) {
+//             alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
+//         }
+//     }
+//     $.ajax({
+//         type: 'GET',
+//         url: url,
+//         data: data,
+//         dataType: 'json',
+//         success: success,
+//         error: error
+//     })
+// }
+
+function uploadFile(url, formData, success, error) {
+    if (error === undefined || error === null) {
+        error = function (res) {
+            alert("请求失败：" + res.statusText + "\n错误码：" + res.status);
         }
     }
     $.ajax({
         type: 'POST',
         url: url,
-        data: data,
-        dataType: 'json',
-        success: success,
-        error: error
-    })
-}
-
-
-function uploadFile(url, formData, success, error) {
-    $.ajax({
-        type: 'POST',
-        url: url,
         cache: false,
         data: formData,
         processData: false,
         contentType: false,
-        dataType: 'json',
+        dataType: 'json'
     }).done(success).fail(error);
 }
 
-function uploadFile(url, formData, success) {
-    $.ajax({
-        type: 'POST',
-        url: url,
-        cache: false,
-        data: formData,
-        processData: false,
-        contentType: false,
-        dataType: 'json',
-    }).done(success).fail(function (res) {
-        alert("请求失败：" + res.statusText + "\n错误码：" + res.status);
-    });
+function showLoadingView() {
+    hideLoadingView();
+    var __xsLoadingView__ = $('<div>', {id: "xsLoadingView", class: "xs-loading"});
+    __xsLoadingView__.append($('<i>', {class:'fa fa-spinner fa-pulse'}));
+    $('body').append(__xsLoadingView__);
 }
 
-function doGet(url, data, success, error) {
-    $.ajax({
-        type: 'GET',
-        url: url,
-        data: data,
-        dataType: 'json',
-        success: success,
-        error: error
-    })
+function hideLoadingView() {
+    $("#xsLoadingView").remove();
 }
+
+function imageUpload(url, folder, file, success, error) {
+    var formData = new FormData();
+    formData.append("folders", folder);
+    formData.append("files", file);
+    uploadFile(url, formData, success, error);
+}
+
+function putImageIntoImageUploader(id, url) {
+    eval('images_' + id + '.splice(0,images_' + id + '.length)');
+    eval('images_' + id + '.push("' + url + '")');
+    eval('$url_' + id + '.val("' + url + '")');
+    eval('updatePreviewDiv_' + id + '()');
+}
+function cleanImageInUploader(id) {
+    eval('images_' + id + '.splice(0,images_' + id + '.length)');
+    eval('updatePreviewDiv_' + id + '()');
+}
+
+
 

@@ -11,6 +11,18 @@
         <div class="navi-wrap">
             <nav class="navi">
                 <ul id="a_nav" class="nav">
+                    <li>
+                        <a href="<%=request.getContextPath()%>/admin/content/article/article">
+                            <i class="fa fa-empire"></i>
+                            <span>文章管理</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<%=request.getContextPath()%>/admin/content/article/category">
+                            <i class="fa fa-empire"></i>
+                            <span>文章分类</span>
+                        </a>
+                    </li>
                         <li>
                             <a href="<%=request.getContextPath()%>/image/manage">
                                 <i class="fa fa-empire"></i>

@@ -69,7 +69,7 @@ public class Article extends BaseModel {
     /**
      * 锁定，0否，1是
      */
-    private Integer lock;
+    private Integer lock=0;
 
     public interface Save {}
 
