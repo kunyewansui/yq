@@ -8,13 +8,11 @@ import com.xiaosuokeji.server.security.admin.constant.SecOrganizationConsts;
 import com.xiaosuokeji.server.security.admin.dao.SecOrganizationDao;
 import com.xiaosuokeji.server.security.admin.model.SecOrganization;
 import com.xiaosuokeji.server.security.admin.model.SecRole;
-import com.xiaosuokeji.server.security.admin.model.SecStaff;
 import com.xiaosuokeji.server.security.admin.service.intf.SecOrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;

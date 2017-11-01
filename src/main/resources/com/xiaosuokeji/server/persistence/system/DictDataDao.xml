@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.server.dao.system.DictDataDao">
+
+    <insert id="save" parameterType="dictData">
+        INSERT INTO shuttle_common.sc_dict_data(dict_id,`value`,`name`,`desc`,`lock`)
+        VALUES (#{dict_id},#{value},#{name},#{desc},#{lock})
+        ON DUPLICATE KEY UPDATE
+        `name`=#{name},
+        `desc`=#{desc},
+        `lock`=#{lock},
+        update_time=NOW()
+    </insert>
+
+    <delete id="remove" parameterType="dictData">
+        DELETE FROM shuttle_common.sc_dict_data
+        WHERE id=#{id}
+    </delete>
+
+    <update id="update" parameterType="dictData">
+        UPDATE shuttle_common.sc_dict_data
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="dict!=null and dict.id!=null">
+                ,dict_id=#{dict.id}
+            </if>
+            <if test="value!=null">
+                ,`value`=#{value}
+            </if>
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="desc!=null">
+                ,`desc`=#{desc}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateLock" parameterType="dictData">
+        UPDATE shuttle_common.sc_dict_data
+        SET `lock`=#{lock},update_time=NOW()
+        WHERE id=#{id}
+    </update>
+
+    <select id="get" parameterType="dictData" resultType="dictData">
+        SELECT *
+        FROM shuttle_common.sc_dict_data
+        WHERE id=#{id}
+    </select>
+
+    <select id="getDesc" parameterType="dictData" resultType="dictData">
+        SELECT dd.desc
+        FROM shuttle_common.sc_dict d
+        JOIN shuttle_common.sc_dict_data dd ON d.id=dd.dict_id
+        WHERE d.key=#{dict.key}
+    </select>
+
+    <sql id="listCondition">
+        FROM shuttle_common.sc_dict_data
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="dict!=null and dict.id!=null">
+                ,dict_id=#{dict.id}
+            </if>
+            <if test="value!=null and value!=''">
+                AND `value`=#{value}
+            </if>
+            <if test="dynamic!=null and dynamic.value!=null and dynamic.value!=''">
+                AND `value`=#{dynamic.value}
+            </if>
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND `name`=#{dynamic.name}
+            </if>
+            <if test="dynamic!=null and dynamic.desc!=null and dynamic.desc!=''">
+                AND `desc`=#{dynamic.desc}
+            </if>
+            <if test="lock!=null">
+                AND `lock`=#{lock}
+            </if>
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="dictData" resultType="dictData">
+        SELECT *
+        <include refid="listCondition"/>
+        <include refid="XSBaseMapper.sort"/>
+        <include refid="XSBaseMapper.limit"/>
+    </select>
+
+    <select id="count" parameterType="dictData" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition"/>
+    </select>
+</mapper>

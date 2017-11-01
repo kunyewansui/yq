@@ -2,10 +2,8 @@ package com.xiaosuokeji.server.security.admin.service.intf;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
-import com.xiaosuokeji.server.security.admin.model.SecResource;
 import com.xiaosuokeji.server.security.admin.model.SecRole;
 import com.xiaosuokeji.server.security.admin.model.SecStaff;
-import org.springframework.security.core.Authentication;
 
 import java.util.List;
 

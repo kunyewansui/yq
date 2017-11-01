@@ -1,7 +1,6 @@
 package com.xiaosuokeji.server.model.article;
 
 import com.xiaosuokeji.server.model.base.BaseModel;
-import com.xiaosuokeji.server.model.image.Image;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
