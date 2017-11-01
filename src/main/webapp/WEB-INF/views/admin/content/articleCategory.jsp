@@ -367,7 +367,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button id="createSubmit" type="submit" class="btn btn-danger">确定</button>
+                    <button id="createSubmit" type="submit" class="btn btn-success">确定</button>
                 </div>
             </form>
         </div>
@@ -427,7 +427,6 @@
                     $createSubmit.attr("disabled", false);
                     if (data.status) {
                         cleanImageInUploader('createIcon');
-                        $createForm.xsClean();
                         $("#createModel").modal("hide");
                         setTimeout(function () {
                             alert("新增成功");

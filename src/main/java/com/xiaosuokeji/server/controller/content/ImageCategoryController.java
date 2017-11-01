@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.controller.content.image;
+package com.xiaosuokeji.server.controller.content;
 
 import com.xiaosuokeji.framework.annotation.XSExceptionHandler;
 import com.xiaosuokeji.framework.annotation.XSLog;
