@@ -32,6 +32,5 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-
     <bean id="xsJacksonObjectMapper" class="com.xiaosuokeji.framework.json.XSJackson" factory-method="getObjectMapper"/>
 </beans>

@@ -35,7 +35,6 @@ public class DetailsService implements UserDetailsService {
         if (!staff.isEnabled()) {
             throw new DisabledException(SecStaffConsts.SEC_STAFF_NOT_ENABLE.getMsg());
         }
-
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         for (SecRole role : staff.getRoleList()) {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));

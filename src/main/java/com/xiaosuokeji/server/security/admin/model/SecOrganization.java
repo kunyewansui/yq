@@ -55,6 +55,11 @@ public class SecOrganization extends BaseModel implements XSTreeable<Long> {
     private List<SecOrganization> list;
 
     /**
+     * 组织列表
+     */
+    private List<XSTreeable<Long>> treeableList;
+
+    /**
      * 角色列表
      */
     private List<SecRole> roleList;
@@ -63,6 +68,10 @@ public class SecOrganization extends BaseModel implements XSTreeable<Long> {
      * 拥有，0否，1是
      */
     private Integer checked;
+
+    public interface Save {}
+
+    public interface Update {}
 
     @Override
     public Long getNodeId() {
@@ -154,9 +163,15 @@ public class SecOrganization extends BaseModel implements XSTreeable<Long> {
         this.checked = checked;
     }
 
-    public interface Save {
+    public void setChildren(List<XSTreeable<Long>> children) {
+        this.children = children;
     }
 
-    public interface Update {
+    public List<XSTreeable<Long>> getTreeableList() {
+        return treeableList;
+    }
+
+    public void setTreeableList(List<XSTreeable<Long>> treeableList) {
+        this.treeableList = treeableList;
     }
 }

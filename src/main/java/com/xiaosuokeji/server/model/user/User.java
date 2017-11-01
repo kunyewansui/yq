@@ -13,8 +13,7 @@ public class User extends XSGenericModel {
      */
     private String id;
 
-    public User() {
-    }
+    public User() {}
 
     public User(String id) {
         this.id = id;

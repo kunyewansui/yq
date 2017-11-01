@@ -25,7 +25,7 @@ public class SecResource extends BaseModel implements XSTreeable<Long> {
      * 键
      */
     @NotNull(message = "键不能为空", groups = Save.class)
-    @Length(min = 1, max = 255, message = "键长度为1-255个字符", groups = {Save.class, Update.class})
+    @Length(min = 1, max = 191, message = "键长度为1-191个字符", groups = {Save.class, Update.class})
     private String key;
 
     /**
@@ -59,10 +59,10 @@ public class SecResource extends BaseModel implements XSTreeable<Long> {
     private String method;
 
     /**
-     * 图标
+     * 图标链接
      */
-    @URL(message = "图标格式错误", groups = {Save.class, Update.class})
-    @Length(max = 255, message = "图标长度最多为255个字符", groups = {Save.class, Update.class})
+    @URL(message = "图标链接格式错误", groups = {Save.class, Update.class})
+    @Length(max = 255, message = "图标链接长度最多为255个字符", groups = {Save.class, Update.class})
     private String icon;
 
     /**
@@ -95,6 +95,11 @@ public class SecResource extends BaseModel implements XSTreeable<Long> {
      * 资源列表
      */
     private List<SecResource> list;
+
+    /**
+     * 资源列表
+     */
+    private List<XSTreeable<Long>> treeableList;
 
     public interface Save {}
 
@@ -243,5 +248,13 @@ public class SecResource extends BaseModel implements XSTreeable<Long> {
 
     public void setList(List<SecResource> list) {
         this.list = list;
+    }
+
+    public List<XSTreeable<Long>> getTreeableList() {
+        return treeableList;
+    }
+
+    public void setTreeableList(List<XSTreeable<Long>> treeableList) {
+        this.treeableList = treeableList;
     }
 }

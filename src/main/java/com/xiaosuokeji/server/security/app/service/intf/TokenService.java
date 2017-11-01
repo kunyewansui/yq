@@ -15,7 +15,6 @@ public interface TokenService {
 
     /**
      * 检验令牌
-     *
      * @param token 令牌
      * @return 令牌所属的用户
      * @throws Exception 令牌无效

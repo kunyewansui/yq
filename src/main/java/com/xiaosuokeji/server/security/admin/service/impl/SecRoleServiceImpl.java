@@ -8,11 +8,15 @@ import com.xiaosuokeji.server.security.admin.dao.SecResourceDao;
 import com.xiaosuokeji.server.security.admin.dao.SecRoleDao;
 import com.xiaosuokeji.server.security.admin.model.SecResource;
 import com.xiaosuokeji.server.security.admin.model.SecRole;
+import com.xiaosuokeji.server.security.admin.model.SecStaff;
 import com.xiaosuokeji.server.security.admin.service.intf.SecRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -24,9 +28,6 @@ public class SecRoleServiceImpl implements SecRoleService {
 
     @Autowired
     private SecRoleDao secRoleDao;
-
-    @Autowired
-    private SecResourceDao secResourceDao;
 
     @Override
     public void save(SecRole secRole) throws XSBusinessException {
@@ -40,18 +41,33 @@ public class SecRoleServiceImpl implements SecRoleService {
     }
 
     @Override
+    @Transactional
     public void remove(SecRole secRole) throws XSBusinessException {
-        secRoleDao.remove(secRole);
+        SecRole existent = get(secRole);
+        Long staffCount = secRoleDao.countStaff(existent);
+        if (staffCount.compareTo(0L) > 0) {
+            throw new XSBusinessException(SecRoleConsts.SEC_ROLE_USED);
+        }
+        Long organizationCount = secRoleDao.countOrganization(existent);
+        if (organizationCount.compareTo(0L) > 0) {
+            throw new XSBusinessException(SecRoleConsts.SEC_ROLE_USED);
+        }
+        secRoleDao.removeRoleRes(existent);
+        secRoleDao.remove(existent);
     }
 
     @Override
     public void update(SecRole secRole) throws XSBusinessException {
+        get(secRole);
         if (secRole.getName() != null) {
             SecRole existent = new SecRole();
             existent.setName(secRole.getName());
-            Long count = secRoleDao.count(existent);
-            if (count.compareTo(0L) > 0) {
-                throw new XSBusinessException(SecRoleConsts.SEC_ROLE_EXIST);
+            List<SecRole> existents = secRoleDao.list(existent);
+            if (existents.size() > 0) {
+                boolean isSelf = existents.get(0).getId().equals(secRole.getId());
+                if (!isSelf) {
+                    throw new XSBusinessException(SecRoleConsts.SEC_ROLE_EXIST);
+                }
             }
         }
         secRoleDao.update(secRole);
@@ -63,79 +79,66 @@ public class SecRoleServiceImpl implements SecRoleService {
         if (existent == null) {
             throw new XSBusinessException(SecRoleConsts.SEC_ROLE_NOT_EXIST);
         }
-        return secRoleDao.get(secRole);
+        return existent;
     }
 
     @Override
     public XSPageModel listAndCount(SecRole secRole) {
-        secRole.setDefaultSort("create_time", "DESC");
+        secRole.setDefaultSort("id", "DESC");
         return XSPageModel.build(secRoleDao.list(secRole), secRoleDao.count(secRole));
     }
 
     @Override
-    public List<SecRole> listCombo(SecRole secRole) {
-        secRole.setDefaultSort("create_time", "DESC");
-        return secRoleDao.listCombo(secRole);
-    }
-
-    @Override
-    public List<SecResource> treeResource(SecRole secRole) throws XSBusinessException {
-        SecRole existent = secRoleDao.get(secRole);
-        if (existent == null) {
-            throw new XSBusinessException(SecRoleConsts.SEC_ROLE_NOT_EXIST);
-        }
-        List<SecResource> resourceList = secResourceDao.listCombo(new SecResource());
-        List<SecResource> ownedResourceList = secRoleDao.listResource(secRole);
-        for (SecResource item : resourceList) {
-            for (SecResource ownd : ownedResourceList) {
-                if (item.getId().equals(ownd.getId())) {
+    public List treeResource(SecRole secRole, SecStaff secStaff) throws XSBusinessException {
+        SecRole existent = get(secRole);
+        SecResource existentRes = new SecResource();
+        existentRes.setDefaultSort("seq", "DESC");
+        List<SecResource> resourceList = secRoleDao.listResourceCombo(existentRes);
+        List<SecResource> ownedResourceList = secRoleDao.listResource(existent);
+        for (Iterator<SecResource> iterator = resourceList.iterator(); iterator.hasNext();) {
+            SecResource item = iterator.next();
+            //不展示类型为url的资源
+            if (item.getType().equals(2)) {
+                iterator.remove();
+                continue;
+            }
+            for (SecResource owned : ownedResourceList) {
+                if (item.getId().equals(owned.getId())) {
                     item.setChecked(1);
+                    break;
+                }
+            }
+        }
+        //非超级管理员不能够操作不可分配资源
+        if (!secStaff.getId().equals(1)) {
+            for (Iterator<SecResource> iterator = resourceList.iterator(); iterator.hasNext();) {
+                if (iterator.next().getAssign().equals(0)) {
+                    iterator.remove();
                 }
             }
         }
         XSTreeUtil.buildTree(resourceList);
-        List<SecResource> trees = new ArrayList<>();
-        for (SecResource item : resourceList) {
-            if (item.getParent() == null) {
-                trees.add(item);
-            }
-        }
-        return trees;
+        return XSTreeUtil.getSubTrees(resourceList, null);
     }
 
     @Override
-    public void authorizeResource(SecRole secRole) throws XSBusinessException {
-        SecRole existent = secRoleDao.get(secRole);
-        if (existent == null) {
-            throw new XSBusinessException(SecRoleConsts.SEC_ROLE_NOT_EXIST);
-        }
-        List<SecResource> oldResList = secRoleDao.listResource(secRole);
-        List<SecResource> newResList = new ArrayList<>();
-        List<SecResource> noChangedResList = new ArrayList<>();
-        //查询出新增的资源列表和未变动的资源列表
-        if (secRole.getResourceList() != null) {
-            for (int i = 0; i < secRole.getResourceList().size(); ++i) {
-                int j = 0;
-                for (; j < oldResList.size(); ++j) {
-                    if (secRole.getResourceList().get(i).getId().equals(oldResList.get(j).getId())) {
-                        noChangedResList.add(oldResList.get(j));
+    @Transactional
+    public void authorizeResource(SecRole secRole, SecStaff secStaff) throws XSBusinessException {
+        SecRole existent = get(secRole);
+        //非超级管理员不能够操作不可分配资源
+        if (!secStaff.getId().equals(1)) {
+            List<SecResource> resourceList = secRoleDao.listResourceCombo(new SecResource());
+            for (Iterator<SecResource> iterator = secRole.getResourceList().iterator(); iterator.hasNext();) {
+                SecResource secResource = iterator.next();
+                for (SecResource item : resourceList) {
+                    if (secResource.getId().equals(item.getId()) && item.getAssign().equals(0)) {
+                        iterator.remove();
                         break;
                     }
                 }
-                if (j >= oldResList.size()) newResList.add(secRole.getResourceList().get(i));
             }
         }
-        //新增资源
-        if (newResList.size() > 0) {
-            secRole.setResourceList(newResList);
-            secRoleDao.saveRoleRes(secRole);
-        }
-        //从旧资源中去除未变动的资源从而获取需要删除的资源
-        oldResList.removeAll(noChangedResList);
-        //删除资源
-        if (oldResList.size() > 0) {
-            secRole.setResourceList(oldResList);
-            secRoleDao.removeRoleRes(secRole);
-        }
+        secRoleDao.removeRoleRes(existent);
+        secRoleDao.saveRoleRes(secRole);
     }
 }

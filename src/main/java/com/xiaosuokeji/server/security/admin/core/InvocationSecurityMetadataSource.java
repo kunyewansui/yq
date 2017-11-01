@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 系统用户请求Service
+ * 系统用户请求拦截Service
  * Created by xuxiaowei on 2017/10/27.
  */
 @Service("securityMetadataSource")
@@ -35,19 +35,19 @@ public class InvocationSecurityMetadataSource implements FilterInvocationSecurit
         }
         //去除请求末尾多余的"/"
         int firstEndSlashIndex = -1;
-        for (int i=url.length() - 1; i>=0; i--) {
+        for (int i = url.length() - 1; i >= 0; --i) {
             if (url.charAt(i) == '/') {
                 firstEndSlashIndex = i;
-            } else {
+            }
+            else {
                 break;
             }
         }
         if (firstEndSlashIndex != -1) {
             url = url.substring(0, firstEndSlashIndex);
         }
-
         Collection<ConfigAttribute> attributes = new ArrayList<>();
-        List<SecRole> roleList = secResourceService.listRole(new SecResource(url, method));
+        List<SecRole> roleList = secResourceService.listRoleByRequest(new SecResource(url, method));
         for (SecRole role : roleList) {
             attributes.add(new SecurityConfig("ROLE_" + role.getName()));
         }

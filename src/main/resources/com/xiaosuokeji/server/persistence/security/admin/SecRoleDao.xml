@@ -5,7 +5,7 @@
 <mapper namespace="com.xiaosuokeji.server.security.admin.dao.SecRoleDao">
 
     <insert id="save" parameterType="secRole">
-        INSERT INTO shuttle_common.sc_security_resource(`name`,status,superior,`desc`)
+        INSERT INTO shuttle_common.sc_security_role(`name`,status,superior,`desc`)
         VALUES (#{name},#{status},0,#{desc})
         ON DUPLICATE KEY UPDATE
         status=#{status},
@@ -23,7 +23,7 @@
     </insert>
 
     <delete id="remove" parameterType="secRole">
-        DELETE FROM shuttle_common.sc_security_resource
+        DELETE FROM shuttle_common.sc_security_role
         WHERE id=#{id} AND superior=0
     </delete>
 
@@ -39,7 +39,7 @@
     </delete>
 
     <update id="update" parameterType="secRole">
-        UPDATE shuttle_common.sc_security_resource
+        UPDATE shuttle_common.sc_security_role
         <trim prefix="SET" prefixOverrides=",">
             <if test="name!=null">
                 ,`name`=#{name}
@@ -57,12 +57,12 @@
 
     <select id="get" parameterType="secRole" resultType="secRole">
         SELECT *
-        FROM shuttle_common.sc_security_resource
+        FROM shuttle_common.sc_security_role
         WHERE id=#{id} AND superior=0
     </select>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_security_resource
+        FROM shuttle_common.sc_security_role
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="name!=null and name!=''">
                 AND `name`=#{name}
@@ -84,10 +84,10 @@
         <include refid="XSBaseMapper.limit"/>
     </select>
 
-    <select id="listCombo" resultType="secRole">
-        SELECT id,`name`
+    <select id="listResourceCombo" resultType="secResource">
+        SELECT id,`name`,assign,pid AS p_id
         FROM shuttle_common.sc_security_resource
-        WHERE superior=0
+        <include refid="XSBaseMapper.sort"/>
     </select>
 
     <select id="listResource" parameterType="secRole" resultType="secResource">

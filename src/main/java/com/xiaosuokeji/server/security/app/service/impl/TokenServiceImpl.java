@@ -58,7 +58,6 @@ public class TokenServiceImpl implements TokenService {
         if (StringUtils.isBlank(tokenStr)) {
             throw new XSBusinessException(TokenConsts.TOKEN_INVALID);
         }
-
         //先查询缓存，若未命中则查询数据库
         Token token = cache.get(tokenStr, new Callable<Token>() {
             @Override
@@ -70,7 +69,6 @@ public class TokenServiceImpl implements TokenService {
                 return token;
             }
         });
-
         //校验令牌是否超过30天有效期
         boolean expired = XSTimeUtil.restLifeTime(token.getCreateTime(), 30 * 24 * 60 * 60) <= 0;
         if (expired) {
@@ -78,7 +76,6 @@ public class TokenServiceImpl implements TokenService {
             cache.invalidate(token.getId());
             throw new XSBusinessException(TokenConsts.TOKEN_INVALID);
         }
-
         return token.getUser();
     }
 }

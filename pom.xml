@@ -63,13 +63,6 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/xsframework.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>com.taobao.sdk</groupId>
-            <artifactId>taobao-sdk-java</artifactId>
-            <version>20160607</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/taobao-sdk-java-20160607.jar</systemPath>
-        </dependency>
         <!--ueditor-->
         <dependency>
             <groupId>com.baidu</groupId>

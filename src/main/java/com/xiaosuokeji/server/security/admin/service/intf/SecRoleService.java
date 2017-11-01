@@ -4,6 +4,8 @@ import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.security.admin.model.SecResource;
 import com.xiaosuokeji.server.security.admin.model.SecRole;
+import com.xiaosuokeji.server.security.admin.model.SecStaff;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -23,9 +25,20 @@ public interface SecRoleService {
 
     XSPageModel listAndCount(SecRole secRole);
 
-    List<SecRole> listCombo(SecRole secRole);
+    /**
+     * 获取指定角色的资源树
+     * @param secRole 参数id
+     * @param secStaff 当前操作的用户
+     * @return 资源树
+     * @throws XSBusinessException 角色不存在
+     */
+    List treeResource(SecRole secRole, SecStaff secStaff) throws XSBusinessException;
 
-    List<SecResource> treeResource(SecRole secRole) throws XSBusinessException;
-
-    void authorizeResource(SecRole secRole) throws XSBusinessException;
+    /**
+     * 授予指定角色资源
+     * @param secRole 参数id，resourceList
+     * @param secStaff 当前操作的用户
+     * @throws XSBusinessException 角色不存在
+     */
+    void authorizeResource(SecRole secRole, SecStaff secStaff) throws XSBusinessException;
 }

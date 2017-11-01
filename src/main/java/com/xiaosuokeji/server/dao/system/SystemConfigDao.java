@@ -20,7 +20,5 @@ public interface SystemConfigDao {
 
     List<SystemConfig> list(SystemConfig systemConfig);
 
-    List<SystemConfig> listCombo(SystemConfig systemConfig);
-
     Long count(SystemConfig systemConfig);
 }

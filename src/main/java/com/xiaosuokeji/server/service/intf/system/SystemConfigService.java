@@ -1,6 +1,7 @@
 package com.xiaosuokeji.server.service.intf.system;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
+import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.model.system.SystemConfig;
 
 import java.util.List;
@@ -13,11 +14,11 @@ public interface SystemConfigService {
 
     void save(SystemConfig systemConfig) throws XSBusinessException;
 
-    void remove(SystemConfig systemConfig);
+    void remove(SystemConfig systemConfig) throws XSBusinessException;
 
     void update(SystemConfig systemConfig) throws XSBusinessException;
 
     SystemConfig get(SystemConfig systemConfig) throws XSBusinessException;
 
-    List<SystemConfig> listCombo(SystemConfig systemConfig);
+    XSPageModel<SystemConfig> listAndCount(SystemConfig systemConfig);
 }

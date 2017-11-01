@@ -39,15 +39,17 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         if (count.compareTo(0L) > 0) {
             throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_EXIST);
         }
-        //展示及锁定状态必须与父级一致
+        //父级隐藏则子级必须隐藏，父级锁定则子级必须锁定
         if (imageCategory.getParent() != null) {
             ImageCategory parent = imageCategoryDao.get(imageCategory.getParent());
             if (parent != null) {
-                imageCategory.setDisplay(parent.getDisplay());
-                imageCategory.setLock(parent.getLock());
+                if (parent.getDisplay().equals(0)) {
+                    imageCategory.setDisplay(0);
+                }
+                if (parent.getLock().equals(1)) {
+                    imageCategory.setLock(1);
+                }
             }
-        } else {
-            imageCategory.setLock(0);
         }
         imageCategory.setId(XSUuidUtil.generate());
         imageCategoryDao.save(imageCategory);
@@ -60,25 +62,26 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
             throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_LOCKED);
         }
         //校验该分类下是否存在子级
-        existent = new ImageCategory();
-        existent.setParent(imageCategory);
-        Long count = imageCategoryDao.count(existent);
-        if (count.compareTo(0L) > 0) {
+        ImageCategory children = new ImageCategory();
+        children.setParent(existent);
+        Long childrenCount = imageCategoryDao.count(children);
+        if (childrenCount.compareTo(0L) > 0) {
             throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_USED);
         }
         //校验该分类下是否存在图片
         Image image = new Image();
-        image.setCategory(imageCategory);
+        image.setCategory(existent);
         Long imageCount = imageDao.count(image);
         if (imageCount.compareTo(0L) > 0) {
             throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_USED);
         }
-        imageCategoryDao.remove(imageCategory);
+        imageCategoryDao.remove(existent);
     }
 
     @Override
     @Transactional
     public void update(ImageCategory imageCategory) throws XSBusinessException {
+        get(imageCategory);
         if (imageCategory.getKey() != null) {
             ImageCategory existent = new ImageCategory();
             existent.setKey(imageCategory.getKey());
@@ -90,7 +93,6 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
                 }
             }
         }
-        get(imageCategory);
         imageCategoryDao.update(imageCategory);
         if (imageCategory.getDisplay() != null) {
             List<ImageCategory> list = imageCategoryDao.listCombo(new ImageCategory());
@@ -101,7 +103,8 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
             if (imageCategory.getDisplay().equals(0)) {
                 List<XSTreeable<String>> subTreeList = XSTreeUtil.listSubTree(map.get(imageCategory.getId()));
                 existent.setList(subTreeList);
-            } else {
+            }
+            else {
                 List<XSTreeable<String>> treePath = XSTreeUtil.getTreePath(map, map.get(imageCategory.getId()));
                 existent.setList(treePath);
             }
@@ -120,7 +123,8 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
             latest.setLock(1);
             List<XSTreeable<String>> treePath = XSTreeUtil.getTreePath(map, map.get(imageCategory.getId()));
             latest.setList(treePath);
-        } else {
+        }
+        else {
             latest.setLock(0);
             List<XSTreeable<String>> subTreeList = XSTreeUtil.listSubTree(map.get(imageCategory.getId()));
             latest.setList(subTreeList);
