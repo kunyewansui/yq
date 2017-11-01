@@ -187,8 +187,9 @@
                     $searchForm.submit();
                 }
             },
-            selectedId: '${search.category.id}'
+            toggle:false
         });
+        $("#tree").treeview('expandAll');
         $("#tree").treeview('selectNode', '${search.category.id}');
     });
 

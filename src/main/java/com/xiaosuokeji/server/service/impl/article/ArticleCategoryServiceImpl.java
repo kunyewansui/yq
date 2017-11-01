@@ -145,6 +145,8 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
         articleCategory.setDefaultSort("seq", "DESC");
         List<ArticleCategory> list = articleCategoryDao.listCombo(articleCategory);
         XSTreeUtil.buildTree(list);
-        return XSTreeUtil.getSubTrees(list, articleCategory.getParent());
+
+        List list1 = XSTreeUtil.getSubTrees(list, articleCategory.getParent());
+        return list1;
     }
 }
