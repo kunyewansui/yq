@@ -1,11 +1,12 @@
 package com.xiaosuokeji.server.controller.content.article;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xiaosuokeji.framework.annotation.XSExceptionHandler;
 import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.annotation.XSPagination;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
+import com.xiaosuokeji.framework.json.XSJackson;
 import com.xiaosuokeji.framework.model.XSServiceResult;
-import com.xiaosuokeji.server.manager.intf.GsonService;
 import com.xiaosuokeji.server.model.article.Article;
 import com.xiaosuokeji.server.model.article.ArticleCategory;
 import com.xiaosuokeji.server.service.intf.article.ArticleCategoryService;
@@ -32,36 +33,34 @@ public class ArticleController {
     private ArticleService articleService;
     @Autowired
     private ArticleCategoryService articleCategoryService;
-    @Autowired
-    private GsonService gsonService;
 
     //region Admin
 
     @RequestMapping(value = "/admin/content/article/article", method = RequestMethod.GET)
     @XSPagination
-    public String index(HttpServletRequest request, Model model, Article article) {
+    public String index(HttpServletRequest request, Model model, Article article) throws Exception {
         model.addAttribute("search", article);
         model.addAttribute("pageModel", articleService.listAndCount(article));
-        model.addAttribute("categoryTree", gsonService.toJson(articleCategoryService.tree(new ArticleCategory())));
+        model.addAttribute("categoryTree", XSJackson.toJsonString(articleCategoryService.tree(new ArticleCategory())));
         return "admin/content/article";
     }
 
     @RequestMapping(value = "/admin/content/article/article/create", method = RequestMethod.GET)
-    public String create(Model model, HttpServletRequest request) {
+    public String create(Model model, HttpServletRequest request) throws Exception {
         model.addAttribute("backUrl", request.getHeader("Referer"));
-        model.addAttribute("categoryTree", gsonService.toJson(articleCategoryService.tree(new ArticleCategory())));
+        model.addAttribute("categoryTree", XSJackson.toJsonString(articleCategoryService.tree(new ArticleCategory())));
         return "admin/content/articleCreate";
     }
 
     @RequestMapping(value = "/admin/content/article/article/update", method = RequestMethod.GET)
-    public String update(Model model, HttpServletRequest request, Article article){
+    public String update(Model model, HttpServletRequest request, Article article) throws Exception {
         model.addAttribute("backUrl", request.getHeader("Referer"));
         try{
             model.addAttribute("article", articleService.get(article));
         } catch (XSBusinessException e) {
             model.addAttribute("article", null);
         }
-        model.addAttribute("categoryTree", gsonService.toJson(articleCategoryService.tree(new ArticleCategory())));
+        model.addAttribute("categoryTree", XSJackson.toJsonString(articleCategoryService.tree(new ArticleCategory())));
         return "admin/content/articleUpdate";
     }
 
