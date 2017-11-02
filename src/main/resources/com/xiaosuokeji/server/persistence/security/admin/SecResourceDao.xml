@@ -6,9 +6,9 @@
 
     <insert id="save" parameterType="secResource">
         INSERT INTO shuttle_common.sc_security_resource(`key`,<if test="parent!=null">pid,</if>`type`,`name`,url,method,
-        icon,seq,assign,log)
+        icon,seq,`desc`,assign,log)
         VALUES (#{key},<if test="parent!=null">#{parent.id},</if>#{type},#{name},#{url},#{method},
-        #{icon},#{seq},#{assign},#{log})
+        #{icon},#{seq},#{desc},#{assign},#{log})
         ON DUPLICATE KEY UPDATE
         <if test="parent!=null">pid=#{parent.id},</if>
         `type`=#{type},
@@ -17,6 +17,7 @@
         method=#{method},
         icon=#{icon},
         seq=#{seq},
+        `desc`=#{desc},
         assign=#{assign},
         log=#{log},
         update_time=NOW()
@@ -63,6 +64,9 @@
             </if>
             <if test="seq!=null">
                 ,seq=#{seq}
+            </if>
+            <if test="desc!=null">
+                ,`desc`=#{desc}
             </if>
             <if test="assign!=null">
                 ,assign=#{assign}

@@ -72,6 +72,13 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
     private Long seq;
 
     /**
+     * 描述
+     */
+    @NotNull(message = "描述不能为空", groups = Save.class)
+    @Length(min = 1, max = 255, message = "描述长度为1-255个字符", groups = {Save.class, Update.class})
+    private String desc;
+
+    /**
      * 可分配，0否，1是
      */
     private Integer assign;
@@ -207,6 +214,14 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
 
     public void setSeq(Long seq) {
         this.seq = seq;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public Integer getAssign() {
