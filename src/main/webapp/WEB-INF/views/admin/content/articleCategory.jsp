@@ -116,8 +116,8 @@
                                 <a id="unlockCategory" class="btn btn-success" style="display:none" type="button"
                                         onclick="lockCategory(0)"><i class="fa fa-unlock-alt"></i>解锁
                                 </a>
-                                <button class="btn btn-info" type="button" onclick="updateCategory()">保存</button>
-                                <button class="btn btn-danger" type="button" onclick="deleteCategory()">删除</button>
+                                <button class="btn btn-info" type="button" onclick="updateItem()">保存</button>
+                                <button class="btn btn-danger" type="button" onclick="deleteItem()">删除</button>
                             </div>
                         </div>
                     </form>
@@ -156,7 +156,7 @@
                     onNodeSelected: function (event, node) {
                         if (selectedId !== node.id) {
                             selectedId = node.id;
-                            getCategory(selectedId);
+                            getItem(selectedId);
                         }
                     },
                     toggle: false
@@ -198,7 +198,7 @@
         })
     }
 
-    function getCategory(id) {
+    function getItem(id) {
         doPost("<%=request.getContextPath()%>/admin/content/article/category/get", {id: id}, function (data) {
             if (data.status) {
                 $form.xsClean();
@@ -231,7 +231,7 @@
         })
     }
 
-    function updateCategory() {
+    function updateItem() {
         doPost("<%=request.getContextPath()%>/admin/content/article/category/update",
             {
                 id: selectedId,
@@ -260,7 +260,7 @@
             },
             function (data) {
                 if (data.status) {
-                    getCategory(selectedId);
+                    getItem(selectedId);
                     alert(lock===1?"锁定成功":"解锁成功");
                 } else {
                     alert(data.msg);
@@ -272,7 +272,7 @@
 
 <%@include file="../common/deleteConfirm.jsp" %>
 <script>
-    function deleteCategory() {
+    function deleteItem() {
         showDeleteModel(null, function () {
             doPost("<%=request.getContextPath()%>/admin/content/article/category/remove", {id: selectedId}, function (data) {
                 if (data.status) {
@@ -477,7 +477,6 @@
         $("#categoryTree").treeview('expandAll');
         $("#categoryModel").modal('show');
     }
-
 </script>
 </body>
 </html>

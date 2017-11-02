@@ -1,5 +1,6 @@
 package com.xiaosuokeji.server.model.article;
 
+import com.xiaosuokeji.framework.annotation.XSAutoDesc;
 import com.xiaosuokeji.server.model.base.BaseModel;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
@@ -27,6 +28,7 @@ public class Article extends BaseModel {
     /**
      * 类型，0富文本，1链接
      */
+    @XSAutoDesc("articleType")
     private Integer type;
 
     /**
@@ -63,6 +65,7 @@ public class Article extends BaseModel {
     /**
      * 展示，0否，1是
      */
+    @XSAutoDesc("articleDisplay")
     private Integer display;
 
     /**

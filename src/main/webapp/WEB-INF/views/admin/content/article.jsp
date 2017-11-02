@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="xs" uri="http://code.xiaosuokeji.com/tags/jsp/xs" %>
 <%--
   Created by IntelliJ IDEA.
   User: gustinlau
@@ -38,8 +39,8 @@
                             <label class="control-label">标题：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input name="dynamic[name]" type="text" class="form-control" placeholder="模糊查询"
-                                   value="${search.dynamic.name}">
+                            <input name="dynamic[title]" type="text" class="form-control" placeholder="模糊查询"
+                                   value="${search.dynamic.title}">
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
                             <label class="control-label">类型：</label>
@@ -47,8 +48,7 @@
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
                             <select name="type" class="form-control" data-value="${search.type}">
                                 <option value="">全部</option>
-                                <option value="0">富文本</option>
-                                <option value="1">链接</option>
+                                <xs:dictOptions key="articleType"/>
                             </select>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
@@ -88,8 +88,7 @@
                         <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
                             <select name="display" class="form-control" data-value="${search.display}">
                                 <option value="">全部</option>
-                                <option value="0">否</option>
-                                <option value="1">是</option>
+                                <xs:dictOptions key="articleDisplay"/>
                             </select>
                         </div>
                         <%--data-ignore设为true,执行$(form).xsClean()会排除该项--%>
@@ -122,35 +121,35 @@
                                 <td colspan="5">无数据</td>
                             </tr>
                         </c:if>
-                        <c:forEach items="${pageModel.list}" var="article">
+                        <c:forEach items="${pageModel.list}" var="item">
                             <tr>
-                                <td>${article.title}</td>
+                                <td>${item.title}</td>
 
-                                <td><img src="${article.image}"></td>
+                                <td><img src="${item.image}"></td>
 
-                                <td>${article.seq}</td>
+                                <td>${item.seq}</td>
 
 
-                                <td>${article.display eq 0?"下架":"上架"}</td>
+                                <td><xs:dictDesc key="articleDisplay" value="${item.display}"/></td>
                                 <td>
-                                    <c:if test="${article.display eq 0}">
+                                    <c:if test="${item.display eq 0}">
                                         <button class="btn btn-success btn-xs"
-                                                onclick="updateArticle('${article.id}',1)">
+                                                onclick="updateListItem('${item.id}',1)">
                                             上架
                                         </button>
                                     </c:if>
-                                    <c:if test="${article.display eq 1}">
+                                    <c:if test="${item.display eq 1}">
                                         <button class="btn btn-danger btn-xs"
-                                                onclick="updateArticle('${article.id}',0)">
+                                                onclick="updateListItem('${item.id}',0)">
                                             下架
                                         </button>
                                     </c:if>
-                                    <a href="<%=request.getContextPath()%>/admin/content/article/article/update?id=${article.id}"
+                                    <a href="<%=request.getContextPath()%>/admin/content/article/article/update?id=${item.id}"
                                        class="btn btn-info btn-xs">
                                         编辑
                                     </a>
                                     <button class="btn btn-danger btn-xs"
-                                            onclick="deleteArticle('${article.id}')">
+                                            onclick="deleteListItem('${item.id}')">
                                         删除
                                     </button>
                                 </td>
@@ -159,7 +158,7 @@
                         </tbody>
                     </table>
                 </div>
-                ${__pagination__}
+                <xs:pagination pageModel="${pageModel}"/>
             </div>
         </div>
     </div>
@@ -171,8 +170,6 @@
     "id":"",
     "children":${categoryTree}
 }]
-
-
 </script>
 
 <script>
@@ -193,7 +190,7 @@
         $("#tree").treeview('selectNode', '${search.category.id}');
     });
 
-    function updateArticle(id, status) {
+    function updateListItem(id, status) {
         doPost('<%=request.getContextPath()%>/admin/content/article/article/update',
             {
                 id: id,
@@ -207,8 +204,8 @@
             });
     }
 
-    function deleteArticle(id) {
-        showDeleteModel("确认删除该文章？", function () {
+    function deleteListItem(id) {
+        showDeleteModel(null, function () {
             doPost("<%=request.getContextPath()%>/admin/content/article/article/remove", {id: id}, function (data) {
                 if (data.status) {
                     setTimeout(function () {

@@ -120,6 +120,7 @@
 </script>
 <script>
     var ue = UE.getEditor('container', {initialFrameWidth: null});
+
     var $richText = $("#richText");
     var $link = $("#link");
     var $form = $("#createForm");
@@ -169,7 +170,6 @@
                     alert(data.msg);
                 }
             });
-
     }
 </script>
 </body>
