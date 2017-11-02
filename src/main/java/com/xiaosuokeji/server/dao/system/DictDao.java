@@ -23,4 +23,11 @@ public interface DictDao {
     List<Dict> list(Dict dict);
 
     Long count(Dict dict);
+
+    /**
+     * 获取属于指定字典的字典数据数量
+     * @param dict 参数id
+     * @return 字典数据数量
+     */
+    Long countDictData(Dict dict);
 }

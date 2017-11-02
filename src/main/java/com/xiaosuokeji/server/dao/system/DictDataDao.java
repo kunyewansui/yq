@@ -1,5 +1,6 @@
 package com.xiaosuokeji.server.dao.system;
 
+import com.xiaosuokeji.server.model.system.Dict;
 import com.xiaosuokeji.server.model.system.DictData;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public interface DictDataDao {
     DictData getDesc(DictData dictData);
 
     List<DictData> list(DictData dictData);
+
+    List<DictData> listByDict(Dict dict);
 
     Long count(DictData dictData);
 }

@@ -1,5 +1,6 @@
 package com.xiaosuokeji.server.model.system;
 
+import com.xiaosuokeji.framework.annotation.XSAutoDesc;
 import com.xiaosuokeji.server.model.base.BaseModel;
 import org.hibernate.validator.constraints.Length;
 
@@ -18,13 +19,6 @@ public class Dict extends BaseModel {
     private Long id;
 
     /**
-     * 键
-     */
-    @NotNull(message = "键不能为空", groups = Save.class)
-    @Length(min = 1, max = 191, message = "键长度为1-191个字符", groups = {Save.class, Update.class})
-    private String key;
-
-    /**
      * 名称
      */
     @NotNull(message = "名称不能为空", groups = Save.class)
@@ -32,14 +26,17 @@ public class Dict extends BaseModel {
     private String name;
 
     /**
-     * 锁定，0否，1是
+     * 键
      */
-    private Integer lock;
+    @NotNull(message = "键不能为空", groups = Save.class)
+    @Length(min = 1, max = 191, message = "键长度为1-191个字符", groups = {Save.class, Update.class})
+    private String key;
 
     /**
-     * 字典列表
+     * 锁定，0否，1是
      */
-    private List<Dict> list;
+    @XSAutoDesc("dictLock")
+    private Integer lock;
 
     public interface Save {}
 
@@ -59,14 +56,6 @@ public class Dict extends BaseModel {
         this.id = id;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public String getName() {
         return name;
     }
@@ -75,19 +64,19 @@ public class Dict extends BaseModel {
         this.name = name;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public Integer getLock() {
         return lock;
     }
 
     public void setLock(Integer lock) {
         this.lock = lock;
-    }
-
-    public List<Dict> getList() {
-        return list;
-    }
-
-    public void setList(List<Dict> list) {
-        this.list = list;
     }
 }

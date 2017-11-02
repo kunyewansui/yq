@@ -7,6 +7,7 @@ import com.xiaosuokeji.server.dao.system.DictDao;
 import com.xiaosuokeji.server.model.system.Dict;
 import com.xiaosuokeji.server.service.intf.system.DictService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * 字典Service
  * Created by xuxiaowei on 2017/11/1.
  */
+@Service
 public class DictServiceImpl implements DictService {
 
     @Autowired
@@ -21,9 +23,9 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public void save(Dict dict) throws XSBusinessException {
-        Dict existent = new Dict();
-        existent.setKey(dict.getKey());
-        Long count = dictDao.count(existent);
+        Dict criteria = new Dict();
+        criteria.setKey(dict.getKey());
+        Long count = dictDao.count(criteria);
         if (count.compareTo(0L) > 0) {
             throw new XSBusinessException(DictConsts.DICT_EXIST);
         }
@@ -36,6 +38,11 @@ public class DictServiceImpl implements DictService {
         if (existent.getLock().equals(1)) {
             throw new XSBusinessException(DictConsts.DICT_LOCKED);
         }
+        //校验是否存在属于该字典的字典数据
+        Long dictDataCount = dictDao.countDictData(existent);
+        if (dictDataCount.compareTo(0L) > 0) {
+            throw new XSBusinessException(DictConsts.DICT_USED);
+        }
         dictDao.remove(existent);
     }
 
@@ -43,9 +50,9 @@ public class DictServiceImpl implements DictService {
     public void update(Dict dict) throws XSBusinessException {
         Dict existent = get(dict);
         if (dict.getKey() != null) {
-            Dict existDict = new Dict();
-            existDict.setKey(dict.getKey());
-            List<Dict> existents = dictDao.list(existDict);
+            Dict criteria = new Dict();
+            criteria.setKey(dict.getKey());
+            List<Dict> existents = dictDao.list(criteria);
             if (existents.size() > 0) {
                 boolean isSelf = existents.get(0).getId().equals(existent.getId());
                 if (!isSelf) {
@@ -66,7 +73,7 @@ public class DictServiceImpl implements DictService {
         else {
             latest.setLock(0);
         }
-        dictDao.updateLock(dict);
+        dictDao.updateLock(latest);
         return latest;
     }
 

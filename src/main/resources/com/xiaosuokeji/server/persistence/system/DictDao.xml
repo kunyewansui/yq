@@ -5,8 +5,8 @@
 <mapper namespace="com.xiaosuokeji.server.dao.system.DictDao">
 
     <insert id="save" parameterType="dict">
-        INSERT INTO shuttle_common.sc_dict(`key`,`name`,`lock`)
-        VALUES (#{key},#{name},#{lock})
+        INSERT INTO shuttle_common.sc_dict(`name`,`key`,`lock`)
+        VALUES (#{name},#{key},#{lock})
         ON DUPLICATE KEY UPDATE
         `name`=#{name},
         `lock`=#{lock},
@@ -21,11 +21,11 @@
     <update id="update" parameterType="dict">
         UPDATE shuttle_common.sc_dict
         <trim prefix="SET" prefixOverrides=",">
-            <if test="key!=null">
-                ,`key`=#{key}
-            </if>
             <if test="name!=null">
                 ,`name`=#{name}
+            </if>
+            <if test="key!=null">
+                ,`key`=#{key}
             </if>
             ,update_time=NOW()
         </trim>
@@ -47,14 +47,14 @@
     <sql id="listCondition">
         FROM shuttle_common.sc_dict
         <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
             <if test="key!=null and key!=''">
                 AND `key`=#{key}
             </if>
             <if test="dynamic!=null and dynamic.key!=null and dynamic.key!=''">
-                AND `key`=#{dynamic.key}
-            </if>
-            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
-                AND `name`=#{dynamic.name}
+                AND `key` LIKE CONCAT('%',#{dynamic.key},'%')
             </if>
             <if test="lock!=null">
                 AND `lock`=#{lock}
@@ -72,5 +72,11 @@
     <select id="count" parameterType="dict" resultType="long">
         SELECT COUNT(*)
         <include refid="listCondition"/>
+    </select>
+
+    <select id="countDictData" parameterType="dict" resultType="long">
+        SELECT COUNT(*)
+        FROM shuttle_common.sc_dict_data
+        WHERE dict_id=#{id}
     </select>
 </mapper>

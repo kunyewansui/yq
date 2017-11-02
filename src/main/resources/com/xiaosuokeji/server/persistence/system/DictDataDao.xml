@@ -55,7 +55,7 @@
         SELECT dd.desc
         FROM shuttle_common.sc_dict d
         JOIN shuttle_common.sc_dict_data dd ON d.id=dd.dict_id
-        WHERE d.key=#{dict.key}
+        WHERE d.key=#{dict.key} AND dd.value=#{value}
     </select>
 
     <sql id="listCondition">
@@ -87,6 +87,13 @@
         <include refid="listCondition"/>
         <include refid="XSBaseMapper.sort"/>
         <include refid="XSBaseMapper.limit"/>
+    </select>
+
+    <select id="listByDict" parameterType="dict" resultType="dictData">
+        SELECT dd.value,dd.desc
+        FROM shuttle_common.sc_dict d
+        JOIN shuttle_common.sc_dict_data dd ON d.id=dd.dict_id
+        WHERE d.key=#{key}
     </select>
 
     <select id="count" parameterType="dictData" resultType="long">

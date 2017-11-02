@@ -103,4 +103,11 @@ public class DictDataServiceImpl implements DictDataService {
         dictData.setDefaultSort("id", "DESC");
         return XSPageModel.build(dictDataDao.list(dictData), dictDataDao.count(dictData));
     }
+
+    @Override
+    public List<DictData> listByDict(String dictKey) {
+        Dict dict = new Dict();
+        dict.setKey(dictKey);
+        return dictDataDao.listByDict(dict);
+    }
 }
