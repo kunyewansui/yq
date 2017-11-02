@@ -171,8 +171,6 @@
     "id":"",
     "children":${categoryTree}
 }]
-
-
 </script>
 
 <script>
