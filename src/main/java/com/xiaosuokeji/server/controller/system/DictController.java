@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * 字典Controller
  * Created by xuxiaowei on 2017/11/1.
@@ -29,16 +27,10 @@ public class DictController {
     private DictService dictService;
 
     @RequestMapping(value = "/admin/system/dict", method = RequestMethod.GET)
-    public String index(Model model, HttpServletRequest request, Dict dict) {
+    public String index(Model model, Dict dict) {
         model.addAttribute("search", dict);
         model.addAttribute("pageModel", dictService.listAndCount(dict));
         return "admin/system/dict";
-    }
-
-    @RequestMapping(value = "/app/system/dict", method = RequestMethod.GET)
-    @ResponseBody
-    public XSServiceResult indexapp() {
-        return XSServiceResult.build().data(dictService.listAndCount(new Dict()));
     }
 
     @RequestMapping(value = "/admin/system/dict/get", method = RequestMethod.POST)
@@ -71,6 +63,7 @@ public class DictController {
     @RequestMapping(value = "/admin/system/dict/lock/update", method = RequestMethod.POST)
     @ResponseBody
     public XSServiceResult adminUpdateLock(Dict dict) throws XSBusinessException {
-        return XSServiceResult.build().data(dictService.updateLock(dict));
+        dictService.updateLock(dict);
+        return XSServiceResult.build();
     }
 }

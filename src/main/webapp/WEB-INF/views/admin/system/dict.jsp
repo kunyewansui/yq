@@ -1,7 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="xs" uri="http://code.xiaosuokeji.com/tags/jsp/xs" %>
 <%--
   Created by IntelliJ IDEA.
-  User: xuxiaowei
+  User: gustinlau
   Date: 11/1/17
   Time: 4:50 PM
   To change this template use File | Settings | File Templates.
@@ -46,8 +47,7 @@
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
                             <select name="lock" class="form-control" data-value="${search.lock}">
                                 <option value="">全部</option>
-                                <option value="0">否</option>
-                                <option value="1">是</option>
+                                <xs:dictOptions key="dictLock"/>
                             </select>
                         </div>
                     </div>
@@ -68,7 +68,6 @@
                             <th>名称</th>
                             <th>键</th>
                             <th>锁定</th>
-                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -81,26 +80,26 @@
                             <tr>
                                 <td>${item.name}</td>
                                 <td>${item.key}</td>
-                                <td>${item.lock eq 0?"正常":"锁定"}</td>
+                                <td><xs:dictDesc key="dictLock" value="${item.lock}"/></td>
                                 <td>
                                     <c:if test="${item.lock eq 0}">
                                         <a href="#" class="btn btn-success btn-xs"
-                                           onclick="updateLock('${item.id}',1);return false">
+                                           onclick="simpleUpdateListItem('${item.id}',1);return false">
                                             锁定
                                         </a>
                                     </c:if>
                                     <c:if test="${item.lock eq 1}">
                                         <a href="#" class="btn btn-danger btn-xs"
-                                           onclick="updateLock('${item.id}',0);return false">
+                                           onclick="simpleUpdateListItem('${item.id}',0);return false">
                                             解锁
                                         </a>
                                     </c:if>
-                                    <a href="#" onclick="editDict('${item.id}');return false;"
+                                    <a href="#" onclick="updateListItem('${item.id}');return false;"
                                        class="btn btn-info btn-xs">
                                         编辑
                                     </a>
                                     <a href="#" class="btn btn-danger btn-xs"
-                                       onclick="deleteDict('${item.id}');return false">
+                                       onclick="deleteListItem('${item.id}');return false">
                                         删除
                                     </a>
                                 </td>
@@ -109,7 +108,7 @@
                         </tbody>
                     </table>
                 </div>
-                ${__pagination__}
+                <xs:pagination pageModel="${pageModel}"/>
             </div>
         </div>
     </div>
@@ -122,7 +121,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">新增字典</h4>
+                <h4 class="modal-title">新增</h4>
             </div>
             <form name="createForm" class="form-horizontal" style="max-width: 800px">
                 <div class="modal-body">
@@ -148,8 +147,7 @@
                         </div>
                         <div class="col-xs-9">
                             <select name="lock" class="form-control">
-                                <option value="1">是</option>
-                                <option value="0">否</option>
+                                <xs:dictOptions key="dictLock"/>
                             </select>
                         </div>
                     </div>
@@ -172,7 +170,7 @@
                 notEmpty: true,
                 maxlength: 255
             },
-            key: {
+            lock: {
                 required: true,
                 notEmpty: true,
                 maxlength: 191
@@ -184,7 +182,7 @@
                 notEmpty: "名称不能为空",
                 maxlength: "名称最多255个字"
             },
-            key: {
+            lock: {
                 required: "键不能为空",
                 notEmpty: "键不能为空",
                 maxlength: "键最多191个字"
@@ -231,7 +229,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">编辑字典</h4>
+                <h4 class="modal-title">编辑</h4>
             </div>
             <form name="updateForm" class="form-horizontal" style="max-width: 800px">
                 <div class="modal-body">
@@ -258,8 +256,7 @@
                         </div>
                         <div class="col-xs-9">
                             <select name="lock" class="form-control">
-                                <option value="1">是</option>
-                                <option value="0">否</option>
+                                <xs:dictOptions key="dictLock"/>
                             </select>
                         </div>
                     </div>
@@ -286,7 +283,7 @@
                 required: true,
                 notEmpty: true,
                 maxlength: 191
-            },
+            }
         },
         messages: {
             name: {
@@ -294,7 +291,7 @@
                 notEmpty: "名称不能为空",
                 maxlength: "名称最多255个字"
             },
-            name: {
+            key: {
                 required: "键不能为空",
                 notEmpty: "键不能为空",
                 maxlength: "键最多191个字"
@@ -323,8 +320,7 @@
         }
     });
 
-
-    function editVersion(id) {
+    function updateListItem(id) {
         doPost("<%=request.getContextPath()%>/admin/system/dict/get", {id: id}, function (data) {
             if (data.status) {
                 $updateForm.xsSetForm(data.data);
@@ -335,19 +331,14 @@
         });
     }
 
-
     $(function () {
         $("#updateModel").on('hide.bs.modal', function () {
             $updateForm.xsClean();
             updateValidator.resetForm();
         })
     });
-</script>
 
-
-<%@include file="../common/deleteConfirm.jsp" %>
-<script>
-    function updateLock(id, status) {
+    function simpleUpdateListItem(id, status) {
         doPost('<%=request.getContextPath()%>/admin/system/dict/lock/update',
             {
                 id: id
@@ -359,9 +350,13 @@
                 }
             });
     }
+</script>
 
-    function deleteDict(id) {
-        showDeleteModel("确认删除？", function () {
+
+<%@include file="../common/deleteConfirm.jsp" %>
+<script>
+    function deleteListItem(id) {
+        showDeleteModel(null, function () {
             doPost("<%=request.getContextPath()%>/admin/system/dict/remove", {id: id}, function (data) {
                 if (data.status) {
                     setTimeout(function () {

@@ -64,7 +64,7 @@ public class DictServiceImpl implements DictService {
     }
 
     @Override
-    public Dict updateLock(Dict dict) throws XSBusinessException {
+    public void updateLock(Dict dict) throws XSBusinessException {
         Dict existent = get(dict);
         Dict latest = new Dict(existent.getId());
         if (existent.getLock().equals(0)) {
@@ -74,7 +74,6 @@ public class DictServiceImpl implements DictService {
             latest.setLock(0);
         }
         dictDao.updateLock(latest);
-        return latest;
     }
 
     @Override

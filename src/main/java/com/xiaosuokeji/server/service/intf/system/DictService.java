@@ -16,7 +16,7 @@ public interface DictService {
 
     void update(Dict dict) throws XSBusinessException;
 
-    Dict updateLock(Dict dict) throws XSBusinessException;
+    void updateLock(Dict dict) throws XSBusinessException;
 
     Dict get(Dict dict) throws XSBusinessException;
 
