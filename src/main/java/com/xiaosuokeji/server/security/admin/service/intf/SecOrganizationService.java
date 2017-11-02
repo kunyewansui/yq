@@ -21,7 +21,7 @@ public interface SecOrganizationService {
 
     SecOrganization get(SecOrganization secOrganization) throws XSBusinessException;
 
-    XSPageModel listAndCount(SecOrganization secOrganization);
+    XSPageModel<SecOrganization> listAndCount(SecOrganization secOrganization);
 
     /**
      * 获取指定组织的角色列表
