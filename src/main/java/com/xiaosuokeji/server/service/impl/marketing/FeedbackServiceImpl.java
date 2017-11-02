@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
+ * 用户反馈ServiceImpl
  * Created by gustinlau on 11/1/17.
  */
 @Service
@@ -19,15 +20,15 @@ public class FeedbackServiceImpl implements FeedbackService {
     FeedbackDao feedbackDao;
 
     @Override
-    public void save(Feedback feedback) throws XSBusinessException {
+    public void save(Feedback feedback) {
         feedbackDao.save(feedback);
     }
 
     @Override
     public void remove(Feedback feedback) throws XSBusinessException {
-        feedbackDao.remove(feedback);
+        Feedback existent = get(feedback);
+        feedbackDao.remove(existent);
     }
-
 
     @Override
     public Feedback get(Feedback feedback) throws XSBusinessException {

@@ -55,25 +55,25 @@
                             <label class="control-label">创建时间：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input type="text" class="form-control datepicker" readonly>
+                            <input type="text" name="dynamic[createTimeStart]" class="form-control datepicker" readonly>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
                             <label class="control-label">至：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input type="text" class="form-control datepicker" readonly>
+                            <input type="text" name="dynamic[createTimeEnd]" class="form-control datepicker" readonly>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
                             <label class="control-label">修改时间：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input type="text" class="form-control datepicker" readonly>
+                            <input type="text" name="dynamic[updateTimeStart]" class="form-control datepicker" readonly>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
                             <label class="control-label">至：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input type="text" class="form-control datepicker" readonly>
+                            <input type="text" name="dynamic[updateTimeEnd]" class="form-control datepicker" readonly>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
                             <label class="control-label">关键词：</label>
@@ -83,7 +83,7 @@
                                    value="${search.dynamic.content}">
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
-                            <label class="control-label">是否上架：</label>
+                            <label class="control-label">是否展示：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
                             <select name="display" class="form-control" data-value="${search.display}">
@@ -111,7 +111,7 @@
                             <th>标题</th>
                             <th>图片</th>
                             <th>顺序</th>
-                            <th>是否上架</th>
+                            <th>是否展示</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -124,24 +124,20 @@
                         <c:forEach items="${pageModel.list}" var="item">
                             <tr>
                                 <td>${item.title}</td>
-
-                                <td><img src="${item.image}"></td>
-
+                                <td><img style="max-width: 200px" src="${item.image}"></td>
                                 <td>${item.seq}</td>
-
-
                                 <td><xs:dictDesc key="articleDisplay" value="${item.display}"/></td>
                                 <td>
                                     <c:if test="${item.display eq 0}">
                                         <button class="btn btn-success btn-xs"
-                                                onclick="updateListItem('${item.id}',1)">
-                                            上架
+                                                onclick="simpleUpdateListItem('${item.id}',1)">
+                                            <xs:dictDesc key="articleDisplay" value="1"/>
                                         </button>
                                     </c:if>
                                     <c:if test="${item.display eq 1}">
                                         <button class="btn btn-danger btn-xs"
-                                                onclick="updateListItem('${item.id}',0)">
-                                            下架
+                                                onclick="simpleUpdateListItem('${item.id}',0)">
+                                            <xs:dictDesc key="articleDisplay" value="0"/>
                                         </button>
                                     </c:if>
                                     <a href="<%=request.getContextPath()%>/admin/content/article/article/update?id=${item.id}"
@@ -184,13 +180,13 @@
                     $searchForm.submit();
                 }
             },
-            toggle:false
+            toggle: false
         });
         $("#tree").treeview('expandAll');
         $("#tree").treeview('selectNode', '${search.category.id}');
     });
 
-    function updateListItem(id, status) {
+    function simpleUpdateListItem(id, status) {
         doPost('<%=request.getContextPath()%>/admin/content/article/article/update',
             {
                 id: id,

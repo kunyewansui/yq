@@ -12,6 +12,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 /**
+ * 分页标签
  * Created by gustinlau on 11/2/17.
  */
 public class PaginationTag extends TagSupport {
@@ -38,6 +39,7 @@ public class PaginationTag extends TagSupport {
     public void setLimit(Long limit) {
         this.limit = limit;
     }
+
 
     @Override
     public int doStartTag() throws JspException {
@@ -148,7 +150,7 @@ public class PaginationTag extends TagSupport {
         for (Map.Entry<String, String[]> entry : params.entrySet()) {
             if (entry.getKey().equals(PAGE))
                 continue;
-            sb.append("&").append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue()[0],"UTF-8"));
+            sb.append("&").append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue()[0], "UTF-8"));
         }
 
         return sb.toString();

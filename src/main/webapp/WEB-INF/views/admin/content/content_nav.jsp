@@ -23,12 +23,12 @@
                             <span>文章分类</span>
                         </a>
                     </li>
-                        <li>
-                            <a href="<%=request.getContextPath()%>/image/manage">
-                                <i class="fa fa-empire"></i>
-                                <span>图片分类</span>
-                            </a>
-                        </li>
+                    <li>
+                        <a href="<%=request.getContextPath()%>/image/manage">
+                            <i class="fa fa-empire"></i>
+                            <span>图片分类</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>

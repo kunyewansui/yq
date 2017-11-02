@@ -5,6 +5,7 @@ import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.model.system.Version;
 
 /**
+ * 版本管理Service
  * Created by gustinlau on 11/1/17.
  */
 public interface VersionService {

@@ -76,7 +76,7 @@ public class ArticleController {
         return XSServiceResult.build();
     }
 
-    @RequestMapping(value = "/admin/content/article/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/content/article/article/update", method = RequestMethod.POST)
     @ResponseBody
     public XSServiceResult adminUpdate(@Validated(Article.Update.class) Article article) throws XSBusinessException {
         articleService.update(article);

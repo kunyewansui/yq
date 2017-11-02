@@ -1,3 +1,4 @@
+<%@ taglib prefix="xs" uri="http://code.xiaosuokeji.com/tags/jsp/xs" %>
 <%--
   Created by IntelliJ IDEA.
   User: gustinlau
@@ -68,12 +69,11 @@
 
                         <div class="form-group row">
                             <div class="col-xs-3 text-right">
-                                <label class="control-label required">是否显示：</label>
+                                <label class="control-label required">是否展示：</label>
                             </div>
                             <div class="col-xs-9">
                                 <select name="display" class="form-control">
-                                    <option value="1">是</option>
-                                    <option value="0">否</option>
+                                    <xs:dictOptions key="articleCategoryDisplay"/>
                                 </select>
                             </div>
                         </div>
@@ -101,20 +101,16 @@
                                 <label class="control-label">图标：</label>
                             </div>
                             <div class="col-xs-9">
-                                <jsp:include page="../common/imageUploader.jsp">
-                                    <jsp:param name="id" value="updateIcon"/>
-                                    <jsp:param name="name" value="icon"/>
-                                    <jsp:param name="folder" value="article"/>
-                                </jsp:include>
+                                <xs:imageUploader identifier="updateIcon" name="icon" folder="article"/>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-xs-12 text-right">
                                 <a id="lockCategory" class="btn btn-danger" style="display:none" type="button"
-                                        onclick="lockCategory(1)"><i class="fa fa-lock"></i> 锁定
+                                   onclick="lockCategory(1)"><i class="fa fa-lock"></i>锁定
                                 </a>
                                 <a id="unlockCategory" class="btn btn-success" style="display:none" type="button"
-                                        onclick="lockCategory(0)"><i class="fa fa-unlock-alt"></i>解锁
+                                   onclick="lockCategory(0)"><i class="fa fa-unlock-alt"></i>解锁
                                 </a>
                                 <button class="btn btn-info" type="button" onclick="updateItem()">保存</button>
                                 <button class="btn btn-danger" type="button" onclick="deleteItem()">删除</button>
@@ -202,20 +198,20 @@
         doPost("<%=request.getContextPath()%>/admin/content/article/category/get", {id: id}, function (data) {
             if (data.status) {
                 $form.xsClean();
-                var category = data.data;
-                $form.xsSetForm(category);
-                if (category.parent !== undefined) {
-                    $form.xsSetInput("parent.id", category.parent.id);
-                    $form.xsSetInput("parent.name", category.parent.name);
+                var object = data.data;
+                $form.xsSetForm(object);
+                if (object.parent !== undefined) {
+                    $form.xsSetInput("parent.id", object.parent.id);
+                    $form.xsSetInput("parent.name", object.parent.name);
                 } else {
                     $form.xsSetInput("parent.name", "无");
                 }
-                if (category.icon !== undefined && category.icon !== "") {
-                    putImageIntoImageUploader('updateIcon', category.icon);
+                if (object.icon !== undefined && object.icon !== "") {
+                    putImageIntoImageUploader('updateIcon', object.icon);
                 } else {
                     cleanImageInUploader('updateIcon');
                 }
-                if (category.lock === 0) {
+                if (object.lock === 0) {
                     $("#lockCategory").css("display", '');
                     $("#unlockCategory").css("display", 'none');
                     $form.xsEnable();
@@ -261,7 +257,7 @@
             function (data) {
                 if (data.status) {
                     getItem(selectedId);
-                    alert(lock===1?"锁定成功":"解锁成功");
+                    alert(lock === 1 ? "锁定成功" : "解锁成功");
                 } else {
                     alert(data.msg);
                 }
@@ -338,8 +334,7 @@
                         </div>
                         <div class="col-xs-9">
                             <select name="display" class="form-control">
-                                <option value="1">是</option>
-                                <option value="0">否</option>
+                                <xs:dictOptions key="articleCategoryDisplay"/>
                             </select>
                         </div>
                     </div>
@@ -348,11 +343,7 @@
                             <label class="control-label required">图标：</label>
                         </div>
                         <div class="col-xs-9">
-                            <jsp:include page="../common/imageUploader.jsp">
-                                <jsp:param name="id" value="createIcon"/>
-                                <jsp:param name="name" value="icon"/>
-                                <jsp:param name="folder" value="article"/>
-                            </jsp:include>
+                            <xs:imageUploader identifier="createIcon" name="icon" folder="article"/>
                         </div>
                     </div>
                     <div class="form-group row">

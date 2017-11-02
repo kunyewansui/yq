@@ -11,12 +11,19 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * 根据value查询desc的标签逻辑
  * Created by gustinlau on 11/2/17.
  */
 public class DictDescTag extends SimpleTagSupport {
 
+    /**
+     * 字典的Key
+     */
     private String key;
 
+    /**
+     * 查询的值
+     */
     private String value;
 
     public void setKey(String key) {
