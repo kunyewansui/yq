@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -95,16 +94,16 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
         articleCategoryDao.update(articleCategory);
         if (articleCategory.getDisplay() != null) {
             List<ArticleCategory> list = articleCategoryDao.listCombo(new ArticleCategory());
-            Map<String, XSTreeable<String>> map = XSTreeUtil.buildTree(list);
+            Map<String, ArticleCategory> map = XSTreeUtil.buildTree(list);
             ArticleCategory existent = new ArticleCategory();
             existent.setDisplay(articleCategory.getDisplay());
             //取消展示则所有子级也取消，开启展示则所有父级也开启
             if (articleCategory.getDisplay().equals(0)) {
-                List<XSTreeable<String>> subTreeList = XSTreeUtil.listSubTree(map.get(articleCategory.getId()));
+                List<ArticleCategory> subTreeList = XSTreeUtil.listSubTree(map.get(articleCategory.getId()));
                 existent.setList(subTreeList);
             }
             else {
-                List<XSTreeable<String>> treePath = XSTreeUtil.getTreePath(map, map.get(articleCategory.getId()));
+                List<ArticleCategory> treePath = XSTreeUtil.getTreePath(map, map.get(articleCategory.getId()));
                 existent.setList(treePath);
             }
             articleCategoryDao.batchUpdate(existent);
@@ -115,17 +114,17 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
     public void updateLock(ArticleCategory articleCategory) throws XSBusinessException {
         ArticleCategory existent = get(articleCategory);
         List<ArticleCategory> list = articleCategoryDao.listCombo(new ArticleCategory());
-        Map<String, XSTreeable<String>> map = XSTreeUtil.buildTree(list);
+        Map<String, ArticleCategory> map = XSTreeUtil.buildTree(list);
         //解锁则所有子级也解锁，锁定则所有父级也锁定
         ArticleCategory latest = new ArticleCategory();
         if (existent.getLock().equals(0)) {
             latest.setLock(1);
-            List<XSTreeable<String>> treePath = XSTreeUtil.getTreePath(map, map.get(articleCategory.getId()));
+            List<ArticleCategory> treePath = XSTreeUtil.getTreePath(map, map.get(articleCategory.getId()));
             latest.setList(treePath);
         }
         else {
             latest.setLock(0);
-            List<XSTreeable<String>> subTreeList = XSTreeUtil.listSubTree(map.get(articleCategory.getId()));
+            List<ArticleCategory> subTreeList = XSTreeUtil.listSubTree(map.get(articleCategory.getId()));
             latest.setList(subTreeList);
         }
         articleCategoryDao.batchUpdateLock(latest);

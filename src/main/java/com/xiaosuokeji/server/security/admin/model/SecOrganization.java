@@ -13,7 +13,7 @@ import java.util.List;
  * 系统组织
  * Created by xuxiaowei on 2017/10/23.
  */
-public class SecOrganization extends BaseModel implements XSTreeable<Long> {
+public class SecOrganization extends BaseModel implements XSTreeable<Long, SecOrganization> {
 
     /**
      * id
@@ -47,17 +47,12 @@ public class SecOrganization extends BaseModel implements XSTreeable<Long> {
     /**
      * 子级列表
      */
-    private List<XSTreeable<Long>> children;
+    private List<SecOrganization> children;
 
     /**
      * 组织列表
      */
     private List<SecOrganization> list;
-
-    /**
-     * 组织列表
-     */
-    private List<XSTreeable<Long>> treeableList;
 
     /**
      * 角色列表
@@ -87,15 +82,15 @@ public class SecOrganization extends BaseModel implements XSTreeable<Long> {
     }
 
     @Override
-    public void addChild(XSTreeable<Long> xsTreeable) {
+    public void addChild(SecOrganization secOrganization) {
         if (children == null) {
             children = new ArrayList<>();
         }
-        children.add(xsTreeable);
+        children.add(secOrganization);
     }
 
     @Override
-    public List<XSTreeable<Long>> getChildren() {
+    public List<SecOrganization> getChildren() {
         return children;
     }
 
@@ -163,15 +158,7 @@ public class SecOrganization extends BaseModel implements XSTreeable<Long> {
         this.checked = checked;
     }
 
-    public void setChildren(List<XSTreeable<Long>> children) {
+    public void setChildren(List<SecOrganization> children) {
         this.children = children;
-    }
-
-    public List<XSTreeable<Long>> getTreeableList() {
-        return treeableList;
-    }
-
-    public void setTreeableList(List<XSTreeable<Long>> treeableList) {
-        this.treeableList = treeableList;
     }
 }

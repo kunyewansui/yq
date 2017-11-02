@@ -9,7 +9,6 @@ import com.xiaosuokeji.server.model.system.SystemConfig;
 import com.xiaosuokeji.server.service.intf.system.SystemConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

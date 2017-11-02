@@ -2,7 +2,6 @@ package com.xiaosuokeji.server.security.admin.service.intf;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
-import com.xiaosuokeji.server.security.admin.model.SecOrganization;
 import com.xiaosuokeji.server.security.admin.model.SecRole;
 import com.xiaosuokeji.server.security.admin.model.SecStaff;
 

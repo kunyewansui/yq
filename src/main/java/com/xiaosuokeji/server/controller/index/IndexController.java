@@ -26,6 +26,16 @@ public class IndexController {
     }
 
     /**
+     * 营销模块
+     *
+     * @return
+     */
+    @RequestMapping(value = "/admin/marketing", method = RequestMethod.GET)
+    public String marketingIndex() {
+        return "admin/marketing/index";
+    }
+
+    /**
      * 系统模块
      *
      * @return

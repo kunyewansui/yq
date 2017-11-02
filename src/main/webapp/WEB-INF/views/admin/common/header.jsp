@@ -25,6 +25,12 @@
                 <a href="<%=request.getContextPath()%>/admin/content" class="btn no-shadow navbar-btn">
                     图文
                 </a>
+                <a href="<%=request.getContextPath()%>/admin/marketing" class="btn no-shadow navbar-btn">
+                    营销
+                </a>
+                <a href="<%=request.getContextPath()%>/admin/system" class="btn no-shadow navbar-btn">
+                    系统
+                </a>
         </div>
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">

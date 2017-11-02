@@ -1,8 +1,8 @@
-package com.xiaosuokeji.server.service.intf.system;
+package com.xiaosuokeji.server.service.intf.marketing;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
-import com.xiaosuokeji.server.model.system.Feedback;
+import com.xiaosuokeji.server.model.marketing.Feedback;
 
 /**
  * Created by gustinlau on 11/1/17.

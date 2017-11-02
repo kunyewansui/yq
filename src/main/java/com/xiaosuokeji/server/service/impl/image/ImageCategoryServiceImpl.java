@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -96,16 +95,16 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         imageCategoryDao.update(imageCategory);
         if (imageCategory.getDisplay() != null) {
             List<ImageCategory> list = imageCategoryDao.listCombo(new ImageCategory());
-            Map<String, XSTreeable<String>> map = XSTreeUtil.buildTree(list);
+            Map<String, ImageCategory> map = XSTreeUtil.buildTree(list);
             ImageCategory existent = new ImageCategory();
             existent.setDisplay(imageCategory.getDisplay());
             //取消展示则所有子级也取消，开启展示则所有父级也开启
             if (imageCategory.getDisplay().equals(0)) {
-                List<XSTreeable<String>> subTreeList = XSTreeUtil.listSubTree(map.get(imageCategory.getId()));
+                List<ImageCategory> subTreeList = XSTreeUtil.listSubTree(map.get(imageCategory.getId()));
                 existent.setList(subTreeList);
             }
             else {
-                List<XSTreeable<String>> treePath = XSTreeUtil.getTreePath(map, map.get(imageCategory.getId()));
+                List<ImageCategory> treePath = XSTreeUtil.getTreePath(map, map.get(imageCategory.getId()));
                 existent.setList(treePath);
             }
             imageCategoryDao.batchUpdate(existent);
@@ -116,17 +115,17 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
     public void updateLock(ImageCategory imageCategory) throws XSBusinessException {
         ImageCategory existent = get(imageCategory);
         List<ImageCategory> list = imageCategoryDao.listCombo(new ImageCategory());
-        Map<String, XSTreeable<String>> map = XSTreeUtil.buildTree(list);
+        Map<String, ImageCategory> map = XSTreeUtil.buildTree(list);
         //解锁则所有子级也解锁，锁定则所有父级也锁定
         ImageCategory latest = new ImageCategory();
         if (existent.getLock().equals(0)) {
             latest.setLock(1);
-            List<XSTreeable<String>> treePath = XSTreeUtil.getTreePath(map, map.get(imageCategory.getId()));
+            List<ImageCategory> treePath = XSTreeUtil.getTreePath(map, map.get(imageCategory.getId()));
             latest.setList(treePath);
         }
         else {
             latest.setLock(0);
-            List<XSTreeable<String>> subTreeList = XSTreeUtil.listSubTree(map.get(imageCategory.getId()));
+            List<ImageCategory> subTreeList = XSTreeUtil.listSubTree(map.get(imageCategory.getId()));
             latest.setList(subTreeList);
         }
         imageCategoryDao.batchUpdateLock(latest);

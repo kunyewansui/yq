@@ -4,18 +4,15 @@ import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.framework.util.XSTreeUtil;
 import com.xiaosuokeji.server.security.admin.constant.SecRoleConsts;
-import com.xiaosuokeji.server.security.admin.dao.SecResourceDao;
 import com.xiaosuokeji.server.security.admin.dao.SecRoleDao;
 import com.xiaosuokeji.server.security.admin.model.SecResource;
 import com.xiaosuokeji.server.security.admin.model.SecRole;
 import com.xiaosuokeji.server.security.admin.model.SecStaff;
 import com.xiaosuokeji.server.security.admin.service.intf.SecRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 

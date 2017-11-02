@@ -97,7 +97,7 @@
 
     function deleteFeedback(id) {
         showDeleteModel("确认删除该反馈？", function () {
-            doPost("<%=request.getContextPath()%>/admin/system/feedback/remove", {id: id}, function (data) {
+            doPost("<%=request.getContextPath()%>/admin/marketing/feedback/remove", {id: id}, function (data) {
                 if (data.status) {
                     setTimeout(function () {
                         alert("删除成功");

@@ -12,15 +12,9 @@
             <nav class="navi">
                 <ul id="a_nav" class="nav">
                     <li>
-                        <a href="<%=request.getContextPath()%>/admin/system/version">
+                        <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
                             <i class="fa fa-empire"></i>
-                            <span>版本管理</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="<%=request.getContextPath()%>/admin/system/dict">
-                            <i class="fa fa-empire"></i>
-                            <span>字典管理</span>
+                            <span>意见反馈</span>
                         </a>
                     </li>
                 </ul>

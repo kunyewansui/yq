@@ -14,7 +14,7 @@ import java.util.List;
  * 系统资源
  * Created by xuxiaowei on 2017/10/23.
  */
-public class SecResource extends BaseModel implements XSTreeable<Long> {
+public class SecResource extends BaseModel implements XSTreeable<Long, SecResource> {
 
     /**
      * id
@@ -89,17 +89,12 @@ public class SecResource extends BaseModel implements XSTreeable<Long> {
     /**
      * 子级列表
      */
-    private List<XSTreeable<Long>> children;
+    private List<SecResource> children;
 
     /**
      * 资源列表
      */
     private List<SecResource> list;
-
-    /**
-     * 资源列表
-     */
-    private List<XSTreeable<Long>> treeableList;
 
     public interface Save {}
 
@@ -130,15 +125,15 @@ public class SecResource extends BaseModel implements XSTreeable<Long> {
     }
 
     @Override
-    public void addChild(XSTreeable<Long> xsTreeable) {
+    public void addChild(SecResource secResource) {
         if (children == null) {
             children = new ArrayList<>();
         }
-        children.add(xsTreeable);
+        children.add(secResource);
     }
 
     @Override
-    public List<XSTreeable<Long>> getChildren() {
+    public List<SecResource> getChildren() {
         return children;
     }
 
@@ -238,7 +233,7 @@ public class SecResource extends BaseModel implements XSTreeable<Long> {
         this.checked = checked;
     }
 
-    public void setChildren(List<XSTreeable<Long>> children) {
+    public void setChildren(List<SecResource> children) {
         this.children = children;
     }
 
@@ -248,13 +243,5 @@ public class SecResource extends BaseModel implements XSTreeable<Long> {
 
     public void setList(List<SecResource> list) {
         this.list = list;
-    }
-
-    public List<XSTreeable<Long>> getTreeableList() {
-        return treeableList;
-    }
-
-    public void setTreeableList(List<XSTreeable<Long>> treeableList) {
-        this.treeableList = treeableList;
     }
 }

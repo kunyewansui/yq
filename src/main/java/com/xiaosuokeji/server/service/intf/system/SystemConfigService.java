@@ -4,8 +4,6 @@ import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.model.system.SystemConfig;
 
-import java.util.List;
-
 /**
  * 系统配置Service
  * Created by xuxiaowei on 2017/10/28.
