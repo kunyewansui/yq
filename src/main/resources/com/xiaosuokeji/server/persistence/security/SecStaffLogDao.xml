@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.server.dao.security.SecStaffLogDao">
+
+    <insert id="save" parameterType="secStaffLog">
+        INSERT INTO shuttle_common.sc_security_staff_log(staff_id,ip,`time`,operation,status,parameters,result)
+        VALUES (#{staff.id},#{ip},#{time},#{operation},#{status},#{parameters},#{result})
+    </insert>
+
+    <delete id="remove" parameterType="secStaffLog">
+        DELETE FROM shuttle_common.sc_security_role
+        WHERE id=#{id}
+    </delete>
+
+    <resultMap id="secStaffLogMap" type="secStaffLog" autoMapping="true">
+        <association property="staff" javaType="secStaff" autoMapping="true" columnPrefix="s_"/>
+    </resultMap>
+
+    <select id="get" parameterType="secStaffLog" resultMap="secStaffLogMap">
+        SELECT sl.*,ss.name AS s_name
+        FROM shuttle_common.sc_security_staff_log sl
+        LEFT JOIN shuttle_common.sc_security_staff ss ON sl.staff_id=ss.id
+        WHERE id=#{id}
+    </select>
+
+    <sql id="listCondition">
+        FROM shuttle_common.sc_security_staff_log sl
+        LEFT JOIN shuttle_common.sc_security_staff ss ON sl.staff_id=ss.id
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND ss.name LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="dynamic!=null and dynamic.startTime!=null and dynamic.startTime!=''">
+                AND sl.time &gt;= #{dynamic.startTime}
+            </if>
+            <if test="dynamic!=null and dynamic.endTime!=null and dynamic.endTime!=''">
+                AND sl.time &lt;= #{dynamic.endTime}
+            </if>
+            <if test="dynamic!=null and dynamic.operation!=null and dynamic.operation!=''">
+                AND sl.operation LIKE CONCAT('%',#{operation},'%')
+            </if>
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="secStaffLog" resultMap="secStaffLogMap">
+        SELECT ss.name AS s_name,sl.time,sl.operation,sl.status
+        <include refid="listCondition"/>
+        <include refid="XSBaseMapper.sort"/>
+        <include refid="XSBaseMapper.limit"/>
+    </select>
+
+    <select id="listResourceByRequest" parameterType="secResource" resultType="secResource">
+        SELECT *
+        FROM shuttle_common.sc_security_resource
+        WHERE url=#{url} AND method=#{method} AND `type`=2
+    </select>
+
+    <select id="count" parameterType="secStaffLog" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition"/>
+    </select>
+</mapper>

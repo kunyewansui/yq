@@ -3,7 +3,7 @@ package com.xiaosuokeji.server.controller.common;
 import com.xiaosuokeji.framework.annotation.XSExceptionHandler;
 import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.model.XSServiceResult;
-import com.xiaosuokeji.server.manager.intf.OssService;
+import com.xiaosuokeji.server.manager.oss.OssService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

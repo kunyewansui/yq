@@ -16,6 +16,8 @@ import java.util.List;
  */
 public class DictOptionsTag extends SimpleTagSupport {
 
+    private static DictDataService dictDataService=XSSpringContext.getBean("dictDataService");
+
     /**
      * 字典key
      */
@@ -36,7 +38,7 @@ public class DictOptionsTag extends SimpleTagSupport {
 
     @Override
     public void doTag() throws JspException, IOException {
-        List<DictData> items = ((DictDataService) XSSpringContext.getBean("dictDataService")).listByDict(key);
+        List<DictData> items = dictDataService.listByDict(key);
         if (items != null && items.size() > 0) {
             JspWriter out = getJspContext().getOut();
             for (DictData data : items) {
