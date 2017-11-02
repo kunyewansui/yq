@@ -47,6 +47,10 @@ public class Dict extends BaseModel {
         this.id = id;
     }
 
+    public Dict(String key) {
+        this.key = key;
+    }
+
     public Long getId() {
         return id;
     }

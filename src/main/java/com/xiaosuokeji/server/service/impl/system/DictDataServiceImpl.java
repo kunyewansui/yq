@@ -1,5 +1,7 @@
 package com.xiaosuokeji.server.service.impl.system;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.constant.system.DictDataConsts;
@@ -7,10 +9,17 @@ import com.xiaosuokeji.server.dao.system.DictDataDao;
 import com.xiaosuokeji.server.model.system.Dict;
 import com.xiaosuokeji.server.model.system.DictData;
 import com.xiaosuokeji.server.service.intf.system.DictDataService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 数据字典ServiceImpl
@@ -19,8 +28,17 @@ import java.util.List;
 @Service("dictDataService")
 public class DictDataServiceImpl implements DictDataService {
 
+    private static final Logger logger = LoggerFactory.getLogger(DictDataServiceImpl.class);
+
     @Autowired
     private DictDataDao dictDataDao;
+
+    private Cache<String, List<DictData>> cache = null;
+
+    @PostConstruct
+    public void init() {
+        cache = CacheBuilder.newBuilder().expireAfterAccess(1800L, TimeUnit.SECONDS).maximumSize(512).build();
+    }
 
     @Override
     public void save(DictData dictData) throws XSBusinessException {
@@ -106,8 +124,18 @@ public class DictDataServiceImpl implements DictDataService {
 
     @Override
     public List<DictData> listByDict(String dictKey) {
-        Dict dict = new Dict();
-        dict.setKey(dictKey);
-        return dictDataDao.listByDict(dict);
+        List<DictData> list = null;
+        //先查询缓存，若未命中则查询数据库
+        try {
+            list = cache.get(dictKey, new Callable<List<DictData>>() {
+                @Override
+                public List<DictData> call() {
+                    return dictDataDao.listByDict(new Dict(dictKey));
+                }
+            });
+        } catch (ExecutionException e) {
+            logger.error("error : ", e);
+        }
+        return list == null ? new ArrayList<>() : list;
     }
 }
