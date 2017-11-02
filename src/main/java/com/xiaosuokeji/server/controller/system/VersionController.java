@@ -2,7 +2,6 @@ package com.xiaosuokeji.server.controller.system;
 
 import com.xiaosuokeji.framework.annotation.XSExceptionHandler;
 import com.xiaosuokeji.framework.annotation.XSLog;
-import com.xiaosuokeji.framework.annotation.XSPagination;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.system.Version;
@@ -29,7 +28,6 @@ public class VersionController {
     VersionService versionService;
 
     @RequestMapping(value = "/admin/system/version", method = RequestMethod.GET)
-    @XSPagination
     public String index(Model model,HttpServletRequest request, Version version) {
         model.addAttribute("search", version);
         model.addAttribute("pageModel", versionService.listAndCount(version));

@@ -2,7 +2,6 @@ package com.xiaosuokeji.server.controller.marketing;
 
 import com.xiaosuokeji.framework.annotation.XSExceptionHandler;
 import com.xiaosuokeji.framework.annotation.XSLog;
-import com.xiaosuokeji.framework.annotation.XSPagination;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.marketing.Feedback;
@@ -28,7 +27,6 @@ public class FeedbackController {
     FeedbackService feedbackService;
 
     @RequestMapping(value = "/admin/marketing/feedback", method = RequestMethod.GET)
-    @XSPagination
     public String index(Model model,HttpServletRequest request, Feedback feedback) {
         model.addAttribute("search", feedback);
         model.addAttribute("pageModel", feedbackService.listAndCount(feedback));
