@@ -3,7 +3,6 @@ package com.xiaosuokeji.server.service.intf.system;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.intf.XSDictDataProvider;
 import com.xiaosuokeji.framework.model.XSPageModel;
-import com.xiaosuokeji.server.model.system.Dict;
 import com.xiaosuokeji.server.model.system.DictData;
 
 import java.util.List;

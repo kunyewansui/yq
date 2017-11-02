@@ -39,6 +39,13 @@
             <type>java.lang.String</type>
             <description>字典的KEY</description>
         </attribute>
+        <attribute>
+            <name>value</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>选中值</description>
+        </attribute>
     </tag>
 
     <tag>
@@ -57,6 +64,30 @@
             <required>false</required>
             <type>java.lang.Long</type>
             <description>计算分页用limit，默认10</description>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>imageUploader</name>
+        <tag-class>com.xiaosuokeji.server.tag.ImageUploaderTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>identifier</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+            <description>uploader id 唯一</description>
+        </attribute>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+            <description>input标签中name的值</description>
+        </attribute>
+        <attribute>
+            <name>folder</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+            <description>文件上传的目录</description>
         </attribute>
     </tag>
 </taglib>

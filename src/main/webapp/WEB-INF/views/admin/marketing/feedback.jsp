@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="xs" uri="http://code.xiaosuokeji.com/tags/jsp/xs" %>
 <%--
   Created by IntelliJ IDEA.
   User: gustinlau
@@ -26,14 +27,14 @@
             <div class="col-xs-12">
                 <form class="form-horizontal" id="searchForm">
                     <div class="form-group">
-                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                        <div class="col-xs-4 col-md-2 col-lg-1 no-padder m-b-md text-right">
                             <label class="control-label">标题：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
                             <input name="dynamic[title]" type="text" class="form-control" placeholder="模糊查询"
                                    value="${search.dynamic.title}">
                         </div>
-                        <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
+                        <div class="col-xs-4 col-md-2 col-lg-1 no-padder m-b-md text-right">
                             <label class="control-label">内容：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
@@ -67,16 +68,16 @@
                                 <td colspan="6">无数据</td>
                             </tr>
                         </c:if>
-                        <c:forEach items="${pageModel.list}" var="feedback">
+                        <c:forEach items="${pageModel.list}" var="item">
                             <tr>
-                                <td>${feedback.name}</td>
-                                <td>${feedback.mobile}</td>
-                                <td>${feedback.title}</td>
-                                <td>${feedback.content}</td>
-                                <td>${feedback.createTime}</td>
+                                <td>${item.name}</td>
+                                <td>${item.mobile}</td>
+                                <td>${item.title}</td>
+                                <td>${item.content}</td>
+                                <td>${item.createTime}</td>
                                 <td>
                                     <a href="#" class="btn btn-danger btn-xs"
-                                       onclick="deleteFeedback('${feedback.id}');return false">
+                                       onclick="deleteListItem('${item.id}');return false">
                                         删除
                                     </a>
                                 </td>
@@ -85,7 +86,7 @@
                         </tbody>
                     </table>
                 </div>
-                ${__pagination__}
+                <xs:pagination pageModel="${pageModel}"/>
             </div>
         </div>
     </div>
@@ -94,9 +95,8 @@
 
 <%@include file="../common/deleteConfirm.jsp" %>
 <script>
-
-    function deleteFeedback(id) {
-        showDeleteModel("确认删除该反馈？", function () {
+    function deleteListItem(id) {
+        showDeleteModel(null, function () {
             doPost("<%=request.getContextPath()%>/admin/marketing/feedback/remove", {id: id}, function (data) {
                 if (data.status) {
                     setTimeout(function () {

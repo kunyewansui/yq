@@ -5,7 +5,6 @@ import com.xiaosuokeji.server.model.base.BaseModel;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * 字典

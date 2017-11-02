@@ -1,7 +1,6 @@
 package com.xiaosuokeji.server.service.impl.image;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
-import com.xiaosuokeji.framework.intf.XSTreeable;
 import com.xiaosuokeji.framework.util.XSTreeUtil;
 import com.xiaosuokeji.framework.util.XSUuidUtil;
 import com.xiaosuokeji.server.constant.image.ImageCategoryConsts;

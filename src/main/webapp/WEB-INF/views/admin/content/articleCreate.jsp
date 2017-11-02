@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="xs" uri="http://code.xiaosuokeji.com/tags/jsp/xs" %>
 <%--
   Created by IntelliJ IDEA.
   User: gustinlau
@@ -49,7 +50,8 @@
                             <label class="control-label required">分类：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input type="text" name="category.name" class="form-control" readonly onclick="showCategoryModel()"/>
+                            <input type="text" name="category.name" class="form-control" readonly
+                                   onclick="showCategoryModel()"/>
                             <input type="hidden" name="category.id">
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
@@ -57,28 +59,22 @@
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
                             <select name="type" class="form-control" onchange="typeChange(event)">
-                                <option value="0">富文本</option>
-                                <option value="1">链接</option>
+                                <xs:dictOptions key="articleType"/>
                             </select>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
-                            <label class="control-label required">是否上架：</label>
+                            <label class="control-label required">是否展示：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
                             <select name="display" class="form-control">
-                                <option value="1">是</option>
-                                <option value="0">否</option>
+                                <xs:dictOptions key="articleDisplay"/>
                             </select>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1 no-padder m-b-md text-right">
                             <label class="control-label">图标：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
-                            <jsp:include page="../common/imageUploader.jsp">
-                                <jsp:param name="id" value="articleIcon"/>
-                                <jsp:param name="name" value="image"/>
-                                <jsp:param name="folder" value="article"/>
-                            </jsp:include>
+                            <xs:imageUploader identifier="articleIcon" name="image" folder="article"/>
                         </div>
                     </div>
                     <div id="richText">
@@ -117,6 +113,7 @@
 </div>
 <script id="treeData" type="text/plain">
     ${categoryTree}
+
 </script>
 <script>
     var ue = UE.getEditor('container', {initialFrameWidth: null});
@@ -152,7 +149,7 @@
     }
 
     function submitForm() {
-        doPost('<%=request.getContextPath()%>/admin/content/articlesave',
+        doPost('<%=request.getContextPath()%>/admin/content/article/save',
             {
                 title: $form.xsGetInput("title"),
                 seq: $form.xsGetInput("seq"),
@@ -161,7 +158,8 @@
                 image: $form.xsGetInput("image"),
                 "category.id": $form.xsGetInput("category.id"),
                 url: (parseInt($form.xsGetInput("type")) === 0) ? undefined : $form.xsGetInput("url"),
-                content: (parseInt($form.xsGetInput("type")) === 1) ? undefined : ue.getContent()
+                content: (parseInt($form.xsGetInput("type")) === 1) ? undefined : ue.getContent(),
+                lock: 0
             }, function (data) {
                 if (data.status) {
                     alert("新增成功");

@@ -77,6 +77,18 @@
             <if test="display!=null">
                 AND a.display=#{display}
             </if>
+            <if test="dynamic!=null and dynamic.createTimeStart!=null and dynamic.createTimeStart!=''">
+                AND date(u.create_time) &gt;= #{dynamic.createTimeStart}
+            </if>
+            <if test="dynamic!=null and dynamic.createTimeEnd!=null and dynamic.createTimeEnd!=''">
+                AND date(u.create_time) &lt;= #{dynamic.createTimeEnd}
+            </if>
+            <if test="dynamic!=null and dynamic.updateTimeStart!=null and dynamic.updateTimeStart!=''">
+                AND date(u.update_time) &gt;= #{dynamic.updateTimeStart}
+            </if>
+            <if test="dynamic!=null and dynamic.updateTimeEnd!=null and dynamic.updateTimeEnd!=''">
+                AND date(u.update_time) &lt;= #{dynamic.updateTimeEnd}
+            </if>
         </trim>
     </sql>
 

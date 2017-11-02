@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by gustinlau on 11/1/17.
@@ -25,10 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 public class VersionController {
 
     @Autowired
-    VersionService versionService;
+    private VersionService versionService;
 
     @RequestMapping(value = "/admin/system/version", method = RequestMethod.GET)
-    public String index(Model model,HttpServletRequest request, Version version) {
+    public String index(Model model, Version version) {
         model.addAttribute("search", version);
         model.addAttribute("pageModel", versionService.listAndCount(version));
         return "admin/system/version";
@@ -56,7 +55,7 @@ public class VersionController {
 
     @RequestMapping(value = "/admin/system/version/update", method = RequestMethod.POST)
     @ResponseBody
-    public XSServiceResult adminUpdate(@Validated(Version.Update.class)Version version) throws XSBusinessException {
+    public XSServiceResult adminUpdate(@Validated(Version.Update.class) Version version) throws XSBusinessException {
         versionService.update(version);
         return XSServiceResult.build();
     }

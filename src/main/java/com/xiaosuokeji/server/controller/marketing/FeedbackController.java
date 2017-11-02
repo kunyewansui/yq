@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Created by gustinlau on 11/1/17.
  */
@@ -24,15 +22,14 @@ import javax.servlet.http.HttpServletRequest;
 public class FeedbackController {
 
     @Autowired
-    FeedbackService feedbackService;
+    private FeedbackService feedbackService;
 
     @RequestMapping(value = "/admin/marketing/feedback", method = RequestMethod.GET)
-    public String index(Model model,HttpServletRequest request, Feedback feedback) {
+    public String index(Model model,Feedback feedback) {
         model.addAttribute("search", feedback);
         model.addAttribute("pageModel", feedbackService.listAndCount(feedback));
         return "admin/marketing/feedback";
     }
-
 
     @RequestMapping(value = "/admin/marketing/feedback/remove", method = RequestMethod.POST)
     @ResponseBody

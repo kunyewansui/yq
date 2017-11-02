@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="xs" uri="http://code.xiaosuokeji.com/tags/jsp/xs" %>
 <%--
   Created by IntelliJ IDEA.
   User: gustinlau
@@ -39,8 +40,7 @@
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
                             <select name="platform" class="form-control" data-value="${search.platform}">
                                 <option value="">全部</option>
-                                <option value="0">安卓</option>
-                                <option value="1">苹果</option>
+                               <xs:dictOptions key="versionPlatform"/>
                             </select>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
@@ -56,8 +56,7 @@
                         <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
                             <select name="status" class="form-control" data-value="${search.status}">
                                 <option value="">全部</option>
-                                <option value="0">下架</option>
-                                <option value="1">上架</option>
+                                <xs:dictOptions key="versionStatus"/>
                             </select>
                         </div>
                     </div>
@@ -89,32 +88,32 @@
                                 <td colspan="6">无数据</td>
                             </tr>
                         </c:if>
-                        <c:forEach items="${pageModel.list}" var="version">
+                        <c:forEach items="${pageModel.list}" var="item">
                             <tr>
-                                <td>${version.code}</td>
-                                <td>${version.name}</td>
-                                <td>${version.desc}</td>
-                                <td>${version.platform eq 0?"安卓":"苹果"}</td>
-                                <td>${version.status eq 0?"下架":"上架"}</td>
+                                <td>${item.code}</td>
+                                <td>${item.name}</td>
+                                <td>${item.desc}</td>
+                                <td><xs:dictDesc key="versionPlatform" value="${item.platform}"/></td>
+                                <td>${item.status eq 0?"下架":"上架"}</td>
                                 <td>
-                                    <c:if test="${version.status eq 0}">
+                                    <c:if test="${item.status eq 0}">
                                         <a href="#" class="btn btn-success btn-xs"
-                                           onclick="updateVersion('${version.id}',1);return false">
+                                           onclick="simpleUpdateListItem('${item.id}',1);return false">
                                             上架
                                         </a>
                                     </c:if>
-                                    <c:if test="${version.status eq 1}">
+                                    <c:if test="${item.status eq 1}">
                                         <a href="#" class="btn btn-danger btn-xs"
-                                           onclick="updateVersion('${version.id}',0);return false">
+                                           onclick="simpleUpdateListItem('${item.id}',0);return false">
                                             下架
                                         </a>
                                     </c:if>
-                                    <a href="#" onclick="editVersion('${version.id}');return false;"
+                                    <a href="#" onclick="updateListItem('${item.id}');return false;"
                                        class="btn btn-info btn-xs">
                                         编辑
                                     </a>
                                     <a href="#" class="btn btn-danger btn-xs"
-                                       onclick="deleteVersion('${version.id}');return false">
+                                       onclick="deleteListItem('${item.id}');return false">
                                         删除
                                     </a>
                                 </td>
@@ -123,7 +122,7 @@
                         </tbody>
                     </table>
                 </div>
-                ${__pagination__}
+              <xs:pagination pageModel="${pageModel}"/>
             </div>
         </div>
     </div>
@@ -162,8 +161,7 @@
                         </div>
                         <div class="col-xs-9">
                             <select name="platform" class="form-control">
-                                <option value="1">苹果</option>
-                                <option value="0">安卓</option>
+                                <xs:dictOptions key="versionPlatform"/>
                             </select>
                         </div>
                     </div>
@@ -181,8 +179,7 @@
                         </div>
                         <div class="col-xs-9">
                             <select name="status" class="form-control">
-                                <option value="1">上架</option>
-                                <option value="0">下架</option>
+                                <xs:dictOptions key="versionStatus"/>
                             </select>
                         </div>
                     </div>
@@ -318,8 +315,7 @@
                         </div>
                         <div class="col-xs-9">
                             <select name="platform" class="form-control">
-                                <option value="1">苹果</option>
-                                <option value="0">安卓</option>
+                                <xs:dictOptions key="versionPlatform"/>
                             </select>
                         </div>
                     </div>
@@ -337,8 +333,7 @@
                         </div>
                         <div class="col-xs-9">
                             <select name="status" class="form-control">
-                                <option value="1">上架</option>
-                                <option value="0">下架</option>
+                                <xs:dictOptions key="versionStatus"/>
                             </select>
                         </div>
                     </div>
@@ -429,8 +424,7 @@
         }
     });
 
-
-    function editVersion(id) {
+    function updateListItem(id) {
         doPost("<%=request.getContextPath()%>/admin/system/version/get", {id: id}, function (data) {
             if (data.status) {
                 $updateForm.xsSetForm(data.data);
@@ -441,19 +435,14 @@
         });
     }
 
-
     $(function () {
         $("#updateModel").on('hide.bs.modal', function () {
             $updateForm.xsClean();
             updateValidator.resetForm();
         })
     });
-</script>
 
-
-<%@include file="../common/deleteConfirm.jsp" %>
-<script>
-    function updateVersion(id, status) {
+    function simpleUpdateListItem(id, status) {
         doPost('<%=request.getContextPath()%>/admin/system/version/update',
             {
                 id: id,
@@ -466,9 +455,13 @@
                 }
             });
     }
+</script>
 
-    function deleteVersion(id) {
-        showDeleteModel("确认删除该版本？", function () {
+
+<%@include file="../common/deleteConfirm.jsp" %>
+<script>
+    function deleteListItem(id) {
+        showDeleteModel(null, function () {
             doPost("<%=request.getContextPath()%>/admin/system/version/remove", {id: id}, function (data) {
                 if (data.status) {
                     setTimeout(function () {

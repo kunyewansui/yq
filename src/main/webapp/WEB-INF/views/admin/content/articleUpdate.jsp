@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="xs" uri="http://code.xiaosuokeji.com/tags/jsp/xs" %>
 <%--
   Created by IntelliJ IDEA.
   User: gustinlau
@@ -63,8 +64,7 @@
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
                             <select name="type" class="form-control" onchange="typeChange(event)" data-value="${article.type}">
-                                <option value="0">富文本</option>
-                                <option value="1">链接</option>
+                                <xs:dictOptions key="articleType"/>
                             </select>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
@@ -72,19 +72,14 @@
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
                             <select name="display" class="form-control" data-value="${article.display}">
-                                <option value="1">是</option>
-                                <option value="0">否</option>
+                                <xs:dictOptions key="articleDisplay"/>
                             </select>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1 no-padder m-b-md text-right">
                             <label class="control-label">图标：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
-                            <jsp:include page="../common/imageUploader.jsp">
-                                <jsp:param name="id" value="articleIcon"/>
-                                <jsp:param name="name" value="image"/>
-                                <jsp:param name="folder" value="article"/>
-                            </jsp:include>
+                            <xs:imageUploader identifier="articleIcon" name="image" folder="article"/>
                             <c:if test="${article.image ne null && article.image ne ''}">
                                 <script>
                                     $(function () {
@@ -143,6 +138,7 @@
     var $link = $("#link");
     var $form = $("#createForm");
     var $categoryModel = $("#categoryModel");
+
     function showCategoryModel() {
         $categoryModel.modal("show");
     }
@@ -190,7 +186,7 @@
             }
         });
         $("#tree").treeview('selectNode','${article.category.id}');
-        $("input[name=type]").trigger("change");
+        $("input[name='type']").trigger("change");
     });
 
 

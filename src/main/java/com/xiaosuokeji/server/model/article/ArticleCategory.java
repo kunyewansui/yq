@@ -66,7 +66,7 @@ public class ArticleCategory extends BaseModel implements XSTreeable<String, Art
     /**
      * 锁定，0否，1是
      */
-    private Integer lock=0;
+    private Integer lock;
 
     /**
      * 子级列表

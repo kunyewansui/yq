@@ -5,10 +5,11 @@ import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.model.marketing.Feedback;
 
 /**
+ * 用户反馈Service
  * Created by gustinlau on 11/1/17.
  */
 public interface FeedbackService {
-    void save(Feedback feedback) throws XSBusinessException;
+    void save(Feedback feedback);
 
     void remove(Feedback feedback) throws XSBusinessException;
 

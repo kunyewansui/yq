@@ -1,7 +1,6 @@
 package com.xiaosuokeji.server.security.admin.service.impl;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
-import com.xiaosuokeji.framework.intf.XSTreeable;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.framework.util.XSTreeUtil;
 import com.xiaosuokeji.server.security.admin.constant.SecResourceConsts;
