@@ -71,7 +71,7 @@
             <if test="dynamic!=null and dynamic.content!=null and dynamic.content!=''">
                 AND a.content LIKE CONCAT('%',#{dynamic.content},'%')
             </if>
-            <if test="category!=null and category.id!=null">
+            <if test="category!=null and category.id!=null and category.id!=''">
                 AND a.category_id=#{category.id}
             </if>
             <if test="display!=null">
@@ -92,7 +92,7 @@
         SELECT id,title,`type`,image,url
         FROM shuttle_common.sc_article
         <trim prefix="WHERE" prefixOverrides="AND|OR">
-            <if test="category!=null and category.id!=null">
+            <if test="category!=null and category.id!=null and category.id!=''">
                 AND category_id=#{category.id}
             </if>
             <if test="display!=null">

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by gustinlau on 11/2/17.
  */
-public class DictNameTag extends SimpleTagSupport {
+public class DictDescTag extends SimpleTagSupport {
 
     private String key;
 

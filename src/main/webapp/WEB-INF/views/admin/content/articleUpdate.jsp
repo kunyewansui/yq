@@ -187,9 +187,9 @@
                 $form.xsSetInput("category.name", data.name);
                 $form.xsSetInput("category.id", data.id);
                 $categoryModel.modal("hide");
-            },
-            selectedId:'${article.category.id}'
+            }
         });
+        $("#tree").treeview('selectNode','${article.category.id}');
         $("input[name=type]").trigger("change");
     });
 

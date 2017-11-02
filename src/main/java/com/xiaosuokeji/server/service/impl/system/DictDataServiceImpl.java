@@ -16,7 +16,7 @@ import java.util.List;
  * 数据字典ServiceImpl
  * Created by xuxiaowei on 2017/11/1.
  */
-@Service
+@Service("dictDataService")
 public class DictDataServiceImpl implements DictDataService {
 
     @Autowired

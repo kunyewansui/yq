@@ -2,7 +2,6 @@ package com.xiaosuokeji.server.controller.article;
 
 import com.xiaosuokeji.framework.annotation.XSExceptionHandler;
 import com.xiaosuokeji.framework.annotation.XSLog;
-import com.xiaosuokeji.framework.annotation.XSPagination;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.json.XSJackson;
 import com.xiaosuokeji.framework.model.XSServiceResult;
@@ -28,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 @XSLog
 @XSExceptionHandler
 public class ArticleController {
+
     @Autowired
     private ArticleService articleService;
     @Autowired
@@ -36,8 +36,7 @@ public class ArticleController {
     //region Admin
 
     @RequestMapping(value = "/admin/content/article/article", method = RequestMethod.GET)
-    @XSPagination
-    public String index(HttpServletRequest request, Model model, Article article) throws Exception {
+    public String index(Model model, Article article) throws Exception {
         model.addAttribute("search", article);
         model.addAttribute("pageModel", articleService.listAndCount(article));
         model.addAttribute("categoryTree", XSJackson.toJsonString(articleCategoryService.tree(new ArticleCategory())));

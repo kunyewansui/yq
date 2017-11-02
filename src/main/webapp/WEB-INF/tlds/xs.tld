@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+        "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<taglib>
+    <tlib-version>1.0</tlib-version><!-- 代表标签库的版本号 -->
+    <jsp-version>2.0</jsp-version>
+    <short-name>xs</short-name><!-- 你的标签库的简称 -->
+    <uri>http://code.xiaosuokeji.com/tags/jsp/xs</uri><!-- 你标签库的引用uri -->
+
+    <!--根据值获取字典描述-->
+    <tag>
+        <name>dictDesc</name>
+        <tag-class>com.xiaosuokeji.server.tag.DictDescTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>key</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+            <description>字典的KEY</description>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>显示字典名称的value</description>
+        </attribute>
+    </tag>
+
+    <!--根据字典生成Options-->
+    <tag>
+        <name>dictOptions</name>
+        <tag-class>com.xiaosuokeji.server.tag.DictOptionsTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>key</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+            <description>字典的KEY</description>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>pagination</name>
+        <tag-class>com.xiaosuokeji.server.tag.PaginationTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>pageModel</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.xiaosuokeji.framework.model.XSPageModel</type>
+            <description>分页模型</description>
+        </attribute>
+        <attribute>
+            <name>limit</name>
+            <required>false</required>
+            <type>java.lang.Long</type>
+            <description>计算分页用limit，默认10</description>
+        </attribute>
+    </tag>
+</taglib>
