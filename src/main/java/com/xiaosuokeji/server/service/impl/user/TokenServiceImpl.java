@@ -62,7 +62,7 @@ public class TokenServiceImpl implements TokenService {
         Token token = cache.get(tokenStr, new Callable<Token>() {
             @Override
             public Token call() throws Exception {
-                logger.debug("Guava缓存未命中，从数据库中获取令牌");
+                logger.debug("Guava缓存未命中，从数据库中获取令牌，key=" + tokenStr);
                 Token token = tokenDao.get(new Token(tokenStr));
                 if (token == null) {
                     throw new XSBusinessException(TokenConsts.TOKEN_INVALID);

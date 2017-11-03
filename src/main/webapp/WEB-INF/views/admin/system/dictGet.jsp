@@ -3,61 +3,61 @@
 <%--
   Created by IntelliJ IDEA.
   User: xuxiaowei
-  Date: 11/1/17
-  Time: 4:50 PM
+  Date: 10/30/17
+  Time: 1:14 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="cmn-hans">
 <head>
-    <title>字典管理</title>
+    <title>字典详情</title>
     <%@include file="../common/head.jsp" %>
     <%@include file="../common/validate.jsp" %>
+</head>
 <body>
 <%@include file="../common/header.jsp" %>
 <%@include file="./content_nav.jsp" %>
-
+<c:if test="${dict eq null}">
+    <script>
+        alert("字典不存在");
+        window.history.back();
+    </script>
+</c:if>
 <div class="app-content ">
     <div class="app-content-body">
         <div class="bg-light lter b-b wrapper-md ">
-            <h1 class="m-n font-thin h3 inline">字典管理</h1>
+            <h1 class="m-n font-thin h3 inline">编辑字典</h1>
+            <a href="${backUrl}" class="btn btn-default pull-right">返回</a>
+            <button id="formSubmit" class="btn btn-info pull-right" style="margin-right: 5px"
+                    onclick="submitForm()">
+                保存
+            </button>
         </div>
-        <div class="wrapper-md">
+        <div class="wrapper-md row">
             <div class="col-xs-12">
-                <form class="form-horizontal" id="searchForm">
+                <form name="form" class="form-horizontal">
                     <div class="form-group">
+                        <input name="id" type="hidden" value="${dict.id}"/>
                         <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
-                            <label class="control-label">名称：</label>
+                            <label class="control-label required">名称：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input name="dynamic[name]" type="text" class="form-control" placeholder="模糊查询"
-                                   value="${search.dynamic.name}">
+                            <input name="name" type="text" class="form-control" value="${dict.name}"/>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
-                            <label class="control-label">键：</label>
+                            <label class="control-label required">键：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input name="dynamic[key]" type="text" class="form-control" placeholder="模糊查询"
-                                   value="${search.dynamic.key}">
-                        </div>
-                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
-                            <label class="control-label">锁定：</label>
-                        </div>
-                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <select name="lock" class="form-control" data-value="${search.lock}">
-                                <option value="">全部</option>
-                                <xs:dictOptions key="dictLock"/>
-                            </select>
+                            <input name="key" type="text" class="form-control" value="${dict.key}"/>
                         </div>
                     </div>
+                </form>
+                <form class="form-horizontal">
                     <div class="form-group m-t-n-md">
                         <div class="col-xs-12">
                             <a href="#" onclick="showCreateModal();return false"
                                class="btn btn-success pull-left">新增</a>
-                            <input class="btn btn-info pull-right" value="搜索" type="submit">
-                            <input class="btn btn-default pull-right  m-r-sm" value="重置" type="button"
-                                   onclick="$('#searchForm').xsClean()">
                         </div>
                     </div>
                 </form>
@@ -66,21 +66,23 @@
                         <thead>
                         <tr>
                             <th>名称</th>
-                            <th>键</th>
+                            <th>值</th>
+                            <th>描述</th>
                             <th>锁定</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <c:if test="${pageModel.list.size() eq 0}">
+                        <c:if test="${dictDataList.size() eq 0}">
                             <tr>
                                 <td colspan="6">无数据</td>
                             </tr>
                         </c:if>
-                        <c:forEach items="${pageModel.list}" var="item">
+                        <c:forEach items="${dictDataList}" var="item">
                             <tr>
                                 <td>${item.name}</td>
-                                <td>${item.key}</td>
-                                <td><xs:dictDesc key="dictLock" value="${item.lock}"/></td>
+                                <td>${item.value}</td>
+                                <td>${item.desc}</td>
+                                <td><xs:dictDesc key="dictDataLock" value="${item.lock}"/></td>
                                 <td>
                                     <c:if test="${item.lock eq 0}">
                                         <a href="#" class="btn btn-success btn-xs"
@@ -94,7 +96,7 @@
                                             解锁
                                         </a>
                                     </c:if>
-                                    <a href="<%=request.getContextPath()%>/admin/system/dict/get?id=${item.id}"
+                                    <a href="#" onclick="updateListItem('${item.id}');return false;"
                                        class="btn btn-info btn-xs">
                                         编辑
                                     </a>
@@ -108,12 +110,28 @@
                         </tbody>
                     </table>
                 </div>
-                <xs:pagination pageModel="${pageModel}"/>
             </div>
         </div>
     </div>
 </div>
-
+<script>
+    var $form = $("form[name=form]");
+    var $formSubmit = $("#formSubmit");
+    function submitForm() {
+        $formSubmit.attr("disabled", true);
+        doPost('<%=request.getContextPath()%>/admin/system/dict/update',
+            $form.serialize(),
+            function (data) {
+                if (data.status) {
+                    alert("修改成功");
+                    window.location.reload(true);
+                } else {
+                    alert(data.msg);
+                    $formSubmit.attr("disabled", false);
+                }
+            });
+    }
+</script>
 <div class="modal fade" id="createModel" data-backdrop="static" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -133,12 +151,21 @@
                             <input name="name" type="text" maxlength="255" class="form-control">
                         </div>
                     </div>
+                    <input name="dict.id" value="${dict.id}" type="hidden" data-ignore="true">
                     <div class="form-group row">
                         <div class="col-xs-3 text-right">
-                            <label class="control-label required">键：</label>
+                            <label class="control-label required">值：</label>
                         </div>
                         <div class="col-xs-9">
-                            <input name="key" type="text" maxlength="191" class="form-control">
+                            <input name="value" type="text" maxlength="191" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xs-3 text-right">
+                            <label class="control-label required">描述：</label>
+                        </div>
+                        <div class="col-xs-9">
+                            <input name="desc" type="text" maxlength="255" class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -147,7 +174,7 @@
                         </div>
                         <div class="col-xs-9">
                             <select name="lock" class="form-control">
-                                <xs:dictOptions key="dictLock"/>
+                                <xs:dictOptions key="dictDataLock"/>
                             </select>
                         </div>
                     </div>
@@ -170,10 +197,15 @@
                 notEmpty: true,
                 maxlength: 255
             },
-            key: {
+            value: {
                 required: true,
                 notEmpty: true,
                 maxlength: 191
+            },
+            desc: {
+                required: true,
+                notEmpty: true,
+                maxlength: 255
             }
         },
         messages: {
@@ -182,15 +214,20 @@
                 notEmpty: "名称不能为空",
                 maxlength: "名称最多255个字"
             },
-            key: {
-                required: "键不能为空",
-                notEmpty: "键不能为空",
-                maxlength: "键最多191个字"
+            value: {
+                required: "值不能为空",
+                notEmpty: "值不能为空",
+                maxlength: "值最多191个字"
+            },
+            desc: {
+                required: "描述不能为空",
+                notEmpty: "描述不能为空",
+                maxlength: "描述最多255个字"
             }
         },
         submitHandler: function () {
             $createSubmit.attr("disabled", true);
-            doPost("<%=request.getContextPath()%>/admin/system/dict/save",
+            doPost("<%=request.getContextPath()%>/admin/system/dictData/save",
                 $createForm.serialize(),
                 function (data) {
                     $createSubmit.attr("disabled", false);
@@ -244,10 +281,18 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-xs-3 text-right">
-                            <label class="control-label required">键：</label>
+                            <label class="control-label required">值：</label>
                         </div>
                         <div class="col-xs-9">
-                            <input name="key" type="text" maxlength="191" class="form-control">
+                            <input name="value" type="text" maxlength="191" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xs-3 text-right">
+                            <label class="control-label required">描述：</label>
+                        </div>
+                        <div class="col-xs-9">
+                            <input name="desc" type="text" maxlength="255" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -269,11 +314,16 @@
                 notEmpty: true,
                 maxlength: 255
             },
-            key: {
+            value: {
                 required: true,
                 notEmpty: true,
                 maxlength: 191
-            }
+            },
+            desc: {
+                required: true,
+                notEmpty: true,
+                maxlength: 255
+            },
         },
         messages: {
             name: {
@@ -281,15 +331,20 @@
                 notEmpty: "名称不能为空",
                 maxlength: "名称最多255个字"
             },
-            key: {
-                required: "键不能为空",
-                notEmpty: "键不能为空",
-                maxlength: "键最多191个字"
-            }
+            value: {
+                required: "值不能为空",
+                notEmpty: "值不能为空",
+                maxlength: "值最多191个字"
+            },
+            desc: {
+                required: "描述不能为空",
+                notEmpty: "描述不能为空",
+                maxlength: "描述最多255个字"
+            },
         },
         submitHandler: function () {
             $updateSubmit.attr("disabled", true);
-            doPost("<%=request.getContextPath()%>/admin/system/dict/update",
+            doPost("<%=request.getContextPath()%>/admin/system/dictData/update",
                 $updateForm.serialize(),
                 function (data) {
                     $updateSubmit.attr("disabled", false);
@@ -311,7 +366,7 @@
     });
 
     function updateListItem(id) {
-        doPost("<%=request.getContextPath()%>/admin/system/dict/get", {id: id}, function (data) {
+        doPost("<%=request.getContextPath()%>/admin/system/dictData/get", {id: id}, function (data) {
             if (data.status) {
                 $updateForm.xsSetForm(data.data);
                 $("#updateModel").modal("show");
@@ -329,7 +384,7 @@
     });
 
     function simpleUpdateListItem(id, status) {
-        doPost('<%=request.getContextPath()%>/admin/system/dict/lock/update',
+        doPost('<%=request.getContextPath()%>/admin/system/dictData/lock/update',
             {
                 id: id
             }, function (data) {
@@ -347,7 +402,7 @@
 <script>
     function deleteListItem(id) {
         showDeleteModel(null, function () {
-            doPost("<%=request.getContextPath()%>/admin/system/dict/remove", {id: id}, function (data) {
+            doPost("<%=request.getContextPath()%>/admin/system/dictData/remove", {id: id}, function (data) {
                 if (data.status) {
                     setTimeout(function () {
                         alert("删除成功");

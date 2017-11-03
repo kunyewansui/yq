@@ -20,14 +20,16 @@ public interface DictDataService extends XSDictDataProvider {
 
     void update(DictData dictData) throws XSBusinessException;
 
-    DictData updateLock(DictData dictData) throws XSBusinessException;
+    void updateLock(DictData dictData) throws XSBusinessException;
 
     DictData get(DictData dictData) throws XSBusinessException;
+
+    List<DictData> list(DictData dictData);
 
     XSPageModel<DictData> listAndCount(DictData dictData);
 
     /**
-     * 根据指定字典键查询字典数据映射集
+     * 根据指定字典键获取字典数据映射集
      * @param dictKey 字典键
      * @return 字典数据映射集
      */

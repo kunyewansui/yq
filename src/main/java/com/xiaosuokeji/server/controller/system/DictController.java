@@ -5,6 +5,8 @@ import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.system.Dict;
+import com.xiaosuokeji.server.model.system.DictData;
+import com.xiaosuokeji.server.service.intf.system.DictDataService;
 import com.xiaosuokeji.server.service.intf.system.DictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 字典Controller
@@ -26,6 +30,10 @@ public class DictController {
     @Autowired
     private DictService dictService;
 
+    @Autowired
+    private DictDataService dictDataService;
+
+    //region Admin
     @RequestMapping(value = "/admin/system/dict", method = RequestMethod.GET)
     public String index(Model model, Dict dict) {
         model.addAttribute("search", dict);
@@ -33,10 +41,18 @@ public class DictController {
         return "admin/system/dict";
     }
 
-    @RequestMapping(value = "/admin/system/dict/get", method = RequestMethod.POST)
-    @ResponseBody
-    public XSServiceResult adminGet(Dict dict) throws XSBusinessException {
-        return XSServiceResult.build().data(dictService.get(dict));
+    @RequestMapping(value = "/admin/system/dict/get", method = RequestMethod.GET)
+    public String adminGet(Model model, HttpServletRequest request, Dict dict) throws XSBusinessException {
+        model.addAttribute("backUrl", request.getHeader("Referer"));
+        try {
+            model.addAttribute("dict", dictService.get(dict));
+        } catch (XSBusinessException e) {
+            model.addAttribute("dict", null);
+        }
+        DictData dictData = new DictData();
+        dictData.setDict(dict);
+        model.addAttribute("dictDataList", dictDataService.list(dictData));
+        return "admin/system/dictGet";
     }
 
     @RequestMapping(value = "/admin/system/dict/save", method = RequestMethod.POST)
@@ -66,4 +82,5 @@ public class DictController {
         dictService.updateLock(dict);
         return XSServiceResult.build();
     }
+    //endregion
 }

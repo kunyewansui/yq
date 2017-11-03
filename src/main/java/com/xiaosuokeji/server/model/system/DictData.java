@@ -1,5 +1,6 @@
 package com.xiaosuokeji.server.model.system;
 
+import com.xiaosuokeji.framework.annotation.XSAutoDesc;
 import com.xiaosuokeji.server.model.base.BaseModel;
 import org.hibernate.validator.constraints.Length;
 
@@ -17,6 +18,13 @@ public class DictData extends BaseModel {
     private Long id;
 
     /**
+     * 名称
+     */
+    @NotNull(message = "名称不能为空", groups = Save.class)
+    @Length(min = 1, max = 255, message = "名称长度为1-255个字符", groups = {Save.class, Update.class})
+    private String name;
+
+    /**
      * 字典
      */
     private Dict dict;
@@ -29,13 +37,6 @@ public class DictData extends BaseModel {
     private String value;
 
     /**
-     * 名称
-     */
-    @NotNull(message = "名称不能为空", groups = Save.class)
-    @Length(min = 1, max = 255, message = "名称长度为1-255个字符", groups = {Save.class, Update.class})
-    private String name;
-
-    /**
      * 描述
      */
     @NotNull(message = "描述不能为空", groups = Save.class)
@@ -45,6 +46,7 @@ public class DictData extends BaseModel {
     /**
      * 锁定，0否，1是
      */
+    @XSAutoDesc("dictDataLock")
     private Integer lock;
 
     public interface Save {}

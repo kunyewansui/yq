@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class DictDescTag extends SimpleTagSupport {
 
-    private static DictDataService dictDataService=XSSpringContext.getBean("dictDataService");
+    private static DictDataService dictDataService=XSSpringContext.getBean("dictDataServiceImpl");
 
     /**
      * 字典的Key
