@@ -11,6 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/error")
 public class ErrorController {
 
+    @RequestMapping("/403")
+    public String deny(Model model){
+        model.addAttribute("code",403);
+        model.addAttribute("msg","您的访问被拒绝！");
+        return "admin/common/error";
+    }
+
     @RequestMapping("/404")
     public String notFound(Model model){
         model.addAttribute("code",404);

@@ -22,9 +22,9 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
             throws IOException, ServletException {
         if (request.getHeader("X-Requested-With") == null) {
             String referer = request.getHeader("Referer");
-            if (referer == null || referer.endsWith("/admin/error/704")) {
+            if (referer == null || referer.endsWith("/admin/error/403")) {
                 if (referer == null) {
-                    response.sendRedirect(request.getContextPath() + "/admin/error/704");
+                    response.sendRedirect(request.getContextPath() + "/admin/error/403");
                 }
                 else {
                     response.sendRedirect(request.getContextPath() + "/admin/login");
@@ -32,7 +32,7 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
             }
             else {
                 response.setHeader("Referer", referer);
-                response.sendRedirect(request.getContextPath() + "/admin/error/704");
+                response.sendRedirect(request.getContextPath() + "/admin/error/403");
             }
         }
         else {

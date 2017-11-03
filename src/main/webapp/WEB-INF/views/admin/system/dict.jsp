@@ -170,7 +170,7 @@
                 notEmpty: true,
                 maxlength: 255
             },
-            lock: {
+            key: {
                 required: true,
                 notEmpty: true,
                 maxlength: 191
@@ -182,7 +182,7 @@
                 notEmpty: "名称不能为空",
                 maxlength: "名称最多255个字"
             },
-            lock: {
+            key: {
                 required: "键不能为空",
                 notEmpty: "键不能为空",
                 maxlength: "键最多191个字"
