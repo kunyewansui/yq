@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.controller.system;
+package com.xiaosuokeji.server.controller.index;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
