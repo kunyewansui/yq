@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +35,7 @@ public class DictDataServiceImpl implements DictDataService {
     @Autowired
     private DictDataDao dictDataDao;
 
-    private Cache<String, List<DictData>> cache = null;
+    private Cache<String, Map<String, String>> cache = null;
 
     @PostConstruct
     public void init() {
@@ -104,16 +106,7 @@ public class DictDataServiceImpl implements DictDataService {
 
     @Override
     public String getDesc(String dictKey, String dictDataValue) {
-        Dict dict = new Dict();
-        dict.setKey(dictKey);
-        DictData dictData = new DictData();
-        dictData.setDict(dict);
-        dictData.setValue(dictDataValue);
-        DictData existent = dictDataDao.getDesc(dictData);
-        if (existent != null) {
-            return existent.getDesc();
-        }
-        return null;
+        return mapByDict(dictKey).get(dictDataValue);
     }
 
     @Override
@@ -123,19 +116,25 @@ public class DictDataServiceImpl implements DictDataService {
     }
 
     @Override
-    public List<DictData> listByDict(String dictKey) {
-        List<DictData> list = null;
+    public Map<String, String> mapByDict(String dictKey) {
+        Map<String, String> map = null;
         //先查询缓存，若未命中则查询数据库
         try {
-            list = cache.get(dictKey, new Callable<List<DictData>>() {
+            map = cache.get(dictKey, new Callable<Map<String, String>>() {
                 @Override
-                public List<DictData> call() {
-                    return dictDataDao.listByDict(new Dict(dictKey));
+                public Map<String, String> call() {
+                    logger.debug("Guava缓存未命中，从数据库中获取字典数据");
+                    List<DictData> list = dictDataDao.listByDict(new Dict(dictKey));
+                    Map<String, String> map = new HashMap<>();
+                    for (DictData item : list) {
+                        map.put(item.getValue(), item.getDesc());
+                    }
+                    return map;
                 }
             });
         } catch (ExecutionException e) {
             logger.error("error : ", e);
         }
-        return list == null ? new ArrayList<>() : list;
+        return map == null ? new HashMap<>() : map;
     }
 }

@@ -60,7 +60,6 @@ public class SecStaffLogServiceImpl implements SecStaffLogService {
             SecResource criteria = new SecResource();
             criteria.setUrl(xsLogger.getRequestUrl());
             criteria.setMethod(xsLogger.getRequestMethod());
-            secStaffLogDao.count(new SecStaffLog());
             List<SecResource> list = secStaffLogDao.listResourceByRequest(criteria);
             boolean doLog = false;
             if (list.size() > 0) {
