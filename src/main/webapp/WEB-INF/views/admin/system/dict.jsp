@@ -250,16 +250,6 @@
                             <input name="key" type="text" maxlength="191" class="form-control">
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-xs-3 text-right">
-                            <label class="control-label required">锁定：</label>
-                        </div>
-                        <div class="col-xs-9">
-                            <select name="lock" class="form-control">
-                                <xs:dictOptions key="dictLock"/>
-                            </select>
-                        </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
