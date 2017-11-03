@@ -1,7 +1,6 @@
 /**
  * Created by GustinLau on 2017-04-05.
  */
-
 $(function () {
     //Nav
     var c_href = window.location.href;
@@ -293,9 +292,9 @@ function uploadFile(url, formData, success, error) {
 
 function showLoadingView() {
     hideLoadingView();
-    var __xsLoadingView__ = $('<div>', {id: "xsLoadingView", class: "xs-loading"});
-    __xsLoadingView__.append($('<i>', {class: 'fa fa-spinner fa-pulse'}));
-    $('body').append(__xsLoadingView__);
+    var xsLoadingView= $('<div>', {"id": "xsLoadingView", "class": "xs-loading"});
+    xsLoadingView.append($('<i>', {"class": 'fa fa-spinner fa-pulse'}));
+    $('body').append(xsLoadingView);
 }
 
 function hideLoadingView() {

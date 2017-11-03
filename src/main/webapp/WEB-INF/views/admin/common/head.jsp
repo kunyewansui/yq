@@ -14,4 +14,4 @@
 
 <script src="<%=request.getContextPath()%>/assets/admin/js/jquery-v2.4.4.min.js"></script>
 <script src="<%=request.getContextPath()%>/assets/admin/js/bootstrap.min.js"></script>
-<script src="<%=request.getContextPath()%>/assets/admin/js/app.js?v=1"></script>
+<script src="<%=request.getContextPath()%>/assets/admin/js/app.min.js"></script>
