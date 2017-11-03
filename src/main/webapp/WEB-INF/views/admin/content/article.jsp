@@ -83,7 +83,7 @@
                                    value="${search.dynamic.content}">
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
-                            <label class="control-label">是否展示：</label>
+                            <label class="control-label">状态：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
                             <select name="display" class="form-control" data-value="${search.display}">
@@ -111,7 +111,7 @@
                             <th>标题</th>
                             <th>图片</th>
                             <th>顺序</th>
-                            <th>是否展示</th>
+                            <th>状态</th>
                             <th>操作</th>
                         </tr>
                         </thead>

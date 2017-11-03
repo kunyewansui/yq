@@ -192,9 +192,7 @@ $(function () {
                 } else {
                     this.xsSetInput(k, jsonObject[k]);
                 }
-
             }
-
         }
     }
 })(jQuery);
@@ -206,70 +204,74 @@ $(function () {
     })
 });
 
-function doPost(url, data, success, error) {
-    var time = setTimeout(function () {
-        showLoadingView()
-    },800);
-    var e,s;
-    if (error === undefined || error === null) {
-        e = function (XMLHttpRequest, textStatus) {
-            clearTimeout(time);
-            hideLoadingView();
-            alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
-        }
+var __oldRequestDataMap__ = {};
+
+function _isNewRequestData(url, _new) {
+    var newStr, isNew;
+    if (_new instanceof Object) {
+        newStr = JSON.stringify(_new);
     } else {
-        e = function (XMLHttpRequest, textStatus) {
-            clearTimeout(time);
-            hideLoadingView();
-            error(XMLHttpRequest, textStatus);
-        }
+        newStr = _new;
     }
-    s = function (data) {
-        clearTimeout(time);
-        hideLoadingView();
-        success(data);
-    };
-    $.ajax({
-        type: 'POST',
-        url: url,
-        data: data,
-        dataType: 'json',
-        success: s,
-        error: e
-    })
+    if (__oldRequestDataMap__.hasOwnProperty(url)) {
+        var oldStr = __oldRequestDataMap__[url];
+        isNew = newStr !== oldStr;
+        if (isNew) {
+            __oldRequestDataMap__[url] = newStr;
+        }
+        return isNew;
+    } else {
+        __oldRequestDataMap__[url] = newStr;
+        return true;
+    }
+
+}
+
+function _ajaxRequest(url, method, data, success, error) {
+    setTimeout(function () {
+        var time = setTimeout(function () {
+            showLoadingView()
+        }, 800);
+        if (error === undefined || error === null) {
+            error = function (XMLHttpRequest, textStatus) {
+                alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
+            }
+        }
+        $.ajax({
+            type: method,
+            url: url,
+            data: data,
+            dataType: 'json',
+            beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},//这里设置header
+            success: success,
+            error: error,
+            complete: function () {
+                clearTimeout(time);
+                hideLoadingView();
+                delete __oldRequestDataMap__[url];
+            }
+        });
+    }, 1000);
+}
+
+function _doPostEvent(url, data, success, error) {
+    _ajaxRequest(url, "POST", data, success, error);
+}
+
+function _doGetEvent(url, data, success, error) {
+    _ajaxRequest(url, "GET", data, success, error);
+}
+
+function doPost(url, data, success, error) {
+    if (_isNewRequestData(url, data)) {
+        _doPostEvent(url, data, success, error, true);
+    }
 }
 
 function doGet(url, data, success, error) {
-    var time=setTimeout(function () {
-        showLoadingView()
-    },800);
-    var e,s;
-    if (error === undefined || error === null) {
-        e = function (XMLHttpRequest, textStatus) {
-            clearTimeout(time);
-            hideLoadingView();
-            alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
-        }
-    }else{
-        e=function (XMLHttpRequest, textStatus) {
-            clearTimeout(time);
-            hideLoadingView();
-            error(XMLHttpRequest, textStatus);
-        }
+    if (_isNewRequestData(url, data)) {
+        _doGetEvent(url, data, success, error);
     }
-    s=function (data) {
-        clearTimeout(time);
-        hideLoadingView();
-        success(data);
-    };
-    $.ajax({
-        type: 'GET',
-        url: url,
-        data: data,
-        dataType: 'json',
-        success: s,
-        error: e
-    })
 }
 
 function uploadFile(url, formData, success, error) {
@@ -317,6 +319,3 @@ function cleanImageInUploader(id) {
     eval('images_' + id + '.splice(0,images_' + id + '.length)');
     eval('updatePreviewDiv_' + id + '()');
 }
-
-
-
