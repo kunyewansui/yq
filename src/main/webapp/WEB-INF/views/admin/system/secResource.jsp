@@ -75,7 +75,7 @@
                     </div>
                     <div class="form-group m-t-n-md">
                         <div class="col-xs-12">
-                            <a href="<%=request.getContextPath()%>/admin/content/article/article/create"
+                            <a href="<%=request.getContextPath()%>/admin/system/secResource/save"
                                class="btn btn-success pull-left">新增</a>
                             <input class="btn btn-info pull-right" value="搜索" type="submit">
                             <input class="btn btn-default pull-right  m-r-sm" value="重置" type="button"

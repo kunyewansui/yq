@@ -129,7 +129,7 @@ public class SecResourceServiceImpl implements SecResourceService {
             }
         }
         XSTreeUtil.buildTree(list);
-        return list;
+        return XSTreeUtil.getSubTrees(list, null);
     }
 
     @Override

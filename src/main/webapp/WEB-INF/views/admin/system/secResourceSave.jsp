@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="xs" uri="http://code.xiaosuokeji.com/tags/jsp/xs" %>
 <%--
   Created by IntelliJ IDEA.
   User: xuxiaowei
@@ -11,7 +13,8 @@
 <head>
     <title>Title</title>
     <%@include file="../common/head.jsp" %>
-    <%@include file="../common/treeview.jsp" %>
+    <%@include file="../common/validate.jsp" %>
+    <%@include file="../common/ztree.jsp" %>
 </head>
 <body>
 <%@include file="../common/header.jsp" %>
@@ -35,7 +38,8 @@
                             <label class="control-label required">名称：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input name="name" type="text" class="form-control"/>
+                            <input name="name" type="text" class="form-control"
+                                   validate-required="true|名称不能为空" validate-maxlength="255|名称最大长度为" validate-notEmpty="true|fs"/>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
                             <label class="control-label required">键：</label>
@@ -59,23 +63,27 @@
                                 <xs:dictOptions key="secResourceType"/>
                             </select>
                         </div>
-                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
-                            <label class="control-label required">url：</label>
+                        <div id="request" style="display: none">
+                            <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                                <label class="control-label required">url：</label>
+                            </div>
+                            <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
+                                <input name="url" type="text" class="form-control"/>
+                            </div>
+                            <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                                <label class="control-label required">请求方法：</label>
+                            </div>
+                            <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
+                                <input name="method" type="text" class="form-control"/>
+                            </div>
                         </div>
-                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input name="url" type="text" class="form-control"/>
-                        </div>
-                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
-                            <label class="control-label required">请求方法：</label>
-                        </div>
-                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input name="method" type="text" class="form-control"/>
-                        </div>
-                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
-                            <label class="control-label required">图标：</label>
-                        </div>
-                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input name="icon" type="text" class="form-control"/>
+                        <div id="icon">
+                            <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                                <label class="control-label required">图标：</label>
+                            </div>
+                            <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
+                                <input name="icon" type="text" class="form-control"/>
+                            </div>
                         </div>
                         <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
                             <label class="control-label required">顺序：</label>
@@ -112,72 +120,90 @@
     </div>
 </div>
 
-<div class="modal fade" id="categoryModel" data-backdrop="static" role="dialog">
+<div class="modal fade" id="resourceTree" data-backdrop="static" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">文章分类</h4>
+                <h4 class="modal-title">父级</h4>
             </div>
             <div class="modal-body">
-                <div id="tree">
-                    <p style="text-align: center">加载中...</p>
-                </div>
+                <ul id="tree" class="ztree" style="overflow:auto;height: 500px"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-success" onclick="selectConfirm()">确定</button>
             </div>
         </div>
     </div>
 </div>
-<script id="treeData" type="text/plain">
-    ${categoryTree}
-</script>
 <script>
-    var ue = UE.getEditor('container', {initialFrameWidth: null});
-
-    var $richText = $("#richText");
-    var $link = $("#link");
-    var $form = $("#createForm");
-    var $categoryModel = $("#categoryModel");
-    $(function () {
-        var treeData = JSON.parse($("#treeData").text());
-        $('#tree').treeview({
-            data: treeData,
-            onNodeSelected: function (event, data) {
-                $form.xsSetInput("category.name", data.name);
-                $form.xsSetInput("category.id", data.id);
-                $categoryModel.modal("hide");
+    var zTreeObj,
+        setting = {
+            data: {
+                key: {
+                    children: "sons"
+                }
+            },
+            view: {
+                selectedMulti: false
             }
-        });
+        },
+        zTreeNodes = [{"name": "顶级", "id": 0, "sons":${tree eq null ? "[]":tree}}];
+
+    $(document).ready(function () {
+        zTreeObj = $.fn.zTree.init($("#tree"), setting, zTreeNodes);
+
     });
 
-    function showCategoryModel() {
-        $categoryModel.modal("show");
+    function selectConfirm() {
+        var selectedNode = zTreeObj.getSelectedNodes()[0];
+        if (treeType === P_TYPE_CREATE) {
+            $("#createPid").val(selectedNode.id);
+            $('#createPName').val(selectedNode.name);
+        } else {
+            $("#editPid").val(selectedNode.id);
+            $('#editPName').val(selectedNode.name);
+        }
+        $('#resourceTree').modal('hide');
+    }
+
+    $('#resourceTree').on('hidden.bs.modal', function (e) {
+        zTreeObj.selectNode(zTreeNodes[0]);
+        zTreeObj.expandAll(false);
+    });
+</script>
+
+<script>
+    var $createForm = $("#createForm");
+    var $parentModel = $("#parentModel");
+    var $request = $("#request");
+    var $icon = $("#icon");
+
+    function showParentModel() {
+        $parentModel.modal("show");
     }
 
     function typeChange(e) {
-        if ($(e.target).val() == 0) {
-            $link.css("display", "none");
-            $richText.css("display", "block");
+        if ($(e.target).val() == 2) {
+            $request.css("display", "block");
+            $icon.css("display", "none");
         } else {
-            $richText.css("display", "none");
-            $link.css("display", "block");
+            $request.css("display", "none");
+            $icon.css("display", "block");
         }
     }
 
-    function submitForm() {
-        doPost('<%=request.getContextPath()%>/admin/content/article/save',
-            {
-                title: $form.xsGetInput("title"),
-                seq: $form.xsGetInput("seq"),
-                type: $form.xsGetInput("type"),
-                display: $form.xsGetInput("display"),
-                image: $form.xsGetInput("image"),
-                "category.id": $form.xsGetInput("category.id"),
-                url: (parseInt($form.xsGetInput("type")) === 0) ? undefined : $form.xsGetInput("url"),
-                content: (parseInt($form.xsGetInput("type")) === 1) ? undefined : ue.getContent(),
-                lock: 0
-            }, function (data) {
+    $createForm.xsValidate(function () {
+        var data = $createForm.xsJson();
+        data.url = (parseInt($createForm.xsGetInput("url")) === 2) ? $createForm.xsGetInput("url") : undefined;
+        data.method = (parseInt($createForm.xsGetInput("method")) === 2) ? $createForm.xsGetInput("method") : undefined;
+        data.icon = (parseInt($createForm.xsGetInput("icon")) === 2) ? undefined : $createForm.xsGetInput("icon");
+        doPost('<%=request.getContextPath()%>/admin/security/secResource/save',
+            data,
+            function (data) {
                 if (data.status) {
                     alert("新增成功");
                     window.location.href = '${backUrl}';
@@ -185,6 +211,10 @@
                     alert(data.msg);
                 }
             });
+    });
+
+    function submitForm() {
+        $createForm.submit();
     }
 </script>
 </body>

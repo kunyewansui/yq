@@ -12,19 +12,19 @@
             <nav class="navi">
                 <ul id="a_nav" class="nav">
                     <li>
-                        <a href="<%=request.getContextPath()%>/admin/system/version">
+                        <a href="<%=request.getContextPath()%>/admin/system/version?page=1">
                             <i class="fa fa-empire"></i>
                             <span>版本管理</span>
                         </a>
                     </li>
                     <li>
-                        <a href="<%=request.getContextPath()%>/admin/system/dict">
+                        <a href="<%=request.getContextPath()%>/admin/system/dict?page=1">
                             <i class="fa fa-empire"></i>
                             <span>字典管理</span>
                         </a>
                     </li>
                     <li>
-                        <a href="<%=request.getContextPath()%>/admin/security/secResource">
+                        <a href="<%=request.getContextPath()%>/admin/system/secResource?page=1">
                             <i class="fa fa-empire"></i>
                             <span>资源管理</span>
                         </a>

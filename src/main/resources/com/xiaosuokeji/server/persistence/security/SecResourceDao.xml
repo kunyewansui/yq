@@ -143,8 +143,8 @@
         <include refid="XSBaseMapper.limit"/>
     </select>
 
-    <select id="listCombo" resultType="secResource">
-        SELECT id,`name`,pid AS p_id
+    <select id="listCombo" resultMap="secResourceMap">
+        SELECT id,`name`,pid AS p_id,`type`
         FROM shuttle_common.sc_security_resource
         <include refid="XSBaseMapper.sort"/>
     </select>

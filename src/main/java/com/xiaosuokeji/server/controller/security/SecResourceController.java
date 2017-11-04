@@ -31,15 +31,15 @@ public class SecResourceController {
     private SecResourceService secResourceService;
 
     //region Admin
-    @RequestMapping(value = "/admin/security/secResource/list/index", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/system/secResource", method = RequestMethod.GET)
     public String indexList(Model model, SecResource secResource) throws JsonProcessingException {
         model.addAttribute("search", secResource);
         model.addAttribute("pageModel", secResourceService.listAndCount(secResource));
-        model.addAttribute("tree", XSJackson.toJsonString(secResourceService.tree(new SecResource())));
-        return "admin/system/secResource";
+        model.addAttribute("resourceTree", XSJackson.toJsonString(secResourceService.tree(new SecResource())));
+        return "admin/system/resource";
     }
 
-    @RequestMapping(value = "/admin/security/secResource/save/index", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/system/secResource/save", method = RequestMethod.GET)
     public String indexSave(Model model, HttpServletRequest request) throws Exception {
         model.addAttribute("backUrl", request.getHeader("Referer"));
         model.addAttribute("tree", XSJackson.toJsonString(secResourceService.tree(new SecResource())));
