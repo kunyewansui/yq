@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -29,9 +30,9 @@ public class SecResourceServiceImpl implements SecResourceService {
     @Override
     @Transactional
     public void save(SecResource secResource) throws XSBusinessException {
-        SecResource existent = new SecResource();
-        existent.setKey(secResource.getKey());
-        Long count = secResourceDao.count(existent);
+        SecResource criteria = new SecResource();
+        criteria.setKey(secResource.getKey());
+        Long count = secResourceDao.count(criteria);
         if (count.compareTo(0L) > 0) {
             throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_EXIST);
         }
@@ -53,7 +54,7 @@ public class SecResourceServiceImpl implements SecResourceService {
     public void remove(SecResource secResource) throws XSBusinessException {
         SecResource existent = get(secResource);
         SecResource children = new SecResource();
-        children.setParent(secResource);
+        children.setParent(existent);
         Long childrenCount = secResourceDao.count(children);
         if (childrenCount.compareTo(0L) > 0) {
             throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_USED);
@@ -72,9 +73,9 @@ public class SecResourceServiceImpl implements SecResourceService {
     public void update(SecResource secResource) throws XSBusinessException {
         SecResource existent = get(secResource);
         if (secResource.getKey() != null) {
-            SecResource existRes = new SecResource();
-            existRes.setKey(secResource.getKey());
-            List<SecResource> existents = secResourceDao.list(existRes);
+            SecResource criteria = new SecResource();
+            criteria.setKey(secResource.getKey());
+            List<SecResource> existents = secResourceDao.list(criteria);
             if (existents.size() > 0) {
                 boolean isSelf = existents.get(0).getId().equals(existent.getId());
                 if (!isSelf) {
@@ -86,18 +87,18 @@ public class SecResourceServiceImpl implements SecResourceService {
         if (secResource.getAssign() != null) {
             List<SecResource> list = secResourceDao.listCombo(new SecResource());
             Map<Long, SecResource> map = XSTreeUtil.buildTree(list);
-            SecResource latestRes = new SecResource();
-            latestRes.setAssign(secResource.getAssign());
+            SecResource latest = new SecResource();
+            latest.setAssign(secResource.getAssign());
             //不可分配则所有子级也不可分配，可分配则所有父级也可分配
             if (secResource.getAssign().equals(0)) {
                 List<SecResource> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
-                latestRes.setList(subTreeList);
+                latest.setList(subTreeList);
             }
             else {
                 List<SecResource> treePath = XSTreeUtil.getTreePath(map, map.get(existent.getId()));
-                latestRes.setList(treePath);
+                latest.setList(treePath);
             }
-            secResourceDao.batchUpdate(latestRes);
+            secResourceDao.batchUpdate(latest);
         }
     }
 
@@ -107,7 +108,7 @@ public class SecResourceServiceImpl implements SecResourceService {
         if (existent == null) {
             throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_NOT_EXIST);
         }
-        return secResourceDao.get(secResource);
+        return existent;
     }
 
     @Override
@@ -117,12 +118,27 @@ public class SecResourceServiceImpl implements SecResourceService {
     }
 
     @Override
+    public List<SecResource> tree(SecResource secResource) {
+        secResource.setDefaultSort(new String[]{"type", "seq"}, new String[]{"ASC", "DESC"});
+        List<SecResource> list = secResourceDao.listCombo(secResource);
+        for (Iterator<SecResource> iterator = list.iterator(); iterator.hasNext();) {
+            SecResource item = iterator.next();
+            //不展示类型为url的资源
+            if (item.getType().equals(2)) {
+                iterator.remove();
+            }
+        }
+        XSTreeUtil.buildTree(list);
+        return list;
+    }
+
+    @Override
     public List<SecRole> listRoleByRequest(SecResource secResource) {
         List<SecResource> resourceList = secResourceDao.listByRequest(secResource);
         if (resourceList.size() > 0) {
-            SecResource existent = new SecResource();
-            existent.setList(resourceList);
-            List<SecRole> roleList = secResourceDao.listRole(existent);
+            SecResource criteria = new SecResource();
+            criteria.setList(resourceList);
+            List<SecRole> roleList = secResourceDao.listRole(criteria);
             return roleList;
         }
         return new ArrayList<>();

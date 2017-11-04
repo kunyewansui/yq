@@ -22,6 +22,13 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
     private Long id;
 
     /**
+     * 名称
+     */
+    @NotNull(message = "名称不能为空", groups = Save.class)
+    @Length(min = 1, max = 255, message = "名称长度为1-255个字符", groups = {Save.class, Update.class})
+    private String name;
+
+    /**
      * 键
      */
     @NotNull(message = "键不能为空", groups = Save.class)
@@ -38,13 +45,6 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
      */
     @XSAutoDesc("secResourceType")
     private Integer type;
-
-    /**
-     * 名称
-     */
-    @NotNull(message = "名称不能为空", groups = Save.class)
-    @Length(min = 1, max = 255, message = "名称长度为1-255个字符", groups = {Save.class, Update.class})
-    private String name;
 
     /**
      * url
@@ -81,11 +81,13 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
     /**
      * 可分配，0否，1是
      */
+    @XSAutoDesc("secResourceAssign")
     private Integer assign;
 
     /**
      * 记录日志，0否，1是
      */
+    @XSAutoDesc("secResourceLog")
     private Integer log;
 
     /**
@@ -152,6 +154,14 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getKey() {
         return key;
     }
@@ -174,14 +184,6 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
 
     public void setType(Integer type) {
         this.type = type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUrl() {

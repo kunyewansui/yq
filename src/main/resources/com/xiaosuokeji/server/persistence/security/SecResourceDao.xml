@@ -4,15 +4,15 @@
 
 <mapper namespace="com.xiaosuokeji.server.dao.security.SecResourceDao">
 
-    <insert id="save" parameterType="secResource">
-        INSERT INTO shuttle_common.sc_security_resource(`key`,<if test="parent!=null">pid,</if>`type`,`name`,url,method,
+    <insert id="save" parameterType="secResource" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO shuttle_common.sc_security_resource(`name`,`key`,<if test="parent!=null">pid,</if>`type`,url,method,
         icon,seq,`desc`,assign,log)
-        VALUES (#{key},<if test="parent!=null">#{parent.id},</if>#{type},#{name},#{url},#{method},
+        VALUES (#{name},#{key},<if test="parent!=null">#{parent.id},</if>#{type},#{url},#{method},
         #{icon},#{seq},#{desc},#{assign},#{log})
         ON DUPLICATE KEY UPDATE
+        `name`=#{name},
         <if test="parent!=null">pid=#{parent.id},</if>
         `type`=#{type},
-        `name`=#{name},
         url=#{url},
         method=#{method},
         icon=#{icon},
@@ -41,6 +41,9 @@
     <update id="update" parameterType="secResource">
         UPDATE shuttle_common.sc_security_resource
         <trim prefix="SET" prefixOverrides=",">
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
             <if test="key!=null">
                 ,`key`=#{key}
             </if>
@@ -49,9 +52,6 @@
             </if>
             <if test="type!=null">
                 ,`type`=#{type}
-            </if>
-            <if test="name!=null">
-                ,`name`=#{name}
             </if>
             <if test="url!=null">
                 ,url=#{url}
@@ -111,20 +111,20 @@
         FROM shuttle_common.sc_security_resource r
         LEFT JOIN shuttle_common.sc_security_resource p ON r.pid=p.id
         <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND r.name LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
             <if test="key!=null and key!=''">
                 AND r.key=#{key}
             </if>
             <if test="dynamic!=null and dynamic.key!=null and dynamic.key!=''">
                 AND r.key LIKE CONCAT('%',#{dynamic.key},'%')
             </if>
-            <if test="dynamic!=null and dynamic.pkey!=null and dynamic.pkey!=''">
-                AND p.key LIKE CONCAT('%',#{dynamic.pkey},'%')
+            <if test="parent!=null and parent.id!=null">
+                AND p.id=#{parent.id}
             </if>
             <if test="type!=null">
                 AND r.type=#{type}
-            </if>
-            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
-                AND r.name LIKE CONCAT('%',#{dynamic.name},'%')
             </if>
             <if test="dynamic!=null and dynamic.url!=null and dynamic.url!=''">
                 AND r.url LIKE CONCAT('%',#{dynamic.url},'%')

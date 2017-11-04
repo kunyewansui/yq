@@ -23,6 +23,12 @@
                             <span>字典管理</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="<%=request.getContextPath()%>/admin/security/secResource">
+                            <i class="fa fa-empire"></i>
+                            <span>资源管理</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
