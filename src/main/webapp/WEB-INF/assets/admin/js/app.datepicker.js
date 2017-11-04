@@ -4,6 +4,9 @@
 // Datepicker
 $(function () {
     $(".datepicker").each(function (i, el) {
-        $(el).datepicker();
+        $(el).datepicker().on('hide', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+        });
     });
 });

@@ -159,6 +159,7 @@ $(function () {
                 return true;
             els.push($(element));
         });
+
         $.each(els, function (index, element) {
             element.val("");
         });
@@ -196,6 +197,30 @@ $(function () {
                 }
             }
         }
+    };
+    $.fn.xsJson = function () {
+        var inputs = this.find("input");
+        var selects = this.find("select");
+        var textareas = this.find("textarea");
+        var els = [];
+        $.each(inputs, function (index, element) {
+            if ($(element).attr('type') === 'button' || $(element).attr('type') === 'submit')
+                return true;
+            els.push($(element));
+        });
+        $.each(selects, function (index, element) {
+            els.push($(element));
+        });
+        $.each(textareas, function (index, element) {
+            els.push($(element));
+        });
+
+        var json = {};
+        $.each(els, function (index, element) {
+            if (element.val() != "")
+                json[element.attr("name")] = element.val();
+        });
+        return json;
     };
     $.fn.xs = function (name, value) {
         if (value === undefined) {
@@ -260,8 +285,6 @@ $(function () {
             messages: messages,
             submitHandler: submitHandler
         });
-
-        console.log(validator);
         return validator;
     }
 })(jQuery);
