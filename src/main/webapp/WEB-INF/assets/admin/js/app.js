@@ -5,8 +5,6 @@ $(function () {
     //Nav
     var c_href = window.location.href;
     var nav = $("#a_nav");
-    var navLinks = nav.find("a");
-    var haveActive = false;
 
     nav.find("a").each(function () {
         var a_href = $(this).context.href.trim();
@@ -14,15 +12,11 @@ $(function () {
             var nexStr = c_href.substr(a_href.length, 1);
             if (nexStr === "" || nexStr === "?" || nexStr === "#" || nexStr === "/") {
                 $(this).parent("li").addClass("active");
-                haveActive = true;
                 return false;
             }
         }
     });
 
-    if (!haveActive && navLinks.length > 0) {
-        navLinks[0].click();
-    }
 
     nav.find("li").each(function () {
         var $this = $(this);

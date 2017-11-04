@@ -15,5 +15,6 @@
 <body>
 <%@include file="../common/header.jsp" %>
 <%@include file="./content_nav.jsp" %>
+<script src="<%=request.getContextPath()%>/assets/admin/js/index.js"></script>
 </body>
 </html>
