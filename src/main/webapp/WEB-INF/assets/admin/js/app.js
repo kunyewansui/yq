@@ -178,7 +178,6 @@ $(function () {
                 }
             }
         };
-
         if (json instanceof String) {
             jsonObject = JSON.parse(json);
         } else {
@@ -193,6 +192,68 @@ $(function () {
                 }
             }
         }
+    };
+    $.fn.xs = function (name, value) {
+        if (value === undefined) {
+            return this.attr("xs-" + name);
+        } else {
+            this.attr("xs-" + name, value);
+        }
+    };
+    $.fn.xsDataValidate = function (name, value) {
+        if (value === undefined) {
+            return this.attr("validate-" + name);
+        } else {
+            this.attr("validate-" + name, value);
+        }
+    };
+    $.fn.xsValidate = function (submitHandler) {
+        var inputs = this.find("input");
+        var selects = this.find("select");
+        var textareas = this.find("textarea");
+        function setRulesAndMsg($element) {
+            if ($element.attr('type') === 'button' || $element.attr('type') === 'submit' || $element.data('ignore'))
+                return;
+            var attrs = $element[0].attributes;
+            var rule = {};
+            var message = {};
+            for (var i = 0; i < attrs.length; i++) {
+                if (attrs.item(i).name.indexOf('validate-') === 0) {
+                    var ruleName = attrs.item(i).name.split('-')[1];
+                    if ($element.xsDataValidate(ruleName) !== undefined && $element.xsDataValidate(ruleName) !== "") {
+                        var r = $element.xsDataValidate(ruleName);
+                        var r2 = r.split("\|");
+                        if (r2.length > 1) {
+                            rule[ruleName] = r2[0];
+                            message[ruleName] = r2[1]
+                        } else {
+                            rule[ruleName] = r2[0];
+                            message[ruleName] = r2[0]
+                        }
+                    }
+                }
+            }
+            rules[$element.attr("name")] = rule;
+            messages[$element.attr("name")] = message;
+        }
+
+        var rules = {};
+        var messages = {};
+        $.each(inputs, function (index, element) {
+            setRulesAndMsg($(element));
+        });
+        $.each(selects, function (index, element) {
+            setRulesAndMsg($(element));
+        });
+        $.each(textareas, function (index, element) {
+            setRulesAndMsg($(element));
+        });
+        var validator = this.validate({
+            rules: rules,
+            messages: messages,
+            submitHandler: submitHandler
+        });
+        return validator;
     }
 })(jQuery);
 
@@ -241,7 +302,9 @@ function _ajaxRequest(url, method, data, success, error) {
             url: url,
             data: data,
             dataType: 'json',
-            beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},//这里设置header
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Accept', 'application/json');
+            },//这里设置header
             success: success,
             error: error,
             complete: function () {
@@ -292,7 +355,7 @@ function uploadFile(url, formData, success, error) {
 
 function showLoadingView() {
     hideLoadingView();
-    var xsLoadingView= $('<div>', {"id": "xsLoadingView", "class": "xs-loading"});
+    var xsLoadingView = $('<div>', {"id": "xsLoadingView", "class": "xs-loading"});
     xsLoadingView.append($('<i>', {"class": 'fa fa-spinner fa-pulse'}));
     $('body').append(xsLoadingView);
 }
