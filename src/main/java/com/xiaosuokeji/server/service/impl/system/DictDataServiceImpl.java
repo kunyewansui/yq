@@ -5,7 +5,6 @@ import com.google.common.cache.CacheBuilder;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.constant.system.DictDataConsts;
-import com.xiaosuokeji.server.dao.system.DictDao;
 import com.xiaosuokeji.server.dao.system.DictDataDao;
 import com.xiaosuokeji.server.model.system.Dict;
 import com.xiaosuokeji.server.model.system.DictData;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

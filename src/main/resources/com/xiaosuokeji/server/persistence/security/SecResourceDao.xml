@@ -6,16 +6,15 @@
 
     <insert id="save" parameterType="secResource" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO shuttle_common.sc_security_resource(`name`,`key`,<if test="parent!=null">pid,</if>`type`,url,method,
-        icon,seq,`desc`,assign,log)
+        seq,`desc`,assign,log)
         VALUES (#{name},#{key},<if test="parent!=null">#{parent.id},</if>#{type},#{url},#{method},
-        #{icon},#{seq},#{desc},#{assign},#{log})
+        #{seq},#{desc},#{assign},#{log})
         ON DUPLICATE KEY UPDATE
         `name`=#{name},
         <if test="parent!=null">pid=#{parent.id},</if>
         `type`=#{type},
         url=#{url},
         method=#{method},
-        icon=#{icon},
         seq=#{seq},
         `desc`=#{desc},
         assign=#{assign},
@@ -58,9 +57,6 @@
             </if>
             <if test="method!=null">
                 ,method=#{method}
-            </if>
-            <if test="icon!=null">
-                ,icon=#{icon}
             </if>
             <if test="seq!=null">
                 ,seq=#{seq}
@@ -128,9 +124,6 @@
             </if>
             <if test="dynamic!=null and dynamic.url!=null and dynamic.url!=''">
                 AND r.url LIKE CONCAT('%',#{dynamic.url},'%')
-            </if>
-            <if test="dynamic!=null and dynamic.method!=null and dynamic.method!=''">
-                AND r.method LIKE CONCAT('%',#{dynamic.method},'%')
             </if>
         </trim>
     </sql>

@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * 系统资源Controller
  * Created by xuxiaowei on 2017/11/3.
@@ -33,17 +31,11 @@ public class SecResourceController {
     //region Admin
     @RequestMapping(value = "/admin/system/secResource", method = RequestMethod.GET)
     public String indexList(Model model, SecResource secResource) throws JsonProcessingException {
+        if(secResource.getPage() == null) secResource.setPage(1L) ;
         model.addAttribute("search", secResource);
         model.addAttribute("pageModel", secResourceService.listAndCount(secResource));
         model.addAttribute("resourceTree", XSJackson.toJsonString(secResourceService.tree(new SecResource())));
-        return "admin/system/resource";
-    }
-
-    @RequestMapping(value = "/admin/system/secResource/save", method = RequestMethod.GET)
-    public String indexSave(Model model, HttpServletRequest request) throws Exception {
-        model.addAttribute("backUrl", request.getHeader("Referer"));
-        model.addAttribute("tree", XSJackson.toJsonString(secResourceService.tree(new SecResource())));
-        return "admin/system/secResourceSave";
+        return "admin/system/secResource";
     }
 
     @RequestMapping(value = "/admin/security/secResource/get", method = RequestMethod.POST)

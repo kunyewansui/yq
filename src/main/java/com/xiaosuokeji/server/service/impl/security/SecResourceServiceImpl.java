@@ -45,6 +45,11 @@ public class SecResourceServiceImpl implements SecResourceService {
                 }
             }
         }
+        //如果不是url资源则置空url和method
+        if (!secResource.getType().equals(2)) {
+            secResource.setUrl(null);
+            secResource.setMethod(null);
+        }
         secResourceDao.save(secResource);
         secResourceDao.saveSuperiorRes(secResource);
     }
@@ -82,6 +87,11 @@ public class SecResourceServiceImpl implements SecResourceService {
                     throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_EXIST);
                 }
             }
+        }
+        //如果不是url资源则置空url和method
+        if (!secResource.getType().equals(2)) {
+            secResource.setUrl("");
+            secResource.setMethod("");
         }
         secResourceDao.update(secResource);
         if (secResource.getAssign() != null) {

@@ -1,14 +1,12 @@
 package com.xiaosuokeji.server.tag;
 
 import com.xiaosuokeji.framework.spring.XSSpringContext;
-import com.xiaosuokeji.server.model.system.DictData;
 import com.xiaosuokeji.server.service.intf.system.DictDataService;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**

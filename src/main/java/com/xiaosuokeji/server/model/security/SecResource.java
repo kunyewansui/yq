@@ -4,7 +4,6 @@ import com.xiaosuokeji.framework.annotation.XSAutoDesc;
 import com.xiaosuokeji.framework.intf.XSTreeable;
 import com.xiaosuokeji.server.model.base.BaseModel;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -57,13 +56,6 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
      */
     @Length(max = 255, message = "方法长度最多为255个字符", groups = {Save.class, Update.class})
     private String method;
-
-    /**
-     * 图标链接
-     */
-    @URL(message = "图标链接格式错误", groups = {Save.class, Update.class})
-    @Length(max = 255, message = "图标链接长度最多为255个字符", groups = {Save.class, Update.class})
-    private String icon;
 
     /**
      * 顺序
@@ -200,14 +192,6 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
 
     public void setMethod(String method) {
         this.method = method;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
     }
 
     public Long getSeq() {
