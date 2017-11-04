@@ -211,6 +211,7 @@ $(function () {
         var inputs = this.find("input");
         var selects = this.find("select");
         var textareas = this.find("textarea");
+
         function setRulesAndMsg($element) {
             if ($element.attr('type') === 'button' || $element.attr('type') === 'submit' || $element.data('ignore'))
                 return;
@@ -219,16 +220,16 @@ $(function () {
             var message = {};
             for (var i = 0; i < attrs.length; i++) {
                 if (attrs.item(i).name.indexOf('validate-') === 0) {
-                    var ruleName = attrs.item(i).name.split('-')[1];
+                    var ruleName = _validateSensitiveCaseChange(attrs.item(i).name.split('-')[1]);
                     if ($element.xsDataValidate(ruleName) !== undefined && $element.xsDataValidate(ruleName) !== "") {
                         var r = $element.xsDataValidate(ruleName);
                         var r2 = r.split("\|");
                         if (r2.length > 1) {
-                            rule[ruleName] = r2[0];
+                            if (r2[0] === 'true')
+                                rule[ruleName] = true;
+                            else
+                                rule[ruleName] = r2[0];
                             message[ruleName] = r2[1]
-                        } else {
-                            rule[ruleName] = r2[0];
-                            message[ruleName] = r2[0]
                         }
                     }
                 }
@@ -248,11 +249,15 @@ $(function () {
         $.each(textareas, function (index, element) {
             setRulesAndMsg($(element));
         });
+
+
         var validator = this.validate({
             rules: rules,
             messages: messages,
             submitHandler: submitHandler
         });
+
+        console.log(validator);
         return validator;
     }
 })(jQuery);
@@ -284,8 +289,8 @@ function _isNewRequestData(url, _new) {
         __oldRequestDataMap__[url] = newStr;
         return true;
     }
-
 }
+
 
 function _ajaxRequest(url, method, data, success, error) {
     setTimeout(function () {
