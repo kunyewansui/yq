@@ -150,9 +150,13 @@ $(function () {
             els.push($(element));
         });
         $.each(selects, function (index, element) {
+            if ($(element).data('ignore'))
+                return true;
             els.push($(element));
         });
         $.each(textareas, function (index, element) {
+            if ($(element).data('ignore'))
+                return true;
             els.push($(element));
         });
         $.each(els, function (index, element) {
