@@ -21,11 +21,15 @@
     <context:property-placeholder location="classpath:common.properties,classpath:jdbc.properties"
                                   file-encoding="UTF-8"/>
 
-    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>
         <property name="url" value="${jdbc.url}"/>
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
+        <property name="defaultQueryTimeout" value="3"/>
+        <property name="connectionProperties" value="connectionTimeout=2000;socketTimeout=2000"/>
+        <property name="maxWaitMillis" value="500"/>
+        <property name="testOnBorrow" value="true"/>
     </bean>
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
@@ -51,13 +55,13 @@
         <property name="basePackage" value="com.xiaosuokeji.server.dao"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
-    <!-- 配置MultipartResolver 用于文件上传 使用spring的CommonsMultipartResolver -->
+    <!-- 使用spring的CommonsMultipartResolver文件上传 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="defaultEncoding" value="UTF-8"/>
         <property name="maxUploadSize" value="${file.maxSize}"/>
         <property name="resolveLazily" value="true"/>
     </bean>
-    <!--HttpClient-->
+
     <bean id="xsHttpClientService" class="com.xiaosuokeji.framework.http.XSHttpClientService"></bean>
 
     <import resource="spring-security.xml"/>

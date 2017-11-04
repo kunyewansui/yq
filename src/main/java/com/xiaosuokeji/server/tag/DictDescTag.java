@@ -9,6 +9,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 根据value查询desc的标签逻辑
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public class DictDescTag extends SimpleTagSupport {
 
-    private static DictDataService dictDataService=XSSpringContext.getBean("dictDataService");
+    private static DictDataService dictDataService=XSSpringContext.getBean("dictDataServiceImpl");
 
     /**
      * 字典的Key
@@ -38,15 +39,7 @@ public class DictDescTag extends SimpleTagSupport {
 
     @Override
     public void doTag() throws JspException, IOException {
-        List<DictData> items = dictDataService.listByDict(key);
-        if (items != null && items.size() > 0) {
-            JspWriter out = getJspContext().getOut();
-            for (DictData data : items) {
-                if (data.getValue().equals(value)) {
-                    out.println(data.getDesc());
-                    break;
-                }
-            }
-        }
+        JspWriter out = getJspContext().getOut();
+        out.println(dictDataService.getDesc(key, value));
     }
 }

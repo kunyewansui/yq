@@ -60,7 +60,6 @@ public class SecStaffLogServiceImpl implements SecStaffLogService {
             SecResource criteria = new SecResource();
             criteria.setUrl(xsLogger.getRequestUrl());
             criteria.setMethod(xsLogger.getRequestMethod());
-            secStaffLogDao.count(new SecStaffLog());
             List<SecResource> list = secStaffLogDao.listResourceByRequest(criteria);
             boolean doLog = false;
             if (list.size() > 0) {
@@ -80,7 +79,7 @@ public class SecStaffLogServiceImpl implements SecStaffLogService {
                 latest.setIp(xsLogger.getRequestIp());
                 latest.setTime(xsLogger.getRequestTime());
                 latest.setOperation(list.get(0).getDesc());
-                latest.setStatus(xsLogger.getStatus());
+                latest.setStatus(xsLogger.getStatus() ? 1 : 0);
                 try {
                     latest.setParameters(XSJackson.toJsonString(xsLogger.getParameters()));
                 } catch (JsonProcessingException e) {}

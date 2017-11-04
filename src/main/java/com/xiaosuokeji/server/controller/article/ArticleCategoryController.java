@@ -25,7 +25,6 @@ public class ArticleCategoryController {
     private ArticleCategoryService articleCategoryService;
 
     //region Admin
-
     @RequestMapping(value = "/admin/content/article/category", method = RequestMethod.GET)
     public String index() {
         return "admin/content/articleCategory";
@@ -75,6 +74,5 @@ public class ArticleCategoryController {
         articleCategoryService.updateLock(articleCategory);
         return XSServiceResult.build();
     }
-
     //endregion
 }

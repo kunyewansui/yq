@@ -9,6 +9,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 根据字典数组输出<option></option>标签
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public class DictOptionsTag extends SimpleTagSupport {
 
-    private static DictDataService dictDataService=XSSpringContext.getBean("dictDataService");
+    private static DictDataService dictDataService=XSSpringContext.getBean("dictDataServiceImpl");
 
     /**
      * 字典key
@@ -38,14 +39,14 @@ public class DictOptionsTag extends SimpleTagSupport {
 
     @Override
     public void doTag() throws JspException, IOException {
-        List<DictData> items = dictDataService.listByDict(key);
+        Map<String, String> items = dictDataService.mapByDict(key);
         if (items != null && items.size() > 0) {
             JspWriter out = getJspContext().getOut();
-            for (DictData data : items) {
-                if(data.getValue().equals(value)){
-                    out.println("<option value=\"" + data.getValue() + "\" selected>" + data.getDesc() + "</option>");
+            for (Map.Entry<String, String> entry : items.entrySet()) {
+                if(entry.getKey().equals(value)){
+                    out.println("<option value=\"" + entry.getKey() + "\" selected>" + entry.getValue() + "</option>");
                 }else{
-                    out.println("<option value=\"" + data.getValue() + "\">" + data.getDesc() + "</option>");
+                    out.println("<option value=\"" + entry.getKey() + "\">" + entry.getValue() + "</option>");
                 }
 
             }

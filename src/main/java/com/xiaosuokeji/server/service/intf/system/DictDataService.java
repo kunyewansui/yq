@@ -6,6 +6,7 @@ import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.model.system.DictData;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 字典数据Service
@@ -19,11 +20,18 @@ public interface DictDataService extends XSDictDataProvider {
 
     void update(DictData dictData) throws XSBusinessException;
 
-    DictData updateLock(DictData dictData) throws XSBusinessException;
+    void updateLock(DictData dictData) throws XSBusinessException;
 
     DictData get(DictData dictData) throws XSBusinessException;
 
+    List<DictData> list(DictData dictData);
+
     XSPageModel<DictData> listAndCount(DictData dictData);
 
-    List<DictData> listByDict(String dictKey);
+    /**
+     * 根据指定字典键获取字典数据映射集
+     * @param dictKey 字典键
+     * @return 字典数据映射集
+     */
+    Map<String, String> mapByDict(String dictKey);
 }

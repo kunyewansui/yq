@@ -4,9 +4,9 @@
 
 <mapper namespace="com.xiaosuokeji.server.dao.system.DictDataDao">
 
-    <insert id="save" parameterType="dictData">
-        INSERT INTO shuttle_common.sc_dict_data(dict_id,`value`,`name`,`desc`,`lock`)
-        VALUES (#{dict_id},#{value},#{name},#{desc},#{lock})
+    <insert id="save" parameterType="dictData" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO shuttle_common.sc_dict_data(`name`,dict_id,`value`,`desc`,`lock`)
+        VALUES (#{name},#{dict.id},#{value},#{desc},#{lock})
         ON DUPLICATE KEY UPDATE
         `name`=#{name},
         `desc`=#{desc},
@@ -22,14 +22,14 @@
     <update id="update" parameterType="dictData">
         UPDATE shuttle_common.sc_dict_data
         <trim prefix="SET" prefixOverrides=",">
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
             <if test="dict!=null and dict.id!=null">
                 ,dict_id=#{dict.id}
             </if>
             <if test="value!=null">
                 ,`value`=#{value}
-            </if>
-            <if test="name!=null">
-                ,`name`=#{name}
             </if>
             <if test="desc!=null">
                 ,`desc`=#{desc}
@@ -45,39 +45,25 @@
         WHERE id=#{id}
     </update>
 
-    <select id="get" parameterType="dictData" resultType="dictData">
-        SELECT *
-        FROM shuttle_common.sc_dict_data
-        WHERE id=#{id}
-    </select>
+    <resultMap id="dictDataMap" type="dictData" autoMapping="true">
+        <association property="dict" javaType="dict" autoMapping="true" columnPrefix="d_"/>
+    </resultMap>
 
-    <select id="getDesc" parameterType="dictData" resultType="dictData">
-        SELECT dd.desc
+    <select id="get" parameterType="dictData" resultMap="dictDataMap">
+        SELECT dd.*,d.id AS d_id, d.name AS d_name,d.key AS d_key
         FROM shuttle_common.sc_dict d
         JOIN shuttle_common.sc_dict_data dd ON d.id=dd.dict_id
-        WHERE d.key=#{dict.key} AND dd.value=#{value}
+        WHERE dd.id=#{id}
     </select>
 
     <sql id="listCondition">
         FROM shuttle_common.sc_dict_data
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="dict!=null and dict.id!=null">
-                ,dict_id=#{dict.id}
+                AND dict_id=#{dict.id}
             </if>
             <if test="value!=null and value!=''">
                 AND `value`=#{value}
-            </if>
-            <if test="dynamic!=null and dynamic.value!=null and dynamic.value!=''">
-                AND `value`=#{dynamic.value}
-            </if>
-            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
-                AND `name`=#{dynamic.name}
-            </if>
-            <if test="dynamic!=null and dynamic.desc!=null and dynamic.desc!=''">
-                AND `desc`=#{dynamic.desc}
-            </if>
-            <if test="lock!=null">
-                AND `lock`=#{lock}
             </if>
         </trim>
     </sql>

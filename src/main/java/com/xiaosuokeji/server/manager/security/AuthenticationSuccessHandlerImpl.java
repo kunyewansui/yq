@@ -24,6 +24,5 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(successMsg);
-        request.getSession().setAttribute("session_staff", authentication.getPrincipal());
     }
 }
