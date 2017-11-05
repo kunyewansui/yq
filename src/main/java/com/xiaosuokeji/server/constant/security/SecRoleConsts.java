@@ -8,9 +8,9 @@ import com.xiaosuokeji.framework.model.XSStatusPair;
  */
 public class SecRoleConsts {
 
-    public static final XSStatusPair SEC_ROLE_EXIST = XSStatusPair.build(10300, "角色已存在");
+    public static final XSStatusPair SEC_ROLE_EXIST = XSStatusPair.build(10110, "角色已存在");
 
-    public static final XSStatusPair SEC_ROLE_USED = XSStatusPair.build(10301, "角色被使用");
+    public static final XSStatusPair SEC_ROLE_USED = XSStatusPair.build(10111, "角色被使用");
 
-    public static final XSStatusPair SEC_ROLE_NOT_EXIST = XSStatusPair.build(10302, "角色不存在");
+    public static final XSStatusPair SEC_ROLE_NOT_EXIST = XSStatusPair.build(10112, "角色不存在");
 }

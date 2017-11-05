@@ -243,7 +243,7 @@
                             </div>
                             <div class="col-xs-9">
                                 <select name="assign" class="form-control">
-                                    <xs:dictOptions key="secResourceAssign"/>
+                                    <xs:dictOptions key="secResourceAssign" value="1"/>
                                 </select>
                             </div>
                         </div>
@@ -455,7 +455,7 @@
                             </div>
                             <div class="col-xs-9">
                                 <select name="assign" class="form-control">
-                                    <xs:dictOptions key="secResourceAssign"/>
+                                    <xs:dictOptions key="secResourceAssign" value="1"/>
                                 </select>
                             </div>
                         </div>

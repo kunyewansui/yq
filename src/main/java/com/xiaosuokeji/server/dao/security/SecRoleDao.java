@@ -26,18 +26,18 @@ public interface SecRoleDao {
     List<SecRole> list(SecRole secRole);
 
     /**
-     * 获取资源列表
-     * @param secResource
-     * @return 资源列表
-     */
-    List<SecResource> listResourceCombo(SecResource secResource);
-
-    /**
      * 获取属于指定角色的资源列表
      * @param secRole 参数id
      * @return 资源列表
      */
     List<SecResource> listResource(SecRole secRole);
+
+    /**
+     * 获取资源列表
+     * @param secResource
+     * @return 资源列表
+     */
+    List<SecResource> listResourceCombo(SecResource secResource);
 
     Long count(SecRole secRole);
 

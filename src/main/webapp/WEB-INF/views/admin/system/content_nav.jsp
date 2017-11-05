@@ -29,6 +29,12 @@
                             <span>资源管理</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="<%=request.getContextPath()%>/admin/system/secRole">
+                            <i class="fa fa-empire"></i>
+                            <span>角色管理</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>

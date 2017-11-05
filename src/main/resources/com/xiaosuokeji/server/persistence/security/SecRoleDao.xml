@@ -68,7 +68,7 @@
                 AND `name`=#{name}
             </if>
             <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
-                AND `name` LIKE CONCAT('%',#{name},'%')
+                AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
             </if>
             <if test="status!=null">
                 AND status=#{status}
@@ -77,24 +77,27 @@
         </trim>
     </sql>
 
-    <select id="listRole" parameterType="secRole" resultType="secRole">
+    <select id="list" parameterType="secRole" resultType="secRole">
         SELECT *
         <include refid="listCondition"/>
         <include refid="XSBaseMapper.sort"/>
         <include refid="XSBaseMapper.limit"/>
     </select>
 
-    <select id="listResourceCombo" resultType="secResource">
-        SELECT id,`name`,assign,pid AS p_id
-        FROM shuttle_common.sc_security_resource
-        <include refid="XSBaseMapper.sort"/>
-    </select>
+    <resultMap id="secResourceMap" type="secResource" autoMapping="true">
+        <association property="parent" javaType="secResource" autoMapping="true" columnPrefix="p_"/>
+    </resultMap>
 
     <select id="listResource" parameterType="secRole" resultType="secResource">
-        SELECT r.id
-        FROM shuttle_common.sc_security_role_res rr
-        JOIN shuttle_common.sc_security_resource r ON rr.resource_id=r.id
-        WHERE rr.role_id=#{id}
+        SELECT resource_id AS id
+        FROM shuttle_common.sc_security_role_res
+        WHERE role_id=#{id}
+    </select>
+
+    <select id="listResourceCombo" resultMap="secResourceMap">
+        SELECT id,`name`,`type`,assign,pid AS p_id
+        FROM shuttle_common.sc_security_resource
+        <include refid="XSBaseMapper.sort"/>
     </select>
 
     <select id="count" parameterType="secRole" resultType="long">

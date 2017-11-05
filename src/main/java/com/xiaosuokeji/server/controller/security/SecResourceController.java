@@ -31,7 +31,7 @@ public class SecResourceController {
     //region Admin
     @RequestMapping(value = "/admin/system/secResource", method = RequestMethod.GET)
     public String indexList(Model model, SecResource secResource) throws JsonProcessingException {
-        if(secResource.getPage() == null) secResource.setPage(1L) ;
+        if(secResource.getPage() == null) secResource.setPage(1L);
         model.addAttribute("search", secResource);
         model.addAttribute("pageModel", secResourceService.listAndCount(secResource));
         model.addAttribute("resourceTree", XSJackson.toJsonString(secResourceService.tree(new SecResource())));
