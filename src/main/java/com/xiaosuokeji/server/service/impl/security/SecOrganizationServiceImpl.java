@@ -37,7 +37,8 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
             throw new XSBusinessException(SecOrganizationConsts.SEC_ORGANIZATION_EXIST);
         }
         //父级禁用则子级禁用
-        if (secOrganization.getParent() != null && !secOrganization.getParent().getId().equals(0L)) {
+        if (secOrganization.getParent() != null && secOrganization.getParent().getId() != null
+                && !secOrganization.getParent().getId().equals(0L)) {
             SecOrganization parent = secOrganizationDao.get(secOrganization.getParent());
             if (parent != null) {
                 if (parent.getStatus().equals(0)) {

@@ -5,13 +5,11 @@
 <mapper namespace="com.xiaosuokeji.server.dao.security.SecResourceDao">
 
     <insert id="save" parameterType="secResource" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO shuttle_common.sc_security_resource(`name`,`key`,<if test="parent!=null">pid,</if>`type`,url,method,
-        seq,`desc`,assign,log)
-        VALUES (#{name},#{key},<if test="parent!=null">#{parent.id},</if>#{type},#{url},#{method},
-        #{seq},#{desc},#{assign},#{log})
+        INSERT INTO shuttle_common.sc_security_resource(`name`,`key`,pid,`type`,url,method,seq,`desc`,assign,log)
+        VALUES (#{name},#{key},#{parent.id},#{type},#{url},#{method},#{seq},#{desc},#{assign},#{log})
         ON DUPLICATE KEY UPDATE
         `name`=#{name},
-        <if test="parent!=null">pid=#{parent.id},</if>
+        pid=#{parent.id},
         `type`=#{type},
         url=#{url},
         method=#{method},

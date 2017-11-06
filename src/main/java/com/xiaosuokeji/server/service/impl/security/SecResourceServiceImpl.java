@@ -8,6 +8,7 @@ import com.xiaosuokeji.server.dao.security.SecResourceDao;
 import com.xiaosuokeji.server.model.security.SecResource;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.service.intf.security.SecResourceService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,8 @@ public class SecResourceServiceImpl implements SecResourceService {
             throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_EXIST);
         }
         //父级不可分配则子级不可分配
-        if (secResource.getParent() != null) {
+        if (secResource.getParent() != null && secResource.getParent().getId() != null
+                && !secResource.getParent().getId().equals(0L)) {
             SecResource parent = secResourceDao.get(secResource.getParent());
             if (parent != null) {
                 if (parent.getAssign().equals(0)) {
@@ -139,7 +141,7 @@ public class SecResourceServiceImpl implements SecResourceService {
             }
         }
         XSTreeUtil.buildTree(list);
-        return XSTreeUtil.getSubTrees(list, null);
+        return XSTreeUtil.getSubTrees(list, new SecResource(0L));
     }
 
     @Override

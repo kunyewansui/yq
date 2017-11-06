@@ -173,7 +173,7 @@
                             </div>
                             <div class="col-xs-9">
                                 <input id="createPid" type="hidden" name="parent.id">
-                                <input id="createPName" class="form-control" type="text" name="pName" readonly
+                                <input id="createPName" class="form-control" type="text" name="parent.name" readonly
                                        onclick="openTreeView(P_TYPE_CREATE)"/>
                             </div>
                         </div>
@@ -285,6 +285,9 @@
         });
         var createValidate = $createForm.validate({
             rules: {
+                "parent.name": {
+                    required: true
+                },
                 key: {
                     required: true,
                     notEmpty: true
@@ -314,6 +317,9 @@
                 }
             },
             messages: {
+                "parent.name": {
+                    required: "请选择父级"
+                },
                 key: {
                     required: "键不能为空",
                     notEmpty: "键不能为空"
@@ -499,6 +505,9 @@
         var $editForm = $("form[name='editForm']");
         var editValidate = $editForm.validate({
             rules: {
+                "parent.name": {
+                    required: true
+                },
                 key: {
                     required: true,
                     notEmpty: true
@@ -528,6 +537,9 @@
                 }
             },
             messages: {
+                "parent.name": {
+                    required: "请选择父级"
+                },
                 key: {
                     required: "键不能为空",
                     notEmpty: "键不能为空"
@@ -580,7 +592,9 @@
                     var _data = data.data;
                     $editForm.find("input[name='id']").val(_data.id);
                     if (_data.parent != undefined) $editForm.find("input[name='parent.id']").val(_data.parent.id);
+                    else $editForm.find("input[name='parent.id']").val(0);
                     if (_data.parent != undefined) $editForm.find("input[name='parent.name']").val(_data.parent.name);
+                    else $editForm.find("input[name='parent.name']").val("顶级");
                     $editForm.find("input[name='key']").val(_data.key);
                     $editForm.find("input[name='name']").val(_data.name);
                     $editForm.find("input[name='seq']").val(_data.seq);
@@ -678,7 +692,7 @@
                     selectedMulti: false
                 }
             },
-            zTreeNodes = [{"name": "顶级", "id": undefined, "children":${resourceTree eq null ? "[]":resourceTree}}];
+            zTreeNodes = [{"name": "顶级", "id": "0", "children":${resourceTree eq null ? "[]":resourceTree}}];
 
         $(document).ready(function () {
             zTreeObj = $.fn.zTree.init($("#tree"), setting, zTreeNodes);
