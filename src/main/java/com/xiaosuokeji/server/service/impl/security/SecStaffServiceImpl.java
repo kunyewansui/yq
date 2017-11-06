@@ -2,6 +2,7 @@ package com.xiaosuokeji.server.service.impl.security;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
+import com.xiaosuokeji.framework.util.XSMd5Util;
 import com.xiaosuokeji.framework.util.XSTreeUtil;
 import com.xiaosuokeji.server.constant.security.SecStaffConsts;
 import com.xiaosuokeji.server.dao.security.SecStaffDao;
@@ -9,10 +10,12 @@ import com.xiaosuokeji.server.model.security.SecOrganization;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.model.security.SecStaff;
 import com.xiaosuokeji.server.service.intf.security.SecStaffService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,13 +31,14 @@ public class SecStaffServiceImpl implements SecStaffService {
     private SecStaffDao secStaffDao;
 
     @Override
-    public void save(SecStaff secStaff) throws XSBusinessException {
-        SecStaff existent = new SecStaff();
-        existent.setUsername(secStaff.getUsername());
-        Long count = secStaffDao.count(existent);
+    public void save(SecStaff secStaff) throws Exception {
+        SecStaff criteria = new SecStaff();
+        criteria.setUsername(secStaff.getUsername());
+        Long count = secStaffDao.count(criteria);
         if (count.compareTo(0L) > 0) {
             throw new XSBusinessException(SecStaffConsts.SEC_STAFF_EXIST);
         }
+        secStaff.setPassword(XSMd5Util.encode(secStaff.getPassword()));
         secStaffDao.save(secStaff);
     }
 
@@ -48,18 +52,21 @@ public class SecStaffServiceImpl implements SecStaffService {
     }
 
     @Override
-    public void update(SecStaff secStaff) throws XSBusinessException {
-        get(secStaff);
+    public void update(SecStaff secStaff) throws Exception {
+        SecStaff existent = get(secStaff);
         if (secStaff.getUsername() != null) {
-            SecStaff existent = new SecStaff();
-            existent.setUsername(secStaff.getUsername());
-            List<SecStaff> existents = secStaffDao.list(existent);
+            SecStaff criteria = new SecStaff();
+            criteria.setUsername(secStaff.getUsername());
+            List<SecStaff> existents = secStaffDao.list(criteria);
             if (existents.size() > 0) {
-                boolean isSelf = existents.get(0).getId().equals(secStaff.getId());
+                boolean isSelf = existents.get(0).getId().equals(existent.getId());
                 if (!isSelf) {
                     throw new XSBusinessException(SecStaffConsts.SEC_STAFF_EXIST);
                 }
             }
+        }
+        if (secStaff.getPassword() != null) {
+            secStaff.setPassword(XSMd5Util.encode(secStaff.getPassword()));
         }
         secStaffDao.update(secStaff);
     }
@@ -70,6 +77,7 @@ public class SecStaffServiceImpl implements SecStaffService {
         if (existent == null) {
             throw new XSBusinessException(SecStaffConsts.SEC_STAFF_NOT_EXIST);
         }
+        existent.setPassword(null);
         return existent;
     }
 
@@ -162,7 +170,9 @@ public class SecStaffServiceImpl implements SecStaffService {
     public void authorizeRole(SecStaff secStaff) throws XSBusinessException {
         SecStaff existent = get(secStaff);
         secStaffDao.removeStaffRole(existent);
-        secStaffDao.saveStaffRole(secStaff);
+        if (secStaff.getRoleList().size() > 0) {
+            secStaffDao.saveStaffRole(secStaff);
+        }
     }
 
     @Override
@@ -180,7 +190,7 @@ public class SecStaffServiceImpl implements SecStaffService {
             }
         }
         XSTreeUtil.buildTree(orgList);
-        return XSTreeUtil.getSubTrees(orgList, null);
+        return XSTreeUtil.getSubTrees(orgList, new SecOrganization(0L));
     }
 
     @Override
@@ -188,6 +198,8 @@ public class SecStaffServiceImpl implements SecStaffService {
     public void authorizeOrganization(SecStaff secStaff) throws XSBusinessException {
         SecStaff existent = get(secStaff);
         secStaffDao.removeStaffOrganization(existent);
-        secStaffDao.saveStaffOrganization(secStaff);
+        if (secStaff.getOrganizationList().size() > 0) {
+            secStaffDao.saveStaffOrganization(secStaff);
+        }
     }
 }

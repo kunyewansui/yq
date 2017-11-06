@@ -33,7 +33,7 @@ public class SecOrganization extends BaseModel implements XSTreeable<Long, SecOr
     private SecOrganization parent;
 
     /**
-     * 状态，0禁用，1启用
+     * 状态，0禁用，1正常
      */
     @XSAutoDesc("secOrganizationStatus")
     private Integer status;

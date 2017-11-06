@@ -26,7 +26,7 @@ public class SecRole extends BaseModel {
     private String name;
 
     /**
-     * 状态，0禁用，1启用
+     * 状态，0禁用，1正常
      */
     @XSAutoDesc("secRoleStatus")
     private Integer status;

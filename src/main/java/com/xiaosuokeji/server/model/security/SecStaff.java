@@ -1,5 +1,6 @@
 package com.xiaosuokeji.server.model.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xiaosuokeji.framework.annotation.XSAutoDesc;
 import com.xiaosuokeji.server.model.base.BaseModel;
 import org.hibernate.validator.constraints.Email;
@@ -38,7 +39,7 @@ public class SecStaff extends BaseModel implements UserDetails {
     private String password;
 
     /**
-     * 状态，0禁用，1启用
+     * 状态，0禁用，1正常
      */
     @XSAutoDesc("secStaffStatus")
     private Integer status;
@@ -99,6 +100,7 @@ public class SecStaff extends BaseModel implements UserDetails {
         this.username = username;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorityList;
@@ -114,21 +116,25 @@ public class SecStaff extends BaseModel implements UserDetails {
         return username;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return status.equals(1);

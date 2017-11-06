@@ -5,6 +5,7 @@ import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.model.security.SecStaff;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -13,11 +14,11 @@ import java.util.List;
  */
 public interface SecStaffService {
 
-    void save(SecStaff secStaff) throws XSBusinessException;
+    void save(SecStaff secStaff) throws Exception;
 
     void remove(SecStaff secStaff) throws XSBusinessException;
 
-    void update(SecStaff secStaff) throws XSBusinessException;
+    void update(SecStaff secStaff) throws Exception;
 
     SecStaff get(SecStaff secStaff) throws XSBusinessException;
 
