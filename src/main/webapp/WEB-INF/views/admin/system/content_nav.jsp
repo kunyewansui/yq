@@ -35,6 +35,12 @@
                             <span>角色管理</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="<%=request.getContextPath()%>/admin/system/secOrganization">
+                            <i class="fa fa-empire"></i>
+                            <span>组织管理</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>

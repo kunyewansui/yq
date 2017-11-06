@@ -43,7 +43,6 @@
                         <input name="dynamic[key]" type="text" class="form-control" placeholder="模糊查询"
                                value="${search.dynamic.key}">
                     </div>
-
                     <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
                         <label class="control-label">父级：</label>
                     </div>

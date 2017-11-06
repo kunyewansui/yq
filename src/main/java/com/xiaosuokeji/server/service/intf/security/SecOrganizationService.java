@@ -23,6 +23,8 @@ public interface SecOrganizationService {
 
     XSPageModel<SecOrganization> listAndCount(SecOrganization secOrganization);
 
+    List<SecOrganization> tree(SecOrganization secOrganization);
+
     /**
      * 获取指定组织的角色列表
      * @param secOrganization 参数id

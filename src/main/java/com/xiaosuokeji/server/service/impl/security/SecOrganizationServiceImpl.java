@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,15 +29,15 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
 
     @Override
     public void save(SecOrganization secOrganization) throws XSBusinessException {
-        SecOrganization existent = new SecOrganization();
-        existent.setName(secOrganization.getName());
-        existent.setParent(secOrganization.getParent());
-        Long count = secOrganizationDao.count(existent);
+        SecOrganization criteria = new SecOrganization();
+        criteria.setName(secOrganization.getName());
+        criteria.setParent(secOrganization.getParent());
+        Long count = secOrganizationDao.count(criteria);
         if (count.compareTo(0L) > 0) {
             throw new XSBusinessException(SecOrganizationConsts.SEC_ORGANIZATION_EXIST);
         }
         //父级禁用则子级禁用
-        if (secOrganization.getParent() != null) {
+        if (secOrganization.getParent() != null && !secOrganization.getParent().getId().equals(0L)) {
             SecOrganization parent = secOrganizationDao.get(secOrganization.getParent());
             if (parent != null) {
                 if (parent.getStatus().equals(0)) {
@@ -57,6 +58,7 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
         if (childrenCount.compareTo(0L) > 0) {
             throw new XSBusinessException(SecOrganizationConsts.SEC_ORGANIZATION_USED);
         }
+        //校验是否存在员工属于该组织
         Long staffCount = secOrganizationDao.countStaff(existent);
         if (staffCount.compareTo(0L) > 0) {
             throw new XSBusinessException(SecOrganizationConsts.SEC_ORGANIZATION_USED);
@@ -70,10 +72,10 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
     public void update(SecOrganization secOrganization) throws XSBusinessException {
         SecOrganization existent = get(secOrganization);
         if (secOrganization.getName() != null || secOrganization.getParent() != null) {
-            SecOrganization existOrg = new SecOrganization();
-            existOrg.setName(secOrganization.getName() == null ? existent.getName() : secOrganization.getName());
-            existOrg.setParent(secOrganization.getParent() == null ? existent.getParent() : secOrganization.getParent());
-            List<SecOrganization> existents = secOrganizationDao.list(existOrg);
+            SecOrganization criteria = new SecOrganization();
+            criteria.setName(secOrganization.getName() == null ? existent.getName() : secOrganization.getName());
+            criteria.setParent(secOrganization.getParent() == null ? existent.getParent() : secOrganization.getParent());
+            List<SecOrganization> existents = secOrganizationDao.list(criteria);
             if (existents.size() > 0) {
                 boolean isSelf = existents.get(0).getId().equals(existent.getId());
                 if (!isSelf) {
@@ -85,18 +87,18 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
         if (secOrganization.getStatus() != null) {
             List<SecOrganization> list = secOrganizationDao.listCombo(new SecOrganization());
             Map<Long, SecOrganization> map = XSTreeUtil.buildTree(list);
-            SecOrganization latestOrg = new SecOrganization();
-            latestOrg.setStatus(secOrganization.getStatus());
+            SecOrganization latest = new SecOrganization();
+            latest.setStatus(secOrganization.getStatus());
             //禁用则所有子级也禁用，启用所有父级也启用
             if (secOrganization.getStatus().equals(0)) {
                 List<SecOrganization> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
-                latestOrg.setList(subTreeList);
+                latest.setList(subTreeList);
             }
             else {
                 List<SecOrganization> treePath = XSTreeUtil.getTreePath(map, map.get(existent.getId()));
-                latestOrg.setList(treePath);
+                latest.setList(treePath);
             }
-            secOrganizationDao.batchUpdate(latestOrg);
+            secOrganizationDao.batchUpdate(latest);
         }
     }
 
@@ -113,6 +115,13 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
     public XSPageModel listAndCount(SecOrganization secOrganization) {
         secOrganization.setDefaultSort("id", "DESC");
         return XSPageModel.build(secOrganizationDao.list(secOrganization), secOrganizationDao.count(secOrganization));
+    }
+
+    @Override
+    public List<SecOrganization> tree(SecOrganization secOrganization) {
+        List<SecOrganization> list = secOrganizationDao.listCombo(secOrganization);
+        XSTreeUtil.buildTree(list);
+        return XSTreeUtil.getSubTrees(list, new SecOrganization(0L));
     }
 
     @Override
@@ -136,7 +145,15 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
     @Transactional
     public void authorizeRole(SecOrganization secOrganization) throws XSBusinessException {
         SecOrganization existent = get(secOrganization);
+        //不能授予超级管理员角色
+        for (Iterator<SecRole> iterator = secOrganization.getRoleList().iterator(); iterator.hasNext();) {
+            if (iterator.next().getId().equals(1L)) {
+                iterator.remove();
+            }
+        }
         secOrganizationDao.removeOrganizationRole(existent);
-        secOrganizationDao.saveOrganizationRole(secOrganization);
+        if (secOrganization.getRoleList().size() > 0) {
+            secOrganizationDao.saveOrganizationRole(secOrganization);
+        }
     }
 }

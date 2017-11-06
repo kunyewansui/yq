@@ -12,7 +12,7 @@
 <!DOCTYPE html>
 <html lang="cmn-hans">
 <head>
-    <title>角色管理</title>
+    <title>资源管理</title>
     <%@include file="../common/head.jsp" %>
     <%@include file="../common/validate.jsp" %>
     <%@include file="../common/ztree.jsp" %>
@@ -24,31 +24,39 @@
 <div class="app-content ">
     <div class="app-content-body">
         <div class="bg-light lter b-b wrapper-md ">
-            <h1 class="m-n font-thin h3">角色管理</h1>
+            <h1 class="m-n font-thin h3">组织管理</h1>
         </div>
         <div class="wrapper-md">
             <form class="form-horizontal" id="searchForm">
                 <div class="form-group">
-                    <div class="col-xs-4 col-md-2 col-lg-1 no-padder m-b-md text-right">
+                    <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
                         <label class="control-label">名称：</label>
                     </div>
-                    <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
-                        <input class="form-control" type="text" name="dynamic[name]" value="${search.dynamic.name}"
-                               placeholder="模糊查询"/>
+                    <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
+                        <input name="dynamic[name]" type="text" class="form-control" placeholder="模糊查询"
+                               value="${search.dynamic.name}">
                     </div>
-                    <div class="col-xs-4 col-md-2 col-lg-1 no-padder m-b-md text-right">
+                    <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                        <label class="control-label">父级：</label>
+                    </div>
+                    <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
+                        <input id="searchPid" type="hidden" name="parent.id" value="${search.parent.id}">
+                        <input id="searchPName" class="form-control" type="text" name="parent.name" readonly
+                               onclick="openTreeView(P_TYPE_SEARCH)" value="${search.parent.name}"/>
+                    </div>
+                    <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
                         <label class="control-label">状态：</label>
                     </div>
-                    <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
+                    <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
                         <select name="status" class="form-control" data-value="${search.status}">
                             <option value="">全部</option>
-                            <xs:dictOptions key="secRoleStatus"/>
+                            <xs:dictOptions key="secOrganizationStatus"/>
                         </select>
                     </div>
                 </div>
                 <div class="form-group m-t-n-md">
                     <div class="col-xs-12">
-                        <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_create})">--%>
+                        <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_create})">--%>
                             <button class="btn btn-success" type="button" data-toggle="modal" data-target="#create">
                                 新增
                             </button>
@@ -75,20 +83,20 @@
                             <td colspan="5">无数据</td>
                         </tr>
                     </c:if>
-                    <c:forEach items="${pageModel.list}" var="role">
+                    <c:forEach items="${pageModel.list}" var="org">
                         <tr>
-                            <td>${role.name}</td>
-                            <td>${role.desc}</td>
-                            <td><xs:dictDesc key="secRoleStatus" value="${role.status}"/></td>
+                            <td>${org.name}</td>
+                            <td>${org.desc}</td>
+                            <td><xs:dictDesc key="secOrganizationStatus" value="${org.status}"/></td>
                             <td>
-                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_auth})">--%>
-                                    <button class="btn btn-primary btn-xs" onclick="auth('${role.id}')">授权</button>
+                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_auth})">--%>
+                                    <button class="btn btn-primary btn-xs" onclick="auth('${org.id}')">授权</button>
                                 <%--</sec:authorize>--%>
-                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_update})">--%>
-                                    <button class="btn btn-info btn-xs" onclick="edit('${role.id}')">编辑</button>
+                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_update})">--%>
+                                    <button class="btn btn-info btn-xs" onclick="edit('${org.id}')">编辑</button>
                                 <%--</sec:authorize>--%>
-                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_delete})">--%>
-                                    <button class="btn btn-danger btn-xs" onclick="del('${role.id}')">删除</button>
+                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_delete})">--%>
+                                    <button class="btn btn-danger btn-xs" onclick="del('${org.id}')">删除</button>
                                 <%--</sec:authorize>--%>
                             </td>
                         </tr>
@@ -116,9 +124,19 @@
         $searchStatus.val("");
     }
 
+    var P_TYPE_CREATE = 0;
+    var P_TYPE_EDIT = 1;
+    var P_TYPE_SEARCH = 2;
+
+    var treeType;
+    function openTreeView(type) {
+        treeType = type;
+        $('#orgTree').modal('show');
+    }
+
 </script>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_create})">--%>
-    <%--新增角色--%>
+<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_create})">--%>
+    <%--新增组织--%>
     <div class="modal fade" id="create" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -126,10 +144,20 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">新增角色</h4>
+                    <h4 class="modal-title">新增组织</h4>
                 </div>
                 <div class="modal-body">
                     <form name="createForm" class="form-horizontal">
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">父级</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input id="createPid" type="hidden" name="parent.id">
+                                <input id="createPName" class="form-control" type="text" name="parent.name" readonly
+                                       onclick="openTreeView(P_TYPE_CREATE)"/>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <div class="col-xs-3 text-right">
                                 <label class="control-label required">名称</label>
@@ -151,8 +179,8 @@
                                 <label class="control-label required">状态</label>
                             </div>
                             <div class="col-xs-9">
-                                <select name="status" class="form-control">
-                                    <xs:dictOptions key="secRoleStatus" value="1"/>
+                                <select id="createStatus" name="status" class="form-control">
+                                    <xs:dictOptions key="secOrganizationStatus" value="1"/>
                                 </select>
                             </div>
                         </div>
@@ -171,27 +199,41 @@
 
         var createValidate = $createForm.validate({
             rules: {
+                "parent.name": {
+                    required: true
+                },
                 name: {
                     required: true,
-                    notEmpty: true
+                    notEmpty: true,
+                    maxlength: 191
+                },
+                desc: {
+                    maxlength: 255
                 },
                 status: {
                     required: true
                 }
             },
             messages: {
+                "parent.name": {
+                    required: "请选择父级"
+                },
                 name: {
                     required: "名称不能为空",
-                    notEmpty: "名称不能为空"
+                    notEmpty: "名称不能为空",
+                    maxlength: "名称最多191字"
+                },
+                desc: {
+                    maxlength: "描述最多255字"
                 },
                 status: {
                     required: "请选择状态"
                 }
             },
             submitHandler: function (form) {
-                doPost("<%=request.getContextPath()%>/admin/security/secRole/save", $(form).serialize(), function (data) {
+                doPost("<%=request.getContextPath()%>/admin/security/secOrganization/save", $(form).serialize(), function (data) {
                     if (data.status) {
-                        alert("角色新增成功");
+                        alert("组织新增成功");
                         window.location.reload(true);
                     } else {
                         alert(data.msg);
@@ -211,8 +253,8 @@
 
     </script>
 <%--</sec:authorize>--%>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_update})">--%>
-    <%--编辑角色--%>
+<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_update})">--%>
+    <%--编辑组织--%>
     <div class="modal fade" id="edit" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -220,11 +262,21 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">编辑角色</h4>
+                    <h4 class="modal-title">编辑组织</h4>
                 </div>
                 <div class="modal-body">
                     <form name="editForm" class="form-horizontal">
                         <input type="hidden" name="id">
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">父级ID</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input id="editPid" type="hidden" name="parent.id">
+                                <input id="editPName" class="form-control" type="text" name="parent.name" readonly
+                                       onclick="openTreeView(P_TYPE_EDIT)"/>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <div class="col-xs-3 text-right">
                                 <label class="control-label required">名称</label>
@@ -246,8 +298,8 @@
                                 <label class="control-label required">状态</label>
                             </div>
                             <div class="col-xs-9">
-                                <select name="status" class="form-control">
-                                    <xs:dictOptions key="secRoleStatus"/>
+                                <select id="editStatus" name="status" class="form-control">
+                                    <xs:dictOptions key="secOrganizationStatus"/>
                                 </select>
                             </div>
                         </div>
@@ -262,31 +314,44 @@
         </div>
     </div>
     <script>
-
         var $editForm = $("form[name='editForm']");
         var editValidate = $editForm.validate({
             rules: {
+                "parent.name": {
+                    required: true
+                },
                 name: {
                     required: true,
-                    notEmpty: true
+                    notEmpty: true,
+                    maxlength: 191
+                },
+                desc: {
+                    maxlength: 255
                 },
                 status: {
                     required: true
                 }
             },
             messages: {
+                "parent.name": {
+                    required: "请选择父级"
+                },
                 name: {
                     required: "名称不能为空",
-                    notEmpty: "名称不能为空"
+                    notEmpty: "名称不能为空",
+                    maxlength: "名称最多191字"
+                },
+                desc: {
+                    maxlength: "描述最多255字"
                 },
                 status: {
                     required: "请选择状态"
                 }
             },
             submitHandler: function (form) {
-                doPost("<%=request.getContextPath()%>/admin/security/secRole/update", $(form).serialize(), function (data) {
+                doPost("<%=request.getContextPath()%>/admin/security/secOrganization/update", $(form).serialize(), function (data) {
                     if (data.status) {
-                        alert("角色编辑成功");
+                        alert("组织编辑成功");
                         window.location.reload(true);
                     } else {
                         alert(data.msg);
@@ -294,16 +359,21 @@
                 });
             }
         });
+
         $('#edit').on('hidden.bs.modal', function (e) {
             editValidate.resetForm();
             $("#edit").find(".text-danger").removeClass("text-danger");
         });
 
         function edit(id) {
-            doPost("<%=request.getContextPath()%>/admin/security/secRole/get", {id: id}, function (data) {
+            doPost("<%=request.getContextPath()%>/admin/security/secOrganization/get", {id: id}, function (data) {
                 if (data.status) {
                     var _data = data.data;
                     $editForm.find("input[name='id']").val(_data.id);
+                    if (_data.parent != undefined) $editForm.find("input[name='parent.id']").val(_data.parent.id);
+                    else $editForm.find("input[name='parent.id']").val(0);
+                    if (_data.parent != undefined) $editForm.find("input[name='parent.name']").val(_data.parent.name);
+                    else $editForm.find("input[name='parent.name']").val("顶级");
                     $editForm.find("input[name='name']").val(_data.name);
                     $editForm.find("input[name='desc']").val(_data.desc);
                     $editForm.find("select[name='status']").val(_data.status);
@@ -319,8 +389,8 @@
         }
     </script>
 <%--</sec:authorize>--%>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_delete})">--%>
-    <%--删除角色--%>
+<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_delete})">--%>
+    <%--删除组织--%>
     <div class="modal fade" id="del" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -328,10 +398,10 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">删除角色</h4>
+                    <h4 class="modal-title">删除组织</h4>
                 </div>
                 <div class="modal-body">
-                    <h4 class="text-danger">确认删除该角色？</h4>
+                    <h4 class="text-danger">确认删除该组织？</h4>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -347,9 +417,9 @@
             $("#del").modal('show');
         }
         function submitDelete() {
-            doPost("<%=request.getContextPath()%>/admin/security/secRole/remove", {id: deleteId}, function (data) {
+            doPost("<%=request.getContextPath()%>/admin/security/secOrganization/remove", {id: deleteId}, function (data) {
                 if (data.status) {
-                    alert("角色删除成功");
+                    alert("组织删除成功");
                     window.location.reload(true);
                 } else {
                     alert(data.msg);
@@ -358,8 +428,69 @@
         }
     </script>
 <%--</sec:authorize>--%>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_auth})">--%>
-    <%--角色授权--%>
+<%--<sec:authorize--%>
+        <%--access="hasAnyRole(${sessionScope.sec_op.system_org_create}) or hasAnyRole(${sessionScope.sec_op.system_org_update}) ">--%>
+    <%--组织树--%>
+    <div class="modal fade" id="orgTree" data-backdrop="static" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">父级</h4>
+                </div>
+                <div class="modal-body">
+                    <ul id="tree" class="ztree" style="overflow:auto;height: 500px"></ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-success" onclick="selectConfirm()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var zTreeObj,
+            setting = {
+                data: {
+                    key: {
+                        children: "children"
+                    }
+                },
+                view: {
+                    selectedMulti: false
+                }
+            },
+            zTreeNodes = [{"name": "顶级", "id": "0", "children":${orgTree eq null ? "[]":orgTree}}];
+
+        $(document).ready(function () {
+            zTreeObj = $.fn.zTree.init($("#tree"), setting, zTreeNodes);
+        });
+
+        function selectConfirm() {
+            var selectedNode = zTreeObj.getSelectedNodes()[0];
+            if (treeType === P_TYPE_CREATE) {
+                $("#createPid").val(selectedNode.id);
+                $('#createPName').val(selectedNode.name);
+            } else if (treeType === P_TYPE_EDIT) {
+                $("#editPid").val(selectedNode.id);
+                $('#editPName').val(selectedNode.name);
+            } else {
+                $("#searchPid").val(selectedNode.id);
+                $('#searchPName').val(selectedNode.name);
+            }
+            $('#orgTree').modal('hide');
+        }
+
+        $('#orgTree').on('hidden.bs.modal', function (e) {
+            zTreeObj.selectNode(zTreeNodes[0]);
+            zTreeObj.expandAll(false);
+        });
+    </script>
+<%--</sec:authorize>--%>
+<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_auth})">--%>
+    <%--组织授权--%>
     <div class="modal fade" id="auth" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -367,10 +498,10 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">角色授权</h4>
+                    <h4 class="modal-title">组织授权</h4>
                 </div>
                 <div class="modal-body pos-rlt" style="height: 500px;">
-                    <ul id="tree" class="ztree" style="overflow:auto;max-height: 100%"></ul>
+                    <ul id="authTree" class="ztree" style="overflow:auto;"></ul>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -380,9 +511,9 @@
         </div>
     </div>
     <script>
-        var roleId = "";
-        var zTreeObj,
-            setting = {
+        var orgId = "";
+        var zOrgTreeObj,
+            orgSetting = {
                 data: {
                     key: {
                         children: "children"
@@ -400,10 +531,10 @@
                     beforeAsync: beforeAsync
                 }
             },
-            zTreeNodes = [];
+            zOrgTreeNodes = [];
 
         $(document).ready(function () {
-            zTreeObj = $.fn.zTree.init($("#tree"), setting, zTreeNodes);
+            zOrgTreeObj = $.fn.zTree.init($("#authTree"), orgSetting, zOrgTreeNodes);
         });
 
         function beforeAsync(treeId, treeNode) {
@@ -412,7 +543,7 @@
         }
 
         function asyncUrl() {
-            return "<%=request.getContextPath()%>/admin/security/secRole/tree?id=" + roleId;
+            return "<%=request.getContextPath()%>/admin/security/secOrganization/secRole/list?id=" + orgId;
         }
 
         function asyncFilter(treeId, parentNode, responseData) {
@@ -425,23 +556,23 @@
         }
 
         function auth(id) {
-            roleId = id;
-            zTreeObj.reAsyncChildNodes(null, "refresh");
+            orgId = id;
+            zOrgTreeObj.reAsyncChildNodes(null, "refresh");
             $("#auth").modal("show");
         }
 
         function submitAuth() {
-            var selectedNodes = zTreeObj.getCheckedNodes();
-            var resources = [];
+            var selectedNodes = zOrgTreeObj.getCheckedNodes();
+            var roleIds = [];
             $.each(selectedNodes, function (index, node) {
-                resources.push(node.id);
+                roleIds.push(node.id);
             });
-            doPost("<%=request.getContextPath()%>/admin/security/secRole/authorize", {
-                id: roleId,
-                resourceIds: resources + ""
+            doPost("<%=request.getContextPath()%>/admin/security/secOrganization/authorize", {
+                id: orgId,
+                roleIds: roleIds + ""
             }, function (data) {
                 if (data.status) {
-                    alert("角色授权成功！");
+                    alert("组织授权成功！");
                 } else {
                     alert(data.msg);
                 }
@@ -450,5 +581,6 @@
         }
     </script>
 <%--</sec:authorize>--%>
+
 </body>
 </html>

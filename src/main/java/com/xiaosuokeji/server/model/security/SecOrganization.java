@@ -68,6 +68,12 @@ public class SecOrganization extends BaseModel implements XSTreeable<Long, SecOr
 
     public interface Update {}
 
+    public SecOrganization() {}
+
+    public SecOrganization(Long id) {
+        this.id = id;
+    }
+
     @Override
     public Long getNodeId() {
         return id;

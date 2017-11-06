@@ -5,8 +5,8 @@
 <mapper namespace="com.xiaosuokeji.server.dao.security.SecOrganizationDao">
 
     <insert id="save" parameterType="secOrganization">
-        INSERT INTO shuttle_common.sc_security_organization(`name`,<if test="parent!=null">pid,</if>,status,`desc`)
-        VALUES (#{name},<if test="parent!=null">#{parent.id},</if>,#{status},#{desc})
+        INSERT INTO shuttle_common.sc_security_organization(`name`,pid,status,`desc`)
+        VALUES (#{name},#{parent.id},#{status},#{desc})
         ON DUPLICATE KEY UPDATE
         status=#{status},
         `desc`=#{desc},
@@ -93,7 +93,7 @@
                 AND o.name=#{name}
             </if>
             <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
-                AND o.name LIKE CONCAT('%',#{name},'%')
+                AND o.name LIKE CONCAT('%',#{dynamic.name},'%')
             </if>
             <if test="parent!=null and parent.id!=null">
                 AND o.pid=#{parent.id}
@@ -104,7 +104,7 @@
         </trim>
     </sql>
 
-    <select id="listOrganization" parameterType="secOrganization" resultMap="secOrganizationMap">
+    <select id="list" parameterType="secOrganization" resultMap="secOrganizationMap">
         SELECT o.*,
         p.id AS p_id,p.name AS p_name
         <include refid="listCondition"/>
@@ -112,20 +112,20 @@
         <include refid="XSBaseMapper.limit"/>
     </select>
 
-    <select id="listCombo" resultType="secOrganization">
+    <select id="listCombo" resultMap="secOrganizationMap">
         SELECT id,`name`,pid AS p_id
         FROM shuttle_common.sc_security_organization
         <include refid="XSBaseMapper.sort"/>
     </select>
 
     <select id="listRoleCombo" resultType="secRole">
-        SELECT id,`name`,pid AS p_id
+        SELECT id,`name`
         FROM shuttle_common.sc_security_role
         WHERE superior=0
     </select>
 
     <select id="listRole" parameterType="secOrganization" resultType="secRole">
-        SELECT r.id,r.name,r.status
+        SELECT r.id
         FROM shuttle_common.sc_security_org_role rr
         JOIN shuttle_common.sc_security_role r ON rr.role_id=r.id
         WHERE rr.organization_id=#{id}
