@@ -5,7 +5,6 @@ import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.model.security.SecStaff;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**

@@ -10,12 +10,10 @@ import com.xiaosuokeji.server.model.security.SecOrganization;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.model.security.SecStaff;
 import com.xiaosuokeji.server.service.intf.security.SecStaffService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
