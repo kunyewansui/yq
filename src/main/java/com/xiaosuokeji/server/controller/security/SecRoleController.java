@@ -69,7 +69,7 @@ public class SecRoleController {
         return XSServiceResult.build();
     }
 
-    @RequestMapping(value = "/admin/security/secRole/tree", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/security/secRole/secResource/tree", method = RequestMethod.POST)
     @ResponseBody
     public XSServiceResult adminTree(SecRole secRole) throws XSBusinessException {
         SecStaff secStaff = new SecStaff();

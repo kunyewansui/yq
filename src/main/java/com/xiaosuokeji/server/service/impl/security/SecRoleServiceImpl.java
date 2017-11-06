@@ -119,7 +119,7 @@ public class SecRoleServiceImpl implements SecRoleService {
             }
         }
         XSTreeUtil.buildTree(resourceList);
-        return XSTreeUtil.getSubTrees(resourceList, null);
+        return XSTreeUtil.getSubTrees(resourceList, new SecResource(0L));
     }
 
     @Override

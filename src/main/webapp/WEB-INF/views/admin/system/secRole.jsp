@@ -412,7 +412,7 @@
         }
 
         function asyncUrl() {
-            return "<%=request.getContextPath()%>/admin/security/secRole/tree?id=" + roleId;
+            return "<%=request.getContextPath()%>/admin/security/secRole/secResource/tree?id=" + roleId;
         }
 
         function asyncFilter(treeId, parentNode, responseData) {
