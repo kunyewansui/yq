@@ -27,11 +27,11 @@
 <div class="app app-header-fixed ">
     <div class="container w-xxl w-auto-xs">
         <div class="text-center m-t-lg">
-            <%--<img  style="width: 215px" src="<%=request.getContextPath()%>/admin/assets/image/logo.png"/>--%>
+            <img  style="width: 215px" src="<%=request.getContextPath()%>/assets/admin/img/logo.png"/>
         </div>
         <div class="m-b-lg">
             <div class="text-center">
-                <%--<h3>医览网</h3>--%>
+                <h3>管理后台</h3>
             </div>
             <form name="form" class="form-validation" method="post">
                 <div id="errorText" class="text-danger wrapper text-center" style="height: 50px">
@@ -68,7 +68,7 @@
         },
         submitHandler: function (form) {
             submitBtn.attr("disabled",true);
-            doPost("<%=request.getContextPath()%>/admin/login", $(form).serialize(),
+            doPost("<%=request.getContextPath()%>/admin/security/login", $(form).serialize(),
                 function (data) {
                     if (data.status) {
                         window.location.href = "<%=request.getContextPath()%>/admin/index"

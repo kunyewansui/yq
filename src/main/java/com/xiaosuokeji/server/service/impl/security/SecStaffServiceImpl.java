@@ -125,8 +125,9 @@ public class SecStaffServiceImpl implements SecStaffService {
                         }
                         //将组织拥有的角色加入到角色列表
                         for (Iterator<SecRole> iterator = orgRoleList.iterator(); iterator.hasNext();) {
+                            SecRole secRole = iterator.next();
                             for (SecRole item : roleList) {
-                                if (iterator.next().getId().equals(item.getId())) {
+                                if (secRole.getId().equals(item.getId())) {
                                     iterator.remove();
                                 }
                             }

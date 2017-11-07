@@ -138,7 +138,7 @@
     </select>
 
     <select id="listRole" parameterType="secStaff" resultType="secRole">
-        SELECT r.id
+        SELECT r.id,r.status,r.name
         FROM shuttle_common.sc_security_staff_role sr
         JOIN shuttle_common.sc_security_role r ON sr.role_id=r.id
         WHERE sr.staff_id=#{id}
@@ -164,7 +164,7 @@
     </select>
 
     <select id="listOrganization" parameterType="secStaff" resultType="secOrganization">
-        SELECT o.id
+        SELECT o.id,o.status
         FROM shuttle_common.sc_security_staff_org so
         JOIN shuttle_common.sc_security_organization o ON so.organization_id=o.id
         WHERE so.staff_id=#{id}

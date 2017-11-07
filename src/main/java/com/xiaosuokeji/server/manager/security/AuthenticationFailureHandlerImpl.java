@@ -28,8 +28,14 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
         String msg = XSStatusConstant.FAILURE.getMsg();
 
         if (exception instanceof UsernameNotFoundException) {
-            code = SecStaffConsts.SEC_STAFF_NOT_EXIST.getCode();
-            msg = SecStaffConsts.SEC_STAFF_NOT_EXIST.getMsg();
+            if (exception.getMessage().equals(XSStatusConstant.FAILURE.getMsg())) {
+                code = XSStatusConstant.FAILURE.getCode();
+                msg = XSStatusConstant.FAILURE.getMsg();
+            }
+            else {
+                code = SecStaffConsts.SEC_STAFF_NOT_EXIST.getCode();
+                msg = SecStaffConsts.SEC_STAFF_NOT_EXIST.getMsg();
+            }
         }
         else if (exception instanceof BadCredentialsException) {
             code = SecStaffConsts.SEC_STAFF_PASSWORD_ERROR.getCode();

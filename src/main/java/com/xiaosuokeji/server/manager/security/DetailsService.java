@@ -1,5 +1,6 @@
 package com.xiaosuokeji.server.manager.security;
 
+import com.xiaosuokeji.framework.constant.XSStatusConstant;
 import com.xiaosuokeji.server.constant.security.SecStaffConsts;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.model.security.SecStaff;
@@ -28,7 +29,12 @@ public class DetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SecStaff staff = secStaffService.getByUsername(new SecStaff(username));
+        SecStaff staff = null;
+        try {
+            staff = secStaffService.getByUsername(new SecStaff(username));
+        } catch (Exception e) {
+            throw new UsernameNotFoundException(XSStatusConstant.FAILURE.getMsg());
+        }
         if (staff == null) {
             throw new UsernameNotFoundException(SecStaffConsts.SEC_STAFF_NOT_EXIST.getMsg());
         }
