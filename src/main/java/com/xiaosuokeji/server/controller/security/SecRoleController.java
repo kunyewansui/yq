@@ -9,6 +9,7 @@ import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.model.security.SecStaff;
 import com.xiaosuokeji.server.service.intf.security.SecRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,22 +71,25 @@ public class SecRoleController {
 
     @RequestMapping(value = "/admin/security/secRole/secResource/tree", method = RequestMethod.POST)
     @ResponseBody
-    public XSServiceResult adminTree(SecRole secRole) throws XSBusinessException {
-        SecStaff secStaff = new SecStaff();
-        secStaff.setId(1L);
+    public XSServiceResult adminTree(SecRole secRole, HttpServletRequest request) throws XSBusinessException {
+        SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession()
+                .getAttribute("SPRING_SECURITY_CONTEXT");
+        SecStaff secStaff = (SecStaff) securityContextImpl.getAuthentication().getPrincipal();
         return XSServiceResult.build().data(secRoleService.treeResource(secRole, secStaff));
     }
 
     @RequestMapping(value = "/admin/security/secRole/authorize", method = RequestMethod.POST)
     @ResponseBody
-    public XSServiceResult adminAuthorize(SecRole secRole, Long[] resourceIds) throws XSBusinessException {
+    public XSServiceResult adminAuthorize(SecRole secRole, Long[] resourceIds, HttpServletRequest request)
+            throws XSBusinessException {
         List<SecResource> resourceList = new ArrayList<>();
         for (Long item : resourceIds) {
             resourceList.add(new SecResource(item));
         }
         secRole.setResourceList(resourceList);
-        SecStaff secStaff = new SecStaff();
-        secStaff.setId(1L);
+        SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession()
+                .getAttribute("SPRING_SECURITY_CONTEXT");
+        SecStaff secStaff = (SecStaff) securityContextImpl.getAuthentication().getPrincipal();
         secRoleService.authorizeResource(secRole, secStaff);
         return XSServiceResult.build();
     }
