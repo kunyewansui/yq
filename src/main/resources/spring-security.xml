@@ -17,7 +17,7 @@
         </security:session-management>
         <security:custom-filter ref="securityInterceptorFilter" after="FILTER_SECURITY_INTERCEPTOR"/>
     </security:http>
-    <bean id="securityInterceptorFilter" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+    <bean id="securityInterceptorFilter" class="com.xiaosuokeji.server.manager.security.SecurityInterceptorFilter">
         <property name="authenticationManager" ref="authenticationManager"/>
         <property name="accessDecisionManager" ref="accessDecisionManager"/>
         <property name="securityMetadataSource" ref="securityMetadataSource"/>

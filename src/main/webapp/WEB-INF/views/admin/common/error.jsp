@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: gustinlau
@@ -48,7 +49,14 @@
         }
     }
     function goback() {
-        window.history.back();
+        <c:choose>
+            <c:when test="${code == 403}">
+                window.location.href = "<%=request.getContextPath()%>/admin/login";
+            </c:when>
+            <c:otherwise>
+                window.history.back();
+            </c:otherwise>
+        </c:choose>
     }
 </script>
 </body>

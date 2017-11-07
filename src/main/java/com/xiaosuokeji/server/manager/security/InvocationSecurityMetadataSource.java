@@ -3,6 +3,9 @@ package com.xiaosuokeji.server.manager.security;
 import com.xiaosuokeji.server.model.security.SecResource;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.service.intf.security.SecResourceService;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -20,6 +23,8 @@ import java.util.List;
  */
 @Service("securityMetadataSource")
 public class InvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
+
+    private static final Logger logger = LoggerFactory.getLogger(InvocationSecurityMetadataSource.class);
 
     @Autowired
     private SecResourceService secResourceService;
@@ -47,9 +52,12 @@ public class InvocationSecurityMetadataSource implements FilterInvocationSecurit
             url = url.substring(0, firstEndSlashIndex);
         }
         Collection<ConfigAttribute> attributes = new ArrayList<>();
-        List<SecRole> roleList = secResourceService.listRoleByRequest(new SecResource(url, method));
+        List<SecRole> roleList = secResourceService.listRoleByRequest(new SecResource(url, StringUtils.lowerCase(method)));
         for (SecRole role : roleList) {
             attributes.add(new SecurityConfig("ROLE_" + role.getName()));
+        }
+        if (attributes.size() == 0) {
+            logger.debug("请求{}没有被SpringSecurity控制起来，如需权限控制请在管理后台添加相应的系统资源", url + "(" + method + ")");
         }
         return attributes;
     }
