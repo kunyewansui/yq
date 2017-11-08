@@ -47,6 +47,12 @@
                             <span>员工管理</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="<%=request.getContextPath()%>/admin/system/systemConfig">
+                            <i class="fa fa-empire"></i>
+                            <span>配置管理</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>

@@ -24,9 +24,9 @@ public class SystemConfigServiceImpl implements SystemConfigService {
 
     @Override
     public void save(SystemConfig systemConfig) throws XSBusinessException {
-        SystemConfig existent = new SystemConfig();
-        existent.setKey(systemConfig.getKey());
-        Long count = systemConfigDao.count(existent);
+        SystemConfig criteria = new SystemConfig();
+        criteria.setKey(systemConfig.getKey());
+        Long count = systemConfigDao.count(criteria);
         if (count.compareTo(0L) > 0) {
             throw new XSBusinessException(SystemConfigConsts.SYSTEM_CONFIG_EXIST);
         }
@@ -42,13 +42,13 @@ public class SystemConfigServiceImpl implements SystemConfigService {
 
     @Override
     public void update(SystemConfig systemConfig) throws XSBusinessException {
-        get(systemConfig);
+        SystemConfig existent = get(systemConfig);
         if (systemConfig.getKey() != null) {
-            SystemConfig existent = new SystemConfig();
-            existent.setKey(systemConfig.getKey());
-            List<SystemConfig> existents = systemConfigDao.list(existent);
+            SystemConfig criteria = new SystemConfig();
+            criteria.setKey(systemConfig.getKey());
+            List<SystemConfig> existents = systemConfigDao.list(criteria);
             if (existents.size() > 0) {
-                boolean isSelf = existents.get(0).getId().equals(systemConfig.getId());
+                boolean isSelf = existents.get(0).getId().equals(existent.getId());
                 if (!isSelf) {
                     throw new XSBusinessException(SystemConfigConsts.SYSTEM_CONFIG_EXIST);
                 }
