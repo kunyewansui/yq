@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="xs" uri="http://code.xiaosuokeji.com/tags/jsp/xs" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: gustinlau
@@ -74,7 +75,8 @@
                                 <td>${item.mobile}</td>
                                 <td>${item.title}</td>
                                 <td>${item.content}</td>
-                                <td>${item.createTime}</td>
+                                <td> <fmt:formatDate pattern="yyyy-MM-dd"
+                                                     value="${item.createTime}"/></td>
                                 <td>
                                     <a href="#" class="btn btn-danger btn-xs"
                                        onclick="deleteListItem('${item.id}');return false">
