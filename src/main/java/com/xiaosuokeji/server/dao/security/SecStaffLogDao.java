@@ -19,12 +19,5 @@ public interface SecStaffLogDao {
 
     List<SecStaffLog> list(SecStaffLog secStaffLog);
 
-    /**
-     * 获取指定请求的资源列表
-     * @param secResource 参数url，method
-     * @return 资源列表
-     */
-    List<SecResource> listResourceByRequest(SecResource secResource);
-
     Long count(SecStaffLog secStaffLog);
 }

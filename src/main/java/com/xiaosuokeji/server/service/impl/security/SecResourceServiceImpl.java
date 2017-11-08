@@ -1,5 +1,7 @@
 package com.xiaosuokeji.server.service.impl.security;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.framework.util.XSTreeUtil;
@@ -8,14 +10,18 @@ import com.xiaosuokeji.server.dao.security.SecResourceDao;
 import com.xiaosuokeji.server.model.security.SecResource;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.service.intf.security.SecResourceService;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.PostConstruct;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 系统资源ServiceImpl
@@ -24,8 +30,18 @@ import java.util.Map;
 @Service
 public class SecResourceServiceImpl implements SecResourceService {
 
+    private static final Logger logger = LoggerFactory.getLogger(SecResourceServiceImpl.class);
+
     @Autowired
     private SecResourceDao secResourceDao;
+
+    private Cache<String, Map<String, Map<String, SecResource>>> cache = null;
+
+    @PostConstruct
+    public void init() throws Exception {
+        cache = CacheBuilder.newBuilder().expireAfterAccess(1800L, TimeUnit.SECONDS).maximumSize(1).build();
+        mapAll();
+    }
 
     @Override
     @Transactional
@@ -53,6 +69,7 @@ public class SecResourceServiceImpl implements SecResourceService {
         }
         secResourceDao.save(secResource);
         secResourceDao.saveSuperiorRes(secResource);
+        cache.invalidateAll();
     }
 
     @Override
@@ -72,6 +89,7 @@ public class SecResourceServiceImpl implements SecResourceService {
         }
         secResourceDao.removeSuperiorRes(existent);
         secResourceDao.remove(existent);
+        cache.invalidateAll();
     }
 
     @Override
@@ -95,6 +113,7 @@ public class SecResourceServiceImpl implements SecResourceService {
             secResource.setMethod("");
         }
         secResourceDao.update(secResource);
+        cache.invalidateAll();
         if (secResource.getAssign() != null) {
             List<SecResource> list = secResourceDao.listCombo(new SecResource());
             Map<Long, SecResource> map = XSTreeUtil.buildTree(list);
@@ -123,6 +142,18 @@ public class SecResourceServiceImpl implements SecResourceService {
     }
 
     @Override
+    public SecResource getByRequest(SecResource secResource) throws Exception {
+        Map<String, SecResource> map = mapAll().get("request");
+        return map.get(secResource.getUrl() + "_" + StringUtils.lowerCase(secResource.getMethod()));
+    }
+
+    @Override
+    public SecResource getByKey(SecResource secResource) throws Exception {
+        Map<String, SecResource> map = mapAll().get("key");
+        return map.get(secResource.getKey());
+    }
+
+    @Override
     public XSPageModel listAndCount(SecResource secResource) {
         secResource.setDefaultSort(new String[]{"type", "seq"}, new String[]{"ASC", "DESC"});
         return XSPageModel.build(secResourceDao.list(secResource), secResourceDao.count(secResource));
@@ -144,14 +175,34 @@ public class SecResourceServiceImpl implements SecResourceService {
     }
 
     @Override
-    public List<SecRole> listRoleByRequest(SecResource secResource) {
-        List<SecResource> resourceList = secResourceDao.listByRequest(secResource);
-        if (resourceList.size() > 0) {
-            SecResource criteria = new SecResource();
-            criteria.setList(resourceList);
-            List<SecRole> roleList = secResourceDao.listRole(criteria);
-            return roleList;
-        }
-        return new ArrayList<>();
+    public void invalidateCache() {
+        cache.invalidateAll();
+    }
+
+    private Map<String, Map<String, SecResource>> mapAll() throws Exception {
+        Map<String, Map<String, SecResource>> map = cache.get("cache", new Callable<Map<String, Map<String, SecResource>>>() {
+            @Override
+            public Map<String, Map<String, SecResource>> call() {
+                logger.debug("Guava缓存未命中，从数据库中获取所有资源");
+                List<SecResource> resourceList = secResourceDao.listAll();
+                Map<String, Map<String, SecResource>> result = new HashMap<>();
+                //构造以key为键的映射
+                Map<String, SecResource> keyMap = new HashMap<>();
+                for (SecResource item : resourceList) {
+                    keyMap.put(item.getKey(), item);
+                }
+                result.put("key", keyMap);
+                //构造以url和method为键的映射
+                Map<String, SecResource> requestMap = new HashMap<>();
+                for (SecResource item : resourceList) {
+                    if (item.getType().equals(2)) {
+                        requestMap.put(item.getUrl() + "_" + StringUtils.lowerCase(item.getMethod()), item);
+                    }
+                }
+                result.put("request", requestMap);
+                return result;
+            }
+        });
+        return map;
     }
 }

@@ -97,6 +97,11 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
      */
     private List<SecResource> list;
 
+    /**
+     * 角色列表
+     */
+    private List<SecRole> roleList;
+
     public interface Save {}
 
     public interface Update {}
@@ -105,6 +110,10 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
 
     public SecResource(Long id) {
         this.id = id;
+    }
+
+    public SecResource(String key) {
+        this.key = key;
     }
 
     public SecResource(String url, String method) {
@@ -244,5 +253,13 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
 
     public void setList(List<SecResource> list) {
         this.list = list;
+    }
+
+    public List<SecRole> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<SecRole> roleList) {
+        this.roleList = roleList;
     }
 }

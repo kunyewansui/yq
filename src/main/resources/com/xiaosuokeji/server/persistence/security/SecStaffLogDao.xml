@@ -51,12 +51,6 @@
         <include refid="XSBaseMapper.limit"/>
     </select>
 
-    <select id="listResourceByRequest" parameterType="secResource" resultType="secResource">
-        SELECT *
-        FROM shuttle_common.sc_security_resource
-        WHERE url=#{url} AND method=#{method} AND `type`=2
-    </select>
-
     <select id="count" parameterType="secStaffLog" resultType="long">
         SELECT COUNT(*)
         <include refid="listCondition"/>

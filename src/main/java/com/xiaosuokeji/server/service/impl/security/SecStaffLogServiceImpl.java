@@ -10,13 +10,14 @@ import com.xiaosuokeji.server.dao.security.SecStaffLogDao;
 import com.xiaosuokeji.server.model.security.SecResource;
 import com.xiaosuokeji.server.model.security.SecStaff;
 import com.xiaosuokeji.server.model.security.SecStaffLog;
+import com.xiaosuokeji.server.service.intf.security.SecResourceService;
 import com.xiaosuokeji.server.service.intf.security.SecStaffLogService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * 系统用户日志ServiceImpl
@@ -25,8 +26,13 @@ import java.util.List;
 @Service
 public class SecStaffLogServiceImpl implements SecStaffLogService {
 
+    private static final Logger logger = LoggerFactory.getLogger(SecStaffLogServiceImpl.class);
+
     @Autowired
     private SecStaffLogDao secStaffLogDao;
+
+    @Autowired
+    private SecResourceService secResourceService;
 
     @Override
     public void save(SecStaffLog secStaffLog) {
@@ -57,34 +63,29 @@ public class SecStaffLogServiceImpl implements SecStaffLogService {
     @Override
     public void handle(XSLogger xsLogger) {
         if (xsLogger.getRequestUrl().contains("admin")) {
-            SecResource criteria = new SecResource();
-            criteria.setUrl(xsLogger.getRequestUrl());
-            criteria.setMethod(xsLogger.getRequestMethod());
-            List<SecResource> list = secStaffLogDao.listResourceByRequest(criteria);
-            boolean doLog = false;
-            if (list.size() > 0) {
-                for (SecResource item : list) {
-                    if (item.getLog().equals(1)) {
-                        doLog = true;
-                        break;
+            try {
+                SecResource criteria = new SecResource();
+                criteria.setUrl(xsLogger.getRequestUrl());
+                criteria.setMethod(xsLogger.getRequestMethod());
+                SecResource resource = secResourceService.getByRequest(criteria);
+                if (resource != null && resource.getLog().equals(1)) {
+                    SecStaffLog latest = new SecStaffLog();
+                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                    if (authentication != null) {
+                        latest.setStaff((SecStaff) authentication.getPrincipal());
                     }
+                    latest.setIp(xsLogger.getRequestIp());
+                    latest.setTime(xsLogger.getRequestTime());
+                    latest.setOperation(resource.getDesc());
+                    latest.setStatus(xsLogger.getStatus() ? 1 : 0);
+                    try {
+                        latest.setParameters(XSJackson.toJsonString(xsLogger.getParameters()));
+                    } catch (JsonProcessingException e) {}
+                    latest.setResult(xsLogger.getResult());
+                    save(latest);
                 }
-            }
-            if (doLog) {
-                SecStaffLog latest = new SecStaffLog();
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                if (authentication != null) {
-                    latest.setStaff((SecStaff) authentication.getPrincipal());
-                }
-                latest.setIp(xsLogger.getRequestIp());
-                latest.setTime(xsLogger.getRequestTime());
-                latest.setOperation(list.get(0).getDesc());
-                latest.setStatus(xsLogger.getStatus() ? 1 : 0);
-                try {
-                    latest.setParameters(XSJackson.toJsonString(xsLogger.getParameters()));
-                } catch (JsonProcessingException e) {}
-                latest.setResult(xsLogger.getResult());
-                save(latest);
+            } catch (Exception e) {
+                logger.error("error : ", e);
             }
         }
     }

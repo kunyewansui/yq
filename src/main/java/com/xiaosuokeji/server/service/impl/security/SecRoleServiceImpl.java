@@ -8,6 +8,7 @@ import com.xiaosuokeji.server.dao.security.SecRoleDao;
 import com.xiaosuokeji.server.model.security.SecResource;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.model.security.SecStaff;
+import com.xiaosuokeji.server.service.intf.security.SecResourceService;
 import com.xiaosuokeji.server.service.intf.security.SecRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,9 @@ public class SecRoleServiceImpl implements SecRoleService {
 
     @Autowired
     private SecRoleDao secRoleDao;
+
+    @Autowired
+    private SecResourceService secResourceService;
 
     @Override
     public void save(SecRole secRole) throws XSBusinessException {
@@ -55,6 +59,7 @@ public class SecRoleServiceImpl implements SecRoleService {
         }
         secRoleDao.removeRoleRes(existent);
         secRoleDao.remove(existent);
+        secResourceService.invalidateCache();
     }
 
     @Override
@@ -72,6 +77,7 @@ public class SecRoleServiceImpl implements SecRoleService {
             }
         }
         secRoleDao.update(secRole);
+        secResourceService.invalidateCache();
     }
 
     @Override
@@ -157,5 +163,6 @@ public class SecRoleServiceImpl implements SecRoleService {
         if (secRole.getResourceList().size() > 0) {
             secRoleDao.saveRoleRes(secRole);
         }
+        secResourceService.invalidateCache();
     }
 }

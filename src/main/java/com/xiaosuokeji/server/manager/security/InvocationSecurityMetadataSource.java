@@ -52,9 +52,16 @@ public class InvocationSecurityMetadataSource implements FilterInvocationSecurit
             url = url.substring(0, firstEndSlashIndex);
         }
         Collection<ConfigAttribute> attributes = new ArrayList<>();
-        List<SecRole> roleList = secResourceService.listRoleByRequest(new SecResource(url, StringUtils.lowerCase(method)));
-        for (SecRole role : roleList) {
-            attributes.add(new SecurityConfig("ROLE_" + role.getName()));
+        try {
+            SecResource secResource = secResourceService.getByRequest(new SecResource(url, method));
+            if (secResource != null) {
+                List<SecRole> roleList = secResource.getRoleList();
+                for (SecRole role : roleList) {
+                    attributes.add(new SecurityConfig("ROLE_" + role.getName()));
+                }
+            }
+        } catch (Exception e) {
+            logger.error("error : ", e);
         }
         if (attributes.size() == 0) {
             logger.debug("请求{}没有被SpringSecurity控制起来，如需权限控制请在管理后台添加相应的系统资源", url + "(" + method + ")");

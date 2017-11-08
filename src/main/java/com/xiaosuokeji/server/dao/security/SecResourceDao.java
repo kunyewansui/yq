@@ -40,18 +40,10 @@ public interface SecResourceDao {
     List<SecResource> listCombo(SecResource secResource);
 
     /**
-     * 获取指定请求的资源列表
-     * @param secResource 参数url，method
+     * 获取所有资源和其所属的角色列表
      * @return 资源列表
      */
-    List<SecResource> listByRequest(SecResource secResource);
-
-    /**
-     * 获取拥有指定多个资源的角色列表
-     * @param secResource 参数list
-     * @return 角色列表
-     */
-    List<SecRole> listRole(SecResource secResource);
+    List<SecResource> listAll();
 
     Long count(SecResource secResource);
 
