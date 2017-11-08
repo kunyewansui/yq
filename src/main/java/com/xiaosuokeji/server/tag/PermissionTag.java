@@ -2,15 +2,11 @@ package com.xiaosuokeji.server.tag;
 
 import com.xiaosuokeji.framework.spring.XSSpringContext;
 import com.xiaosuokeji.server.model.security.SecResource;
-import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.service.intf.security.SecResourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
-import java.io.IOException;
 
 /**
  * 获取指定资源所需的权限

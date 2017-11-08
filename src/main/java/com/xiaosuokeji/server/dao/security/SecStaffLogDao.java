@@ -1,6 +1,5 @@
 package com.xiaosuokeji.server.dao.security;
 
-import com.xiaosuokeji.server.model.security.SecResource;
 import com.xiaosuokeji.server.model.security.SecStaffLog;
 
 import java.util.List;
