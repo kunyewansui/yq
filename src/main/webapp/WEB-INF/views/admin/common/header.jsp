@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="xs" uri="http://code.xiaosuokeji.com/tags/jsp/xs" %>
 <div class="app-header-fixed ">
 <div class="app-header navbar">
     <div class="navbar-header bg-black" style="max-height: 50px;height:50px;">
@@ -23,15 +24,21 @@
     </div>
     <div class="collapse pos-rlt navbar-collapse box-shadow bg-white-only">
         <div id="t_nav" class="nav navbar-nav">
+                <sec:authorize access="hasAnyRole(${xs:getPermissions('content')})">
                 <a href="<%=request.getContextPath()%>/admin/content" class="btn no-shadow navbar-btn">
                     图文
                 </a>
+                </sec:authorize>
+                <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing')})">
                 <a href="<%=request.getContextPath()%>/admin/marketing" class="btn no-shadow navbar-btn">
                     营销
                 </a>
+                </sec:authorize>
+                <sec:authorize access="hasAnyRole(${xs:getPermissions('system')})">
                 <a href="<%=request.getContextPath()%>/admin/system" class="btn no-shadow navbar-btn">
                     系统
                 </a>
+                </sec:authorize>
         </div>
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">

@@ -81,15 +81,19 @@
                                 <td><xs:dictDesc key="feedbackStatus" value="${item.status}"/></td>
                                 <td>
                                     <c:if test="${item.status eq 0}">
+                                        <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback_solve')})">
                                         <a href="#" class="btn btn-success btn-xs"
                                            onclick="simpleUpdateListItem('${item.id}');return false">
                                             解决
                                         </a>
+                                        </sec:authorize>
                                     </c:if>
+                                    <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback_delete')})">
                                     <a href="#" class="btn btn-danger btn-xs"
                                        onclick="deleteListItem('${item.id}');return false">
                                         删除
                                     </a>
+                                    </sec:authorize>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -101,6 +105,7 @@
         </div>
     </div>
 </div>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback_solve')})">
 <script>
     function simpleUpdateListItem(id) {
         doPost("<%=request.getContextPath()%>/admin/marketing/feedback/solve",{id:id},function (data) {
@@ -113,7 +118,9 @@
         })
     }
 </script>
+</sec:authorize>
 
+<sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback_delete')})">
 <%@include file="../common/deleteConfirm.jsp" %>
 <script>
     function deleteListItem(id) {
@@ -131,5 +138,6 @@
         })
     }
 </script>
+</sec:authorize>
 </body>
 </html>

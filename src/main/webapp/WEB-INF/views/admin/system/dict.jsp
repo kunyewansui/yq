@@ -100,7 +100,7 @@
                                     </c:if>
                                     </sec:authorize>
                                     <sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict_update')})">
-                                    <a href="<%=request.getContextPath()%>/admin/system/dict/get?id=${item.id}"
+                                    <a href="<%=request.getContextPath()%>/admin/system/dict/get?id=${item.id}&backUrl=${sessionScope.redirectURL}"
                                        class="btn btn-info btn-xs">
                                         编辑
                                     </a>

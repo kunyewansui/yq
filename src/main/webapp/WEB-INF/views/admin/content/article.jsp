@@ -96,8 +96,10 @@
                     </div>
                     <div class="form-group m-t-n-md">
                         <div class="col-xs-12">
+                            <sec:authorize access="hasAnyRole(${xs:getPermissions('content_article_create')})">
                             <a href="<%=request.getContextPath()%>/admin/content/article/article/create"
                                class="btn btn-success pull-left">新增</a>
+                            </sec:authorize>
                             <input class="btn btn-info pull-right" value="搜索" type="submit">
                             <input class="btn btn-default pull-right  m-r-sm" value="重置" type="button"
                                    onclick="$('#searchForm').xsClean()">
@@ -128,6 +130,7 @@
                                 <td>${item.seq}</td>
                                 <td><xs:dictDesc key="articleDisplay" value="${item.display}"/></td>
                                 <td>
+                                    <sec:authorize access="hasAnyRole(${xs:getPermissions('content_article_update')})">
                                     <c:if test="${item.display eq 0}">
                                         <button class="btn btn-success btn-xs"
                                                 onclick="simpleUpdateListItem('${item.id}',1)">
@@ -144,10 +147,13 @@
                                        class="btn btn-info btn-xs">
                                         编辑
                                     </a>
+                                    </sec:authorize>
+                                    <sec:authorize access="hasAnyRole(${xs:getPermissions('content_article_delete')})">
                                     <button class="btn btn-danger btn-xs"
                                             onclick="deleteListItem('${item.id}')">
                                         删除
                                     </button>
+                                    </sec:authorize>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -186,6 +192,7 @@
         $("#tree").treeview('selectNode', '${search.category.id}');
     });
 
+    <sec:authorize access="hasAnyRole(${xs:getPermissions('content_article_update')})">
     function simpleUpdateListItem(id, status) {
         doPost('<%=request.getContextPath()%>/admin/content/article/article/update',
             {
@@ -199,7 +206,8 @@
                 }
             });
     }
-
+    </sec:authorize>
+    <sec:authorize access="hasAnyRole(${xs:getPermissions('content_article_delete')})">
     function deleteListItem(id) {
         showDeleteModel(null, function () {
             doPost("<%=request.getContextPath()%>/admin/content/article/article/remove", {id: id}, function (data) {
@@ -214,6 +222,7 @@
             })
         })
     }
+    </sec:authorize>
 </script>
 </body>
 </html>

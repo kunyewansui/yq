@@ -4,6 +4,7 @@ import com.xiaosuokeji.framework.annotation.XSExceptionHandler;
 import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
+import com.xiaosuokeji.server.annotation.SaveURL;
 import com.xiaosuokeji.server.model.system.Dict;
 import com.xiaosuokeji.server.model.system.DictData;
 import com.xiaosuokeji.server.service.intf.system.DictDataService;
@@ -35,6 +36,7 @@ public class DictController {
 
     //region Admin
     @RequestMapping(value = "/admin/system/dict", method = RequestMethod.GET)
+    @SaveURL
     public String index(Model model, Dict dict) {
         if(dict.getPage() == null) dict.setPage(1L);
         model.addAttribute("search", dict);
@@ -43,8 +45,8 @@ public class DictController {
     }
 
     @RequestMapping(value = "/admin/system/dict/get", method = RequestMethod.GET)
-    public String adminGet(Model model, HttpServletRequest request, Dict dict) throws XSBusinessException {
-        model.addAttribute("backUrl", request.getHeader("Referer"));
+    public String adminGet(Model model, HttpServletRequest request, Dict dict, String backUrl) throws XSBusinessException {
+        model.addAttribute("backUrl", backUrl);
         try {
             model.addAttribute("dict", dictService.get(dict));
         } catch (XSBusinessException e) {
