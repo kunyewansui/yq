@@ -60,6 +60,7 @@
                             <th>标题</th>
                             <th>内容</th>
                             <th>反馈时间</th>
+                            <th>状态</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -77,7 +78,14 @@
                                 <td>${item.content}</td>
                                 <td><fmt:formatDate pattern="yyyy-MM-dd"
                                                      value="${item.createTime}"/></td>
+                                <td><xs:dictDesc key="feedbackStatus" value="${item.status}"/></td>
                                 <td>
+                                    <c:if test="${item.status eq 0}">
+                                        <a href="#" class="btn btn-success btn-xs"
+                                           onclick="simpleUpdateListItem('${item.id}');return false">
+                                            解决
+                                        </a>
+                                    </c:if>
                                     <a href="#" class="btn btn-danger btn-xs"
                                        onclick="deleteListItem('${item.id}');return false">
                                         删除
@@ -93,7 +101,18 @@
         </div>
     </div>
 </div>
-
+<script>
+    function simpleUpdateListItem(id) {
+        doPost("<%=request.getContextPath()%>/admin/marketing/feedback/solve",{id:id},function (data) {
+            if(data.status){
+                alert("标记成功");
+                window.location.reload(true);
+            }else{
+                alert(data.msg);
+            }
+        })
+    }
+</script>
 
 <%@include file="../common/deleteConfirm.jsp" %>
 <script>

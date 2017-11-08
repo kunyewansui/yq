@@ -36,6 +36,11 @@ public class Feedback extends XSGenericModel {
     @Length( max = 500, message = "内容长度最多500个字符", groups = Save.class)
     private String content;
 
+    /**
+     * 是否解决 1 是 0：否
+     */
+    private Integer status;
+
     public interface Save {
     }
 
@@ -77,5 +82,13 @@ public class Feedback extends XSGenericModel {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

@@ -38,4 +38,11 @@ public class FeedbackController {
         return XSServiceResult.build();
     }
 
+    @RequestMapping(value = "/admin/marketing/feedback/solve", method = RequestMethod.POST)
+    @ResponseBody
+    public XSServiceResult adminSolve(Feedback feedback)throws XSBusinessException{
+        feedbackService.solve(feedback);
+        return XSServiceResult.build();
+    }
+
 }

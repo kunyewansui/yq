@@ -16,4 +16,6 @@ public interface FeedbackService {
     Feedback get(Feedback feedback) throws XSBusinessException;
 
     XSPageModel<Feedback> listAndCount(Feedback feedback);
+
+    void solve(Feedback feedback) throws XSBusinessException;
 }

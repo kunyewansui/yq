@@ -5,8 +5,8 @@
 <mapper namespace="com.xiaosuokeji.server.dao.marketing.FeedbackDao">
 
     <insert id="save" parameterType="feedback">
-        INSERT INTO shuttle_common.sc_feedback(id,`name`,`mobile`,`title`,`content`)
-        VALUES (#{id},#{name},#{mobile},#{title},#{content})
+        INSERT INTO shuttle_common.sc_feedback(id,`name`,`mobile`,`title`,`content`,`status`)
+        VALUES (#{id},#{name},#{mobile},#{title},#{content},0)
     </insert>
 
     <delete id="remove" parameterType="feedback">
@@ -19,6 +19,11 @@
         FROM shuttle_common.sc_feedback
         WHERE id=#{id}
     </select>
+
+    <update id="update" parameterType="feedback">
+        UPDATE shuttle_common.sc_feedback SET `status`=1,update_time=NOW()
+        WHERE id=#{id}
+    </update>
 
     <sql id="listCondition">
         FROM shuttle_common.sc_feedback

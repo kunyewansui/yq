@@ -19,4 +19,6 @@ public interface FeedbackDao {
     List<Feedback> list(Feedback feedback);
 
     Long count(Feedback feedback);
+
+    int update(Feedback feedback);
 }

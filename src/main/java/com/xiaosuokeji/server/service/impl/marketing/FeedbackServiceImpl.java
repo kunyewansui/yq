@@ -44,4 +44,10 @@ public class FeedbackServiceImpl implements FeedbackService {
         feedback.setDefaultSort("create_time", "DESC");
         return XSPageModel.build(feedbackDao.list(feedback), feedbackDao.count(feedback));
     }
+
+    @Override
+    public void solve(Feedback feedback) throws XSBusinessException {
+        Feedback existent = get(feedback);
+        feedbackDao.update(existent);
+    }
 }
