@@ -100,6 +100,7 @@ public class ImageUploaderTag extends TagSupport {
                 "            }, function (res) {\n" +
                 "                alert(\"请求失败：\" + res.statusText + \"\\n错误码：\" + res.status);\n" +
                 "                lock_{{id}} = false;\n" +
+                "                updatePreviewDiv_{{id}}();\n" +
                 "            });\n" +
                 "            $input_{{id}}.val(\"\");\n" +
                 "        }\n" +
@@ -107,6 +108,7 @@ public class ImageUploaderTag extends TagSupport {
                 "\n" +
                 "    function deleteUpload_{{id}}(index) {\n" +
                 "        images_{{id}}.splice(index, 1);\n" +
+                "        $url_{{id}}.val(\"\");\n;" +
                 "        updatePreviewDiv_{{id}}();\n" +
                 "    }\n" +
                 "</script>";

@@ -5,9 +5,9 @@
 <mapper namespace="com.xiaosuokeji.server.dao.article.ArticleCategoryDao">
 
     <insert id="save" parameterType="articleCategory">
-        INSERT INTO shuttle_common.sc_article_category(id,`key`,`name`,prefix,icon,<if test="parent!=null">pid,</if>seq,
+        INSERT INTO shuttle_common.sc_article_category(id,`key`,`name`,prefix,icon,<if test="parent!=null and parent.id!=null and parent.id!=''">pid,</if>seq,
         display,`lock`)
-        VALUES (#{id},#{key},#{name},#{prefix},#{icon},<if test="parent!=null">#{parent.id},</if>#{seq},
+        VALUES (#{id},#{key},#{name},#{prefix},#{icon},<if test="parent!=null and parent.id!=null and parent.id!=''">#{parent.id},</if>#{seq},
         #{display},#{lock})
         ON DUPLICATE KEY UPDATE
         `name`=#{name},
@@ -40,8 +40,11 @@
             <if test="icon!=null">
                 ,icon=#{icon}
             </if>
-            <if test="parent!=null">
+            <if test="parent!=null and parent.id!=null and parent.id!=''">
                 ,pid=#{parent.id}
+            </if>
+            <if test="parent==null or parent.id==null or parent.id==''">
+                ,pid=NULL
             </if>
             <if test="seq!=null">
                 ,seq=#{seq}

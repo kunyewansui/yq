@@ -128,6 +128,34 @@
     </div>
 </div>
 
+<script>
+  function uploadApk(type) {
+      var formData=new FormData();
+      formData.append("folders","apk");
+      if(type==0){
+          formData.append("files",$("#create_file").get(0).files[0]);
+          uploadFile("<%=request.getContextPath()%>/admin/common/api/file/upload",formData,function (data) {
+              if(data.status){
+                  alert("上传成功");
+                  $("#create_url").val(data.data[0]);
+              }else{
+                  alert(data.msg);
+              }
+          });
+      }else{
+          formData.append("files",$("#update_file").get(0).files[0]);
+          uploadFile("<%=request.getContextPath()%>/admin/common/api/file/upload",formData,function (data) {
+              if(data.status){
+                  alert("上传成功");
+                  $("#update_url").val(data.data[0]);
+              }else{
+                  alert(data.msg);
+              }
+          });
+      }
+  }
+</script>
+
 <div class="modal fade" id="createModel" data-backdrop="static" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -169,8 +197,12 @@
                         <div class="col-xs-3 text-right">
                             <label class="control-label required">URL：</label>
                         </div>
-                        <div class="col-xs-9">
-                            <input name="url" type="text" class="form-control">
+                        <div class="col-xs-6">
+                            <input id="create_url" name="url" type="text" class="form-control">
+                        </div>
+                        <div class="col-xs-3">
+                            <a href="#" onclick="$('#create_file').click();return false;" class="btn btn-success">上传</a>
+                            <input id="create_file" type="file" style="display: none" onchange="uploadApk(0)">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -188,7 +220,7 @@
                             <label class="control-label required">描述：</label>
                         </div>
                         <div class="col-xs-9">
-                            <input name="desc" maxlength="255" type="text" class="form-control">
+                            <textarea style="height: 200px;resize: none;" name="desc" maxlength="255" type="text" class="form-control"></textarea>
                         </div>
                     </div>
 
@@ -323,8 +355,12 @@
                         <div class="col-xs-3 text-right">
                             <label class="control-label required">URL：</label>
                         </div>
-                        <div class="col-xs-9">
-                            <input name="url" type="text" class="form-control">
+                        <div class="col-xs-6">
+                            <input id="update_url" name="url" type="text" class="form-control">
+                        </div>
+                        <div class="col-xs-3">
+                            <a href="#" onclick="$('#update_file').click();return false;" class="btn btn-success">上传</a>
+                            <input id="update_file" type="file" style="display: none" onchange="uploadApk(1)">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -342,7 +378,7 @@
                             <label class="control-label required">描述：</label>
                         </div>
                         <div class="col-xs-9">
-                            <input name="desc" maxlength="255" type="text" class="form-control">
+                            <textarea style="height: 200px;resize: none;" name="desc" maxlength="255" type="text" class="form-control"></textarea>
                         </div>
                     </div>
 
@@ -455,7 +491,10 @@
                 }
             });
     }
+
 </script>
+
+
 
 
 <%@include file="../common/deleteConfirm.jsp" %>

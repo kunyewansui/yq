@@ -56,10 +56,10 @@
             <if test="code!=null and code!=''">
                 AND `code`=#{code}
             </if>
-            <if test="platform!=null and platform!=''">
+            <if test="platform!=null">
                 AND `platform`=#{platform}
             </if>
-            <if test="status!=null and status!=''">
+            <if test="status!=null">
                 AND `status`=#{status}
             </if>
             <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
