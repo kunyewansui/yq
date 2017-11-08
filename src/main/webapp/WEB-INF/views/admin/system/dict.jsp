@@ -70,6 +70,7 @@
                             <th>名称</th>
                             <th>键</th>
                             <th>锁定</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -84,6 +85,7 @@
                                 <td>${item.key}</td>
                                 <td><xs:dictDesc key="dictLock" value="${item.lock}"/></td>
                                 <td>
+                                    <sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict_lock')})">
                                     <c:if test="${item.lock eq 0}">
                                         <a href="#" class="btn btn-success btn-xs"
                                            onclick="simpleUpdateListItem('${item.id}',1);return false">
@@ -96,14 +98,19 @@
                                             解锁
                                         </a>
                                     </c:if>
+                                    </sec:authorize>
+                                    <sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict_update')})">
                                     <a href="<%=request.getContextPath()%>/admin/system/dict/get?id=${item.id}"
                                        class="btn btn-info btn-xs">
                                         编辑
                                     </a>
+                                    </sec:authorize>
+                                    <sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict_delete')})">
                                     <a href="#" class="btn btn-danger btn-xs"
                                        onclick="deleteListItem('${item.id}');return false">
                                         删除
                                     </a>
+                                    </sec:authorize>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -116,6 +123,7 @@
     </div>
 </div>
 
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict_create')})">
 <div class="modal fade" id="createModel" data-backdrop="static" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -223,113 +231,10 @@
         })
     });
 </script>
+</sec:authorize>
 
-<div class="modal fade" id="updateModel" data-backdrop="static" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">编辑</h4>
-            </div>
-            <form name="updateForm" class="form-horizontal" style="max-width: 800px">
-                <div class="modal-body">
-                    <input type="hidden" name="id">
-                    <div class="form-group row">
-                        <div class="col-xs-3 text-right">
-                            <label class="control-label required">名称：</label>
-                        </div>
-                        <div class="col-xs-9">
-                            <input name="name" type="text" maxlength="255" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-xs-3 text-right">
-                            <label class="control-label required">键：</label>
-                        </div>
-                        <div class="col-xs-9">
-                            <input name="key" type="text" maxlength="191" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button id="updateSubmit" type="submit" class="btn btn-success">确定</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict_lock')})">
 <script>
-    var $updateForm = $("form[name=updateForm]");
-    var $updateSubmit = $("#updateSubmit");
-    var updateValidator = $updateForm.validate({
-        rules: {
-            name: {
-                required: true,
-                notEmpty: true,
-                maxlength: 255
-            },
-            key: {
-                required: true,
-                notEmpty: true,
-                maxlength: 191
-            }
-        },
-        messages: {
-            name: {
-                required: "名称不能为空",
-                notEmpty: "名称不能为空",
-                maxlength: "名称最多255个字"
-            },
-            key: {
-                required: "键不能为空",
-                notEmpty: "键不能为空",
-                maxlength: "键最多191个字"
-            }
-        },
-        submitHandler: function () {
-            $updateSubmit.attr("disabled", true);
-            doPost("<%=request.getContextPath()%>/admin/system/dict/update",
-                $updateForm.serialize(),
-                function (data) {
-                    $updateSubmit.attr("disabled", false);
-                    if (data.status) {
-                        $("#updateModel").modal("hide");
-                        setTimeout(function () {
-                            alert("修改成功");
-                            window.location.reload(true);
-                        }, 380);
-
-                    } else {
-                        alert(data.msg);
-                    }
-                }, function (XMLHttpRequest, textStatus) {
-                    $updateSubmit.attr("disabled", false);
-                    alert("请求失败：" + textStatus + "\n错误码：" + XMLHttpRequest.status);
-                });
-        }
-    });
-
-    function updateListItem(id) {
-        doPost("<%=request.getContextPath()%>/admin/system/dict/get", {id: id}, function (data) {
-            if (data.status) {
-                $updateForm.xsSetForm(data.data);
-                $("#updateModel").modal("show");
-            } else {
-                alert(data.msg);
-            }
-        });
-    }
-
-    $(function () {
-        $("#updateModel").on('hide.bs.modal', function () {
-            $updateForm.xsClean();
-            updateValidator.resetForm();
-        })
-    });
-
     function simpleUpdateListItem(id, status) {
         doPost('<%=request.getContextPath()%>/admin/system/dict/lock/update',
             {
@@ -343,8 +248,9 @@
             });
     }
 </script>
+</sec:authorize>
 
-
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict_delete')})">
 <%@include file="../common/deleteConfirm.jsp" %>
 <script>
     function deleteListItem(id) {
@@ -362,5 +268,6 @@
         })
     }
 </script>
+</sec:authorize>
 </body>
 </html>

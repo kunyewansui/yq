@@ -56,11 +56,11 @@
                 </div>
                 <div class="form-group m-t-n-md">
                     <div class="col-xs-12">
-                        <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_create})">--%>
-                            <button class="btn btn-success" type="button" data-toggle="modal" data-target="#create">
-                                新增
-                            </button>
-                        <%--</sec:authorize>--%>
+                        <sec:authorize access="hasAnyRole(${xs:getPermissions('system_organization_create')})">
+                        <button class="btn btn-success" type="button" data-toggle="modal" data-target="#create">
+                            新增
+                        </button>
+                        </sec:authorize>
                         <input class="btn btn-default pull-right" value="重置" type="button" onclick="$('#searchForm').xsClean()">
                         <input class="btn btn-info pull-right m-r-sm" value="搜索" type="submit">
                     </div>
@@ -89,15 +89,15 @@
                             <td>${org.desc}</td>
                             <td><xs:dictDesc key="secOrganizationStatus" value="${org.status}"/></td>
                             <td>
-                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_auth})">--%>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('system_organization_authorize')})">
                                     <button class="btn btn-primary btn-xs" onclick="auth('${org.id}')">授权</button>
-                                <%--</sec:authorize>--%>
-                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_update})">--%>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('system_organization_update')})">
                                     <button class="btn btn-info btn-xs" onclick="edit('${org.id}')">编辑</button>
-                                <%--</sec:authorize>--%>
-                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_delete})">--%>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('system_organization_delete')})">
                                     <button class="btn btn-danger btn-xs" onclick="del('${org.id}')">删除</button>
-                                <%--</sec:authorize>--%>
+                                </sec:authorize>
                             </td>
                         </tr>
                     </c:forEach>
@@ -135,7 +135,7 @@
     }
 
 </script>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_create})">--%>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_organization_create')})">
     <%--新增组织--%>
     <div class="modal fade" id="create" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -252,8 +252,8 @@
         }
 
     </script>
-<%--</sec:authorize>--%>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_update})">--%>
+</sec:authorize>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_organization_update')})">
     <%--编辑组织--%>
     <div class="modal fade" id="edit" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -388,8 +388,8 @@
             $editForm.submit();
         }
     </script>
-<%--</sec:authorize>--%>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_delete})">--%>
+</sec:authorize>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_organization_delete')})">
     <%--删除组织--%>
     <div class="modal fade" id="del" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -427,9 +427,7 @@
             });
         }
     </script>
-<%--</sec:authorize>--%>
-<%--<sec:authorize--%>
-        <%--access="hasAnyRole(${sessionScope.sec_op.system_org_create}) or hasAnyRole(${sessionScope.sec_op.system_org_update}) ">--%>
+</sec:authorize>
     <%--组织树--%>
     <div class="modal fade" id="orgTree" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -473,11 +471,11 @@
             if (treeType === P_TYPE_CREATE) {
                 $("#createPid").val(selectedNode.id);
                 $('#createPName').val(selectedNode.name);
-                $createForm.valid();
+                $createForm.validate().element($("#createPName"));
             } else if (treeType === P_TYPE_EDIT) {
                 $("#editPid").val(selectedNode.id);
                 $('#editPName').val(selectedNode.name);
-                $editForm.valid();
+                $editForm.validate().element($("#editPName"));
             } else {
                 $("#searchPid").val(selectedNode.id);
                 $('#searchPName').val(selectedNode.name);
@@ -490,8 +488,7 @@
             zTreeObj.expandAll(false);
         });
     </script>
-<%--</sec:authorize>--%>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_org_auth})">--%>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_organization_authorize')})">
     <%--组织授权--%>
     <div class="modal fade" id="auth" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -582,7 +579,6 @@
             });
         }
     </script>
-<%--</sec:authorize>--%>
-
+</sec:authorize>
 </body>
 </html>

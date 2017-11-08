@@ -36,6 +36,7 @@ public class DictController {
     //region Admin
     @RequestMapping(value = "/admin/system/dict", method = RequestMethod.GET)
     public String index(Model model, Dict dict) {
+        if(dict.getPage() == null) dict.setPage(1L);
         model.addAttribute("search", dict);
         model.addAttribute("pageModel", dictService.listAndCount(dict));
         return "admin/system/dict";

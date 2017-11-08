@@ -131,13 +131,12 @@ public class SecResourceServiceImpl implements SecResourceService {
             }
         }
         secResourceDao.update(secResource);
-        cache.invalidateAll();
         if (secResource.getAssign() != null) {
             List<SecResource> list = secResourceDao.listCombo(new SecResource());
             Map<Long, SecResource> map = XSTreeUtil.buildTree(list);
             SecResource latest = new SecResource();
             latest.setAssign(secResource.getAssign());
-            //不可分配则所有子级也不可分配，可分配则所有父级也可分配
+            //不可分配则所有子级也不可分配，可分配则直属父级和所有子级也可分配
             if (secResource.getAssign().equals(0)) {
                 List<SecResource> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
                 latest.setList(subTreeList);
@@ -145,9 +144,12 @@ public class SecResourceServiceImpl implements SecResourceService {
             else {
                 List<SecResource> treePath = XSTreeUtil.getTreePath(map, map.get(existent.getId()));
                 latest.setList(treePath);
+                List<SecResource> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
+                latest.getList().addAll(subTreeList);
             }
             secResourceDao.batchUpdate(latest);
         }
+        cache.invalidateAll();
     }
 
     @Override

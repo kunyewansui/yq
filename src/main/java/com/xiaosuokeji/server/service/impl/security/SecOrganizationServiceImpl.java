@@ -89,7 +89,7 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
             Map<Long, SecOrganization> map = XSTreeUtil.buildTree(list);
             SecOrganization latest = new SecOrganization();
             latest.setStatus(secOrganization.getStatus());
-            //禁用则所有子级也禁用，启用所有父级也启用
+            //禁用则所有子级也禁用，启用则直属父级和所有子级也启用
             if (secOrganization.getStatus().equals(0)) {
                 List<SecOrganization> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
                 latest.setList(subTreeList);
@@ -97,6 +97,8 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
             else {
                 List<SecOrganization> treePath = XSTreeUtil.getTreePath(map, map.get(existent.getId()));
                 latest.setList(treePath);
+                List<SecOrganization> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
+                latest.getList().addAll(subTreeList);
             }
             secOrganizationDao.batchUpdate(latest);
         }

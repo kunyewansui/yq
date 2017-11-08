@@ -70,11 +70,11 @@
                 </div>
                 <div class="form-group m-t-n-md">
                     <div class="col-xs-12">
-                        <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_resource_create})">--%>
-                            <button class="btn btn-success" type="button" data-toggle="modal" data-target="#create">
-                                新增
-                            </button>
-                        <%--</sec:authorize>--%>
+                        <sec:authorize access="hasAnyRole(${xs:getPermissions('system_resource_create')})">
+                        <button class="btn btn-success" type="button" data-toggle="modal" data-target="#create">
+                            新增
+                        </button>
+                        </sec:authorize>
                         <input class="btn btn-default pull-right" value="重置" type="button" onclick="$('#searchForm').xsClean()">
                         <input class="btn btn-info pull-right m-r-sm" value="搜索" type="submit">
                     </div>
@@ -90,6 +90,7 @@
                         <th>类型</th>
                         <th>可分配</th>
                         <th>记录日志</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -106,13 +107,13 @@
                             <td><xs:dictDesc key="secResourceAssign" value="${resource.assign}"/></td>
                             <td><xs:dictDesc key="secResourceLog" value="${resource.log}"/></td>
                             <td>
-                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_resource_update})">--%>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('system_resource_update')})">
                                     <button class="btn btn-info btn-xs" onclick="edit('${resource.id}')">编辑</button>
-                                <%--</sec:authorize>--%>
-                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_resource_delete})">--%>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('system_resource_delete')})">
                                     <button class="btn btn-danger btn-xs" onclick="del('${resource.id}')">删除
                                     </button>
-                                <%--</sec:authorize>--%>
+                                </sec:authorize>
                             </td>
                         </tr>
                     </c:forEach>
@@ -154,7 +155,7 @@
         $('#resourceTree').modal('show');
     }
 </script>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_resource_create})">--%>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_resource_create')})">
     <%--新增资源--%>
     <div class="modal fade" id="create" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -361,8 +362,8 @@
         });
 
         $('#create').on('hide.bs.modal', function (e) {
-            $createForm.xsClean();
             createValidate.resetForm();
+            $createForm[0].reset();
         });
 
         function submitCreateForm() {
@@ -370,8 +371,8 @@
         }
 
     </script>
-<%--</sec:authorize>--%>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_resource_update})">--%>
+</sec:authorize>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_resource_update')})">
     <%--编辑资源--%>
     <div class="modal fade" id="edit" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -618,8 +619,8 @@
             $editForm.submit();
         }
     </script>
-<%--</sec:authorize>--%>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_resource_delete})">--%>
+</sec:authorize>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_resource_delete')})">
     <%--删除资源--%>
     <div class="modal fade" id="del" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -657,10 +658,7 @@
             });
         }
     </script>
-<%--</sec:authorize>--%>
-
-<%--<sec:authorize--%>
-        <%--access="hasAnyRole(${sessionScope.sec_op.system_resource_create}) or hasAnyRole(${sessionScope.sec_op.system_resource_update})">--%>
+</sec:authorize>
     <div class="modal fade" id="resourceTree" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -704,11 +702,11 @@
             if (treeType === P_TYPE_CREATE) {
                 $("#createPid").val(selectedNode.id);
                 $('#createPName').val(selectedNode.name);
-                $createForm.valid();
+                $createForm.validate().element($("#createPName"));
             } else if (treeType === P_TYPE_EDIT) {
                 $("#editPid").val(selectedNode.id);
                 $('#editPName').val(selectedNode.name);
-                $editForm.valid();
+                $editForm.validate().element($("#editPName"));
             } else {
                 $("#searchPid").val(selectedNode.id);
                 $('#searchPName').val(selectedNode.name);
@@ -721,7 +719,5 @@
             zTreeObj.expandAll(false);
         });
     </script>
-<%--</sec:authorize>--%>
-
 </body>
 </html>

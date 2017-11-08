@@ -48,11 +48,11 @@
                 </div>
                 <div class="form-group m-t-n-md">
                     <div class="col-xs-12">
-                        <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_create})">--%>
-                            <button class="btn btn-success" type="button" data-toggle="modal" data-target="#create">
-                                新增
-                            </button>
-                        <%--</sec:authorize>--%>
+                        <sec:authorize access="hasAnyRole(${xs:getPermissions('system_role_create')})">
+                        <button class="btn btn-success" type="button" data-toggle="modal" data-target="#create">
+                            新增
+                        </button>
+                        </sec:authorize>
                         <input class="btn btn-default pull-right" value="重置" type="button" onclick="$('#searchForm').xsClean()">
                         <input class="btn btn-info pull-right m-r-sm" value="搜索" type="submit">
                     </div>
@@ -81,15 +81,15 @@
                             <td>${role.desc}</td>
                             <td><xs:dictDesc key="secRoleStatus" value="${role.status}"/></td>
                             <td>
-                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_auth})">--%>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('system_role_authorize')})">
                                     <button class="btn btn-primary btn-xs" onclick="auth('${role.id}')">授权</button>
-                                <%--</sec:authorize>--%>
-                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_update})">--%>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('system_role_update')})">
                                     <button class="btn btn-info btn-xs" onclick="edit('${role.id}')">编辑</button>
-                                <%--</sec:authorize>--%>
-                                <%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_delete})">--%>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('system_role_delete')})">
                                     <button class="btn btn-danger btn-xs" onclick="del('${role.id}')">删除</button>
-                                <%--</sec:authorize>--%>
+                                </sec:authorize>
                             </td>
                         </tr>
                     </c:forEach>
@@ -117,7 +117,7 @@
     }
 
 </script>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_create})">--%>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_role_create')})">
     <%--新增角色--%>
     <div class="modal fade" id="create" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -210,8 +210,8 @@
         }
 
     </script>
-<%--</sec:authorize>--%>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_update})">--%>
+</sec:authorize>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_role_update')})">
     <%--编辑角色--%>
     <div class="modal fade" id="edit" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -318,8 +318,8 @@
             $editForm.submit();
         }
     </script>
-<%--</sec:authorize>--%>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_delete})">--%>
+</sec:authorize>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_role_delete')})">
     <%--删除角色--%>
     <div class="modal fade" id="del" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -357,8 +357,8 @@
             });
         }
     </script>
-<%--</sec:authorize>--%>
-<%--<sec:authorize access="hasAnyRole(${sessionScope.sec_op.system_role_auth})">--%>
+</sec:authorize>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_role_authorize')})">
     <%--角色授权--%>
     <div class="modal fade" id="auth" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -449,6 +449,6 @@
             });
         }
     </script>
-<%--</sec:authorize>--%>
+</sec:authorize>
 </body>
 </html>
