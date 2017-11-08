@@ -37,10 +37,10 @@
                     </div>
                     <div class="form-group m-t-n-md">
                         <div class="col-xs-12">
-                            <%--<sec:authorize access="hasAnyRole(${xs:getPermissions('system_config_create')})">--%>
+                            <sec:authorize access="hasAnyRole(${xs:getPermissions('system_config_create')})">
                                 <a href="#" onclick="showCreateModal();return false"
                                    class="btn btn-success pull-left">新增</a>
-                            <%--</sec:authorize>--%>
+                            </sec:authorize>
                             <input class="btn btn-info pull-right" value="搜索" type="submit">
                             <input class="btn btn-default pull-right  m-r-sm" value="重置" type="button"
                                    onclick="$('#searchForm').xsClean()">
@@ -69,18 +69,18 @@
                                 <td>${item.key}</td>
                                 <td>${item.value}</td>
                                 <td>
-                                    <%--<sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict_update')})">--%>
+                                    <sec:authorize access="hasAnyRole(${xs:getPermissions('system_config_update')})">
                                         <a href="#" onclick="updateListItem('${item.id}');return false;"
                                            class="btn btn-info btn-xs">
                                             编辑
                                         </a>
-                                    <%--</sec:authorize>--%>
-                                    <%--<sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict_delete')})">--%>
+                                    </sec:authorize>
+                                    <sec:authorize access="hasAnyRole(${xs:getPermissions('system_config_delete')})">
                                         <a href="#" class="btn btn-danger btn-xs"
                                            onclick="deleteListItem('${item.id}');return false">
                                             删除
                                         </a>
-                                    <%--</sec:authorize>--%>
+                                    </sec:authorize>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -93,7 +93,7 @@
     </div>
 </div>
 
-<%--<sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict_create')})">--%>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_config_create')})">
     <div class="modal fade" id="createModel" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -126,7 +126,7 @@
                                 <label class="control-label required">值：</label>
                             </div>
                             <div class="col-xs-9">
-                                <input name="key" type="text" maxlength="255" class="form-control">
+                                <input name="value" type="text" maxlength="255" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -153,7 +153,7 @@
                     notEmpty: true,
                     maxlength: 191
                 },
-                key: {
+                value: {
                     required: true,
                     notEmpty: true,
                     maxlength: 255
@@ -209,8 +209,9 @@
             })
         });
     </script>
-<%--</sec:authorize>--%>
+</sec:authorize>
 
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_config_update')})">
 <div class="modal fade" id="updateModel" data-backdrop="static" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -233,10 +234,10 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-xs-3 text-right">
-                            <label class="control-label required">值：</label>
+                            <label class="control-label required">键：</label>
                         </div>
                         <div class="col-xs-9">
-                            <input name="value" type="text" maxlength="191" class="form-control">
+                            <input name="key" type="text" maxlength="191" class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -244,7 +245,7 @@
                             <label class="control-label required">值：</label>
                         </div>
                         <div class="col-xs-9">
-                            <input name="key" type="text" maxlength="255" class="form-control">
+                            <input name="value" type="text" maxlength="255" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -335,8 +336,9 @@
         })
     });
 </script>
+</sec:authorize>
 
-<%--<sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict_delete')})">--%>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_config_delete')})">
     <%@include file="../common/deleteConfirm.jsp" %>
     <script>
         function deleteListItem(id) {
@@ -354,7 +356,7 @@
             })
         }
     </script>
-<%--</sec:authorize>--%>
+</sec:authorize>
 </body>
 </html>
 
