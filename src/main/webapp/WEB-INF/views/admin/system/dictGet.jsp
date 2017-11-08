@@ -323,7 +323,7 @@
                 required: true,
                 notEmpty: true,
                 maxlength: 255
-            },
+            }
         },
         messages: {
             name: {
@@ -340,7 +340,7 @@
                 required: "描述不能为空",
                 notEmpty: "描述不能为空",
                 maxlength: "描述最多255个字"
-            },
+            }
         },
         submitHandler: function () {
             $updateSubmit.attr("disabled", true);

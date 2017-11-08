@@ -48,7 +48,7 @@
                 AND `key`=#{key}
             </if>
             <if test="dynamic!=null and dynamic.key!=null and dynamic.key!=''">
-                AND `key`=#{dynamic.key}
+                AND `key` LIKE CONCAT('%',#{dynamic.key},'%')
             </if>
         </trim>
     </sql>
