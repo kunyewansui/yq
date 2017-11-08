@@ -102,6 +102,11 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
      */
     private List<SecRole> roleList;
 
+    /**
+     * 逗号分隔的角色列表字符串
+     */
+    private String rolesStr;
+
     public interface Save {}
 
     public interface Update {}
@@ -261,5 +266,13 @@ public class SecResource extends BaseModel implements XSTreeable<Long, SecResour
 
     public void setRoleList(List<SecRole> roleList) {
         this.roleList = roleList;
+    }
+
+    public String getRolesStr() {
+        return rolesStr;
+    }
+
+    public void setRolesStr(String rolesStr) {
+        this.rolesStr = rolesStr;
     }
 }

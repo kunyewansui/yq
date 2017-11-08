@@ -43,7 +43,7 @@ public class DetailsService implements UserDetailsService {
         }
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         for (SecRole role : staff.getRoleList()) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + String.valueOf(role.getId())));
         }
         staff.setAuthorityList(authorities);
         return staff;

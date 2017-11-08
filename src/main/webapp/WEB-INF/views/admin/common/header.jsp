@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <div class="app-header-fixed ">
 <div class="app-header navbar">
     <div class="navbar-header bg-black" style="max-height: 50px;height:50px;">

@@ -53,8 +53,10 @@
                     </div>
                     <div class="form-group m-t-n-md">
                         <div class="col-xs-12">
-                            <a href="#" onclick="showCreateModal();return false"
-                               class="btn btn-success pull-left">新增</a>
+                            <sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict_create')})">
+                                <a href="#" onclick="showCreateModal();return false"
+                                    class="btn btn-success pull-left">新增</a>
+                            </sec:authorize>
                             <input class="btn btn-info pull-right" value="搜索" type="submit">
                             <input class="btn btn-default pull-right  m-r-sm" value="重置" type="button"
                                    onclick="$('#searchForm').xsClean()">

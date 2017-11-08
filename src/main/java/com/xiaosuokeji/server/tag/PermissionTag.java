@@ -13,7 +13,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 
 /**
- * 获取指定资源所需权限标签
+ * 获取指定资源所需的权限
  * Created by xuxiaowei on 2017/11/8.
  */
 public class PermissionTag extends SimpleTagSupport {
@@ -22,33 +22,15 @@ public class PermissionTag extends SimpleTagSupport {
 
     private static SecResourceService secResourceService = XSSpringContext.getBean("secResourceServiceImpl");
 
-    /**
-     * 资源的key
-     */
-    private String key;
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-
-    @Override
-    public void doTag() throws JspException, IOException {
-        JspWriter out = getJspContext().getOut();
+    public static String getPermissions(String resourceKey) {
         try {
-            SecResource secResource = secResourceService.getByKey(new SecResource(key));
-            StringBuilder permissions = new StringBuilder();
+            SecResource secResource = secResourceService.getByKey(new SecResource(resourceKey));
             if (secResource != null) {
-                for (SecRole item : secResource.getRoleList()) {
-                    permissions.append(item.getName()).append(",");
-                }
+                return "\"" + secResource.getRolesStr() + "\"";
             }
-            if (permissions.length() > 0) {
-                permissions.deleteCharAt(permissions.length() - 1);
-            }
-            out.println(permissions.toString());
         } catch (Exception e) {
             logger.error("error : ", e);
         }
+        return "\"\"";
     }
 }

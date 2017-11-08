@@ -57,7 +57,7 @@ public class InvocationSecurityMetadataSource implements FilterInvocationSecurit
             if (secResource != null) {
                 List<SecRole> roleList = secResource.getRoleList();
                 for (SecRole role : roleList) {
-                    attributes.add(new SecurityConfig("ROLE_" + role.getName()));
+                    attributes.add(new SecurityConfig("ROLE_" + String.valueOf(role.getId())));
                 }
             }
         } catch (Exception e) {

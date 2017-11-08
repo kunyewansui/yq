@@ -189,6 +189,15 @@ public class SecResourceServiceImpl implements SecResourceService {
                 //构造以key为键的映射
                 Map<String, SecResource> keyMap = new HashMap<>();
                 for (SecResource item : resourceList) {
+                    //构造逗号分隔的角色列表字符串
+                    StringBuilder rolesStr = new StringBuilder();
+                    for (SecRole role : item.getRoleList()) {
+                        rolesStr.append("ROLE_" + String.valueOf(role.getId())).append(",");
+                    }
+                    if (rolesStr.length() > 0) {
+                        rolesStr.deleteCharAt(rolesStr.length() - 1);
+                    }
+                    item.setRolesStr(rolesStr.toString());
                     keyMap.put(item.getKey(), item);
                 }
                 result.put("key", keyMap);

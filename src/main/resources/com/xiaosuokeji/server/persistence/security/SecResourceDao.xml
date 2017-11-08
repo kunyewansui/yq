@@ -146,7 +146,7 @@
     </resultMap>
 
     <select id="listAll" resultMap="secResourceWithRoleMap">
-        SELECT r.*,ro.id AS r_id,ro.name AS r_name
+        SELECT r.*,ro.id AS r_id
         FROM shuttle_common.sc_security_resource r
         LEFT JOIN shuttle_common.sc_security_role_res rr ON r.id=rr.resource_id
         LEFT JOIN shuttle_common.sc_security_role ro ON rr.role_id=ro.id
