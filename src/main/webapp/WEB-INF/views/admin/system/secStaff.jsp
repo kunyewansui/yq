@@ -286,7 +286,7 @@
             }
         });
 
-        $('#create').on('hidden.bs.modal', function (e) {
+        $('#create').on('hide.bs.modal', function (e) {
             createValidate.resetForm();
             $createForm[0].reset();
         });
@@ -449,7 +449,7 @@
             }
         });
 
-        $('#edit').on('hidden.bs.modal', function (e) {
+        $('#edit').on('hide.bs.modal', function (e) {
             editValidate.resetForm();
             $("#edit").find(".text-danger").removeClass("text-danger");
         });

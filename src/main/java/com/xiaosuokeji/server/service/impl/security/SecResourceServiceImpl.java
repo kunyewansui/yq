@@ -52,6 +52,20 @@ public class SecResourceServiceImpl implements SecResourceService {
         if (count.compareTo(0L) > 0) {
             throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_EXIST);
         }
+        if (!secResource.getType().equals(2)) {
+            //如果不是url资源则置空url和method
+            secResource.setUrl(null);
+            secResource.setMethod(null);
+        }
+        else {
+            criteria = new SecResource();
+            criteria.setUrl(secResource.getUrl());
+            criteria.setMethod(secResource.getMethod());
+            count = secResourceDao.count(criteria);
+            if (count.compareTo(0L) > 0) {
+                throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_EXIST);
+            }
+        }
         //父级不可分配则子级不可分配
         if (secResource.getParent() != null && secResource.getParent().getId() != null
                 && !secResource.getParent().getId().equals(0L)) {
@@ -61,11 +75,6 @@ public class SecResourceServiceImpl implements SecResourceService {
                     secResource.setAssign(0);
                 }
             }
-        }
-        //如果不是url资源则置空url和method
-        if (!secResource.getType().equals(2)) {
-            secResource.setUrl(null);
-            secResource.setMethod(null);
         }
         secResourceDao.save(secResource);
         secResourceDao.saveSuperiorRes(secResource);
@@ -107,10 +116,17 @@ public class SecResourceServiceImpl implements SecResourceService {
                 }
             }
         }
-        //如果不是url资源则置空url和method
-        if (!secResource.getType().equals(2)) {
-            secResource.setUrl("");
-            secResource.setMethod("");
+        if (secResource.getType() != null && secResource.getType().equals(2)) {
+            SecResource criteria = new SecResource();
+            criteria.setUrl(secResource.getUrl());
+            criteria.setMethod(secResource.getMethod());
+            List<SecResource> existents = secResourceDao.list(criteria);
+            if (existents.size() > 0) {
+                boolean isSelf = existents.get(0).getId().equals(existent.getId());
+                if (!isSelf) {
+                    throw new XSBusinessException(SecResourceConsts.SEC_RESOURCE_EXIST);
+                }
+            }
         }
         secResourceDao.update(secResource);
         cache.invalidateAll();

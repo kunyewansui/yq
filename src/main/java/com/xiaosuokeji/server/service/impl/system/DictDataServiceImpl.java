@@ -143,7 +143,7 @@ public class DictDataServiceImpl implements DictDataService {
                     return map;
                 }
             });
-        } catch (ExecutionException e) {
+        } catch (Exception e) {
             logger.error("error : ", e);
         }
         return map == null ? new HashMap<>() : map;

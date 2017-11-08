@@ -242,7 +242,7 @@
             }
         });
 
-        $('#create').on('hidden.bs.modal', function (e) {
+        $('#create').on('hide.bs.modal', function (e) {
             createValidate.resetForm();
             $createForm[0].reset();
         });
@@ -360,7 +360,7 @@
             }
         });
 
-        $('#edit').on('hidden.bs.modal', function (e) {
+        $('#edit').on('hide.bs.modal', function (e) {
             editValidate.resetForm();
             $("#edit").find(".text-danger").removeClass("text-danger");
         });
@@ -473,9 +473,11 @@
             if (treeType === P_TYPE_CREATE) {
                 $("#createPid").val(selectedNode.id);
                 $('#createPName').val(selectedNode.name);
+                $createForm.valid();
             } else if (treeType === P_TYPE_EDIT) {
                 $("#editPid").val(selectedNode.id);
                 $('#editPName').val(selectedNode.name);
+                $editForm.valid();
             } else {
                 $("#searchPid").val(selectedNode.id);
                 $('#searchPName').val(selectedNode.name);
@@ -483,7 +485,7 @@
             $('#orgTree').modal('hide');
         }
 
-        $('#orgTree').on('hidden.bs.modal', function (e) {
+        $('#orgTree').on('hide.bs.modal', function (e) {
             zTreeObj.selectNode(zTreeNodes[0]);
             zTreeObj.expandAll(false);
         });

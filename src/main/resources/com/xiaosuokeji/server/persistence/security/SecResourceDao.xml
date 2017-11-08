@@ -49,12 +49,20 @@
             </if>
             <if test="type!=null">
                 ,`type`=#{type}
-            </if>
-            <if test="url!=null">
-                ,url=#{url}
-            </if>
-            <if test="method!=null">
-                ,method=#{method}
+                <choose>
+                    <when test="type!=2">
+                        ,url=NULL
+                        ,method=NULL
+                    </when>
+                    <otherwise>
+                        <if test="url!=null">
+                            ,url=#{url}
+                        </if>
+                        <if test="method!=null">
+                            ,method=#{method}
+                        </if>
+                    </otherwise>
+                </choose>
             </if>
             <if test="seq!=null">
                 ,seq=#{seq}
@@ -120,8 +128,14 @@
             <if test="type!=null">
                 AND r.type=#{type}
             </if>
+            <if test="url!=null and url!=''">
+                AND r.url=#{url}
+            </if>
             <if test="dynamic!=null and dynamic.url!=null and dynamic.url!=''">
                 AND r.url LIKE CONCAT('%',#{dynamic.url},'%')
+            </if>
+            <if test="method!=null and method!=''">
+                AND r.method=#{method}
             </if>
         </trim>
     </sql>
