@@ -405,5 +405,6 @@ function putImageIntoImageUploader(id, url) {
 }
 function cleanImageInUploader(id) {
     eval('images_' + id + '.splice(0,images_' + id + '.length)');
+    eval('$url_' + id + '.val("")');
     eval('updatePreviewDiv_' + id + '()');
 }

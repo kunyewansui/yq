@@ -46,6 +46,7 @@ public class ArticleCategoryController {
     @RequestMapping(value = "/admin/content/article/category/save", method = RequestMethod.POST)
     @ResponseBody
     public XSServiceResult adminSave(@Validated(ArticleCategory.Save.class) ArticleCategory articleCategory) throws XSBusinessException {
+        articleCategory.setLock(0);
         articleCategoryService.save(articleCategory);
         return XSServiceResult.build();
     }

@@ -315,7 +315,7 @@
                             <label class="control-label required">父级：</label>
                         </div>
                         <div class="col-xs-9">
-                            <input name="parent.id" type="hidden">
+                            <input name="parent.id" type="hidden" value="null">
                             <input type="text" name="parent.name" class="form-control" readonly data-value="无" value="无"
                                    onclick="showCategoryTree(0)">
                         </div>
