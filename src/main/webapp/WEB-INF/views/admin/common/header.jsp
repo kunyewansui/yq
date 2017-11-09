@@ -43,7 +43,7 @@
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle clear">
-                    <span class="hidden-sm hidden-md"></span>
+                    <span class="hidden-sm hidden-md"><sec:authentication property="name"/></span>
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu animated fadeInRight w">
