@@ -59,7 +59,7 @@
             <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
                 AND i.name LIKE CONCAT('%',#{dynamic.name},'%')
             </if>
-            <if test="category!=null and category.id!=null">
+            <if test="category!=null and category.id!=null and category.id!=''">
                 AND i.category_id=#{category.id}
             </if>
             <if test="display!=null">

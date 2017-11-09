@@ -132,6 +132,7 @@
         if (remove) {
             $("#tree").treeview("remove");
             $("#categoryTree").treeview("remove");
+            selectedId=undefined;
         }
         doPost("<%=request.getContextPath()%>/admin/content/imageCategory/tree", {}, function (data) {
             if (data.status) {
@@ -218,8 +219,8 @@
             function (data) {
                 if (data.status) {
                     setTimeout(function () {
+                        updateTree(false, true);
                         alert("更新成功");
-                        window.location.reload(true);
                     }, 380);
                 } else {
                     alert(data.msg);
@@ -251,10 +252,8 @@
             showDeleteModel(null, function () {
                 doPost("<%=request.getContextPath()%>/admin/content/imageCategory/remove", {id: selectedId}, function (data) {
                     if (data.status) {
-                        setTimeout(function () {
-                            alert("删除成功");
-                            window.location.reload(true);
-                        }, 380);
+                        selectedId = "";
+                        updateTree(true, true);
                     } else {
                         alert(data.msg);
                     }
@@ -370,7 +369,7 @@
                             $("#createModel").modal("hide");
                             setTimeout(function () {
                                 alert("新增成功");
-                                window.location.reload(true);
+                                updateTree(false);
                             }, 380);
                         } else {
                             alert(data.msg);
@@ -401,7 +400,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">文章分类</h4>
+                <h4 class="modal-title">图片分类</h4>
             </div>
             <div class="modal-body">
                 <div id="categoryTree">

@@ -1,5 +1,6 @@
 package com.xiaosuokeji.server.model.image;
 
+import com.xiaosuokeji.framework.annotation.XSAutoDesc;
 import com.xiaosuokeji.server.model.base.BaseModel;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
@@ -53,6 +54,7 @@ public class Image extends BaseModel {
     /**
      * 展示，0否，1是
      */
+    @XSAutoDesc("imageDisplay")
     private Integer display;
 
     public interface Save {}
