@@ -60,6 +60,14 @@
                         </a>
                     </li>
                     </sec:authorize>
+                    <sec:authorize access="hasAnyRole(${xs:getPermissions('system_log')})">
+                    <li>
+                        <a href="<%=request.getContextPath()%>/admin/system/secStaffLog">
+                            <i class="fa fa-empire"></i>
+                            <span>系统日志</span>
+                        </a>
+                    </li>
+                    </sec:authorize>
                     <sec:authorize access="hasAnyRole(${xs:getPermissions('system_config')})">
                     <li>
                         <a href="<%=request.getContextPath()%>/admin/system/systemConfig">

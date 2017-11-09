@@ -1,5 +1,6 @@
 package com.xiaosuokeji.server.model.security;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xiaosuokeji.framework.annotation.XSAutoDesc;
 import com.xiaosuokeji.server.model.base.BaseModel;
 
@@ -29,6 +30,7 @@ public class SecStaffLog extends BaseModel {
     /**
      * 时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date time;
 
     /**

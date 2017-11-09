@@ -28,18 +28,22 @@
                         </a>
                     </li>
                     </sec:authorize>
+                    <sec:authorize access="hasAnyRole(${xs:getPermissions('content_image')})">
                     <li>
                         <a href="<%=request.getContextPath()%>/admin/content/image">
                             <i class="fa fa-empire"></i>
                             <span>图片管理</span>
                         </a>
                     </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasAnyRole(${xs:getPermissions('content_imageCategory')})">
                     <li>
                         <a href="<%=request.getContextPath()%>/admin/content/imageCategory">
                             <i class="fa fa-empire"></i>
                             <span>图片分类</span>
                         </a>
                     </li>
+                    </sec:authorize>
                 </ul>
             </nav>
         </div>

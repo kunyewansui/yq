@@ -19,6 +19,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 /**
  * 系统用户日志ServiceImpl
  * Created by xuxiaowei on 2017/11/2.
@@ -56,7 +58,18 @@ public class SecStaffLogServiceImpl implements SecStaffLogService {
 
     @Override
     public XSPageModel<SecStaffLog> listAndCount(SecStaffLog secStaffLog) {
-        secStaffLog.setDefaultSort("id", "DESC");
+        secStaffLog.setDefaultSort("sl.id", "DESC");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            SecStaff secStaff = (SecStaff) authentication.getPrincipal();
+            //非超级管理员不能查看超级管理员日志
+            if (!secStaff.getId().equals(1L)) {
+                if (secStaffLog.getDynamic() == null) {
+                    secStaffLog.setDynamic(new HashMap<>());
+                }
+                secStaffLog.getDynamic().put("notSuperior", "true");
+            }
+        }
         return XSPageModel.build(secStaffLogDao.list(secStaffLog), secStaffLogDao.count(secStaffLog));
     }
 
@@ -65,7 +78,7 @@ public class SecStaffLogServiceImpl implements SecStaffLogService {
         if (xsLogger.getRequestUrl().contains("admin")) {
             try {
                 SecResource criteria = new SecResource();
-                criteria.setUrl(xsLogger.getRequestUrl());
+                criteria.setUrl(xsLogger.getRequestUrl().substring(xsLogger.getRequestUrl().indexOf("admin") - 1));
                 criteria.setMethod(xsLogger.getRequestMethod());
                 SecResource resource = secResourceService.getByRequest(criteria);
                 if (resource != null && resource.getLog().equals(1)) {
