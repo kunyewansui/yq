@@ -23,9 +23,9 @@
     <div class="app-content-body">
         <div class="bg-light lter b-b wrapper-md ">
             <h1 class="m-n font-thin h3 inline">图片分类</h1>
-            <%--<sec:authorize access="hasAnyRole(${xs:getPermissions('content_articleCategory_create')})">--%>
+            <sec:authorize access="hasAnyRole(${xs:getPermissions('content_imageCategory_create')})">
                 <button class="btn btn-success pull-right" type="button" onclick="showCreateModal()">新增</button>
-            <%--</sec:authorize>--%>
+            </sec:authorize>
         </div>
         <div class="wrapper-md">
             <div class="row">
@@ -91,18 +91,20 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-xs-12 text-right">
-                                <%--<sec:authorize access="hasAnyRole(${xs:getPermissions('content_articleCategory_update')})">--%>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('content_imageCategory_lock')})">
                                     <a id="lockCategory" class="btn btn-danger" style="display:none" type="button"
                                        onclick="lockCategory(1)"><i class="fa fa-lock"></i>锁定
                                     </a>
                                     <a id="unlockCategory" class="btn btn-success" style="display:none" type="button"
                                        onclick="lockCategory(0)"><i class="fa fa-unlock-alt"></i>解锁
                                     </a>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('content_imageCategory_update')})">
                                     <button class="btn btn-info" type="button" onclick="updateItem()">保存</button>
-                                <%--</sec:authorize>--%>
-                                <%--<sec:authorize access="hasAnyRole(${xs:getPermissions('content_articleCategory_delete')})">--%>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('content_imageCategory_delete')})">
                                     <button class="btn btn-danger" type="button" onclick="deleteItem()">删除</button>
-                                <%--</sec:authorize>--%>
+                                </sec:authorize>
                             </div>
                         </div>
                     </form>
@@ -212,7 +214,7 @@
         })
     }
 
-    <%--<sec:authorize access="hasAnyRole(${xs:getPermissions('content_articleCategory_update')})">--%>
+    <sec:authorize access="hasAnyRole(${xs:getPermissions('content_imageCategory_update')})">
     function updateItem() {
         doPost("<%=request.getContextPath()%>/admin/content/imageCategory/update",
             $form.serialize(),
@@ -227,7 +229,8 @@
                 }
             });
     }
-
+    </sec:authorize>
+    <sec:authorize access="hasAnyRole(${xs:getPermissions('content_imageCategory_lock')})">
     function lockCategory(lock) {
         doPost("<%=request.getContextPath()%>/admin/content/imageCategory/lock",
             {
@@ -242,10 +245,10 @@
                 }
             });
     }
-    <%--</sec:authorize>--%>
+    </sec:authorize>
 </script>
 
-<%--<sec:authorize access="hasAnyRole(${xs:getPermissions('system_articleCategory_delete')})">--%>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('system_imageCategory_delete')})">
     <%@include file="../common/deleteConfirm.jsp" %>
     <script>
         function deleteItem() {
@@ -261,9 +264,9 @@
             });
         }
     </script>
-<%--</sec:authorize>--%>
+</sec:authorize>
 
-<%--<sec:authorize access="hasAnyRole(${xs:getPermissions('content_articleCategory_create')})">--%>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('content_imageCategory_create')})">
     <div class="modal fade" id="createModel" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -390,7 +393,7 @@
             })
         });
     </script>
-<%--</sec:authorize>--%>
+</sec:authorize>
 
 <%--分类树--%>
 <div class="modal fade" id="categoryModel" data-backdrop="static" role="dialog">

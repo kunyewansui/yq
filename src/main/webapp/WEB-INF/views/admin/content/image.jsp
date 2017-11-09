@@ -56,10 +56,10 @@
                     </div>
                     <div class="form-group m-t-n-md">
                         <div class="col-xs-12">
-                            <%--<sec:authorize access="hasAnyRole(${xs:getPermissions('content_article_create')})">--%>
+                            <sec:authorize access="hasAnyRole(${xs:getPermissions('content_image_create')})">
                             <a href="#" onclick="showCreateModal();return false"
                                class="btn btn-success pull-left">新增</a>
-                            <%--</sec:authorize>--%>
+                            </sec:authorize>
                             <input class="btn btn-info pull-right" value="搜索" type="submit">
                             <input class="btn btn-default pull-right  m-r-sm" value="重置" type="button"
                                    onclick="$('#searchForm').xsClean()">
@@ -92,18 +92,18 @@
                                 <td>${item.seq}</td>
                                 <td><xs:dictDesc key="imageDisplay" value="${item.display}"/></td>
                                 <td>
-                                        <%--<sec:authorize access="hasAnyRole(${xs:getPermissions('content_article_update')})">--%>
+                                    <sec:authorize access="hasAnyRole(${xs:getPermissions('content_image_update')})">
                                     <a href="#" onclick="updateListItem('${item.id}');return false;"
                                        class="btn btn-info btn-xs">
                                         编辑
                                     </a>
-                                        <%--</sec:authorize>--%>
-                                        <%--<sec:authorize access="hasAnyRole(${xs:getPermissions('content_article_delete')})">--%>
+                                    </sec:authorize>
+                                    <sec:authorize access="hasAnyRole(${xs:getPermissions('content_image_delete')})">
                                     <button class="btn btn-danger btn-xs"
                                             onclick="deleteListItem('${item.id}')">
                                         删除
                                     </button>
-                                        <%--</sec:authorize>--%>
+                                    </sec:authorize>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -174,6 +174,7 @@
     }
 </script>
 
+<sec:authorize access="hasAnyRole(${xs:getPermissions('content_image_create')})">
 <div class="modal fade" id="createModel" data-backdrop="static" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -321,7 +322,9 @@
         })
     });
 </script>
+</sec:authorize>
 
+<sec:authorize access="hasAnyRole(${xs:getPermissions('content_image_update')})">
 <div class="modal fade" id="updateModel" data-backdrop="static" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -495,8 +498,8 @@
             });
     }
 </script>
-
-<%--<sec:authorize access="hasAnyRole(${xs:getPermissions('content_article_delete')})">--%>
+</sec:authorize>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('content_image_delete')})">
 <%@include file="../common/deleteConfirm.jsp" %>
 <script>
     function deleteListItem(id) {
@@ -514,7 +517,7 @@
         })
     }
 </script>
-<%--</sec:authorize>--%>
+</sec:authorize>
 
 <div class="modal fade" id="categoryModel" data-backdrop="static" role="dialog">
     <div class="modal-dialog" role="document">
