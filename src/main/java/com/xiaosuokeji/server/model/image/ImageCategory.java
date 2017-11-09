@@ -1,6 +1,7 @@
 package com.xiaosuokeji.server.model.image;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.xiaosuokeji.framework.annotation.XSAutoDesc;
 import com.xiaosuokeji.framework.intf.XSTreeable;
 import com.xiaosuokeji.server.model.base.BaseModel;
 import org.hibernate.validator.constraints.Length;
@@ -48,11 +49,13 @@ public class ImageCategory extends BaseModel implements XSTreeable<String, Image
     /**
      * 展示，0否，1是
      */
+    @XSAutoDesc("imageCategoryDisplay")
     private Integer display;
 
     /**
      * 锁定，0否，1是
      */
+    @XSAutoDesc("imageCategoryLock")
     private Integer lock;
 
     /**
@@ -68,6 +71,12 @@ public class ImageCategory extends BaseModel implements XSTreeable<String, Image
     public interface Save {}
 
     public interface Update {}
+
+    public ImageCategory() {}
+
+    public ImageCategory(String id) {
+        this.id = id;
+    }
 
     @JsonIgnore
     @Override

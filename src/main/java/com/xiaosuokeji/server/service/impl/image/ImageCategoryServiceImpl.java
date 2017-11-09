@@ -31,9 +31,9 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
 
     @Override
     public void save(ImageCategory imageCategory) throws XSBusinessException {
-        ImageCategory existent = new ImageCategory();
-        existent.setKey(imageCategory.getKey());
-        Long count = imageCategoryDao.count(existent);
+        ImageCategory criteria = new ImageCategory();
+        criteria.setKey(imageCategory.getKey());
+        Long count = imageCategoryDao.count(criteria);
         if (count.compareTo(0L) > 0) {
             throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_EXIST);
         }
@@ -79,13 +79,13 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
     @Override
     @Transactional
     public void update(ImageCategory imageCategory) throws XSBusinessException {
-        get(imageCategory);
+        ImageCategory existent = get(imageCategory);
         if (imageCategory.getKey() != null) {
-            ImageCategory existent = new ImageCategory();
-            existent.setKey(imageCategory.getKey());
-            List<ImageCategory> existents = imageCategoryDao.list(existent);
+            ImageCategory criteria = new ImageCategory();
+            criteria.setKey(imageCategory.getKey());
+            List<ImageCategory> existents = imageCategoryDao.list(criteria);
             if (existents.size() > 0) {
-                boolean isSelf = existents.get(0).getId().equals(imageCategory.getId());
+                boolean isSelf = existents.get(0).getId().equals(existent.getId());
                 if (!isSelf) {
                     throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_EXIST);
                 }
@@ -95,18 +95,20 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         if (imageCategory.getDisplay() != null) {
             List<ImageCategory> list = imageCategoryDao.listCombo(new ImageCategory());
             Map<String, ImageCategory> map = XSTreeUtil.buildTree(list);
-            ImageCategory existent = new ImageCategory();
-            existent.setDisplay(imageCategory.getDisplay());
-            //取消展示则所有子级也取消，开启展示则所有父级也开启
+            ImageCategory latest = new ImageCategory();
+            latest.setDisplay(imageCategory.getDisplay());
+            //取消展示则所有子级也取消，开启展示则直属父级和所有子级也开启
             if (imageCategory.getDisplay().equals(0)) {
                 List<ImageCategory> subTreeList = XSTreeUtil.listSubTree(map.get(imageCategory.getId()));
-                existent.setList(subTreeList);
+                latest.setList(subTreeList);
             }
             else {
                 List<ImageCategory> treePath = XSTreeUtil.getTreePath(map, map.get(imageCategory.getId()));
-                existent.setList(treePath);
+                latest.setList(treePath);
+                List<ImageCategory> subTreeList = XSTreeUtil.listSubTree(map.get(imageCategory.getId()));
+                latest.getList().addAll(subTreeList);
             }
-            imageCategoryDao.batchUpdate(existent);
+            imageCategoryDao.batchUpdate(latest);
         }
     }
 
@@ -115,12 +117,14 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         ImageCategory existent = get(imageCategory);
         List<ImageCategory> list = imageCategoryDao.listCombo(new ImageCategory());
         Map<String, ImageCategory> map = XSTreeUtil.buildTree(list);
-        //解锁则所有子级也解锁，锁定则所有父级也锁定
+        //解锁则所有子级也解锁，锁定则直属父级和所有子级也锁定
         ImageCategory latest = new ImageCategory();
         if (existent.getLock().equals(0)) {
             latest.setLock(1);
             List<ImageCategory> treePath = XSTreeUtil.getTreePath(map, map.get(imageCategory.getId()));
             latest.setList(treePath);
+            List<ImageCategory> subTreeList = XSTreeUtil.listSubTree(map.get(imageCategory.getId()));
+            latest.getList().addAll(subTreeList);
         }
         else {
             latest.setLock(0);
@@ -144,6 +148,6 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         imageCategory.setDefaultSort("seq", "DESC");
         List<ImageCategory> list = imageCategoryDao.listCombo(imageCategory);
         XSTreeUtil.buildTree(list);
-        return XSTreeUtil.getSubTrees(list, imageCategory.getParent());
+        return XSTreeUtil.getSubTrees(list, new ImageCategory(""));
     }
 }

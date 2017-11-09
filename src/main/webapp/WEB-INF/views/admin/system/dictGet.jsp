@@ -253,7 +253,7 @@
     }
     $(function () {
         $("#createModel").on('hide.bs.modal', function () {
-            $createForm.xsClean();
+            $createForm[0].reset();
             createValidator.resetForm();
         })
     });
@@ -378,7 +378,7 @@
 
     $(function () {
         $("#updateModel").on('hide.bs.modal', function () {
-            $updateForm.xsClean();
+            $updateForm[0].reset();
             updateValidator.resetForm();
         })
     });

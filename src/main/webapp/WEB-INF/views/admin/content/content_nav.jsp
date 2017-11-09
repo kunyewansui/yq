@@ -28,6 +28,12 @@
                         </a>
                     </li>
                     </sec:authorize>
+                    <li>
+                        <a href="<%=request.getContextPath()%>/admin/content/imageCategory">
+                            <i class="fa fa-empire"></i>
+                            <span>图片分类</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>

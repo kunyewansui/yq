@@ -5,11 +5,11 @@
 <mapper namespace="com.xiaosuokeji.server.dao.image.ImageCategoryDao">
 
     <insert id="save" parameterType="imageCategory">
-        INSERT INTO shuttle_common.sc_image_category(id,`key`,`name`,<if test="parent!=null">pid,</if>seq,display,`lock`)
-        VALUES (#{id},#{key},#{name},<if test="parent!=null">#{parent.id},</if>#{seq},#{display},#{lock})
+        INSERT INTO shuttle_common.sc_image_category(id,`key`,`name`,pid,seq,display,`lock`)
+        VALUES (#{id},#{key},#{name},#{parent.id},#{seq},#{display},#{lock})
         ON DUPLICATE KEY UPDATE
         `name`=#{name},
-        <if test="parent!=null">pid=#{parent.id},</if>
+        pid=#{parent.id},
         seq=#{seq},
         display=#{display},
         `lock`=#{lock},
