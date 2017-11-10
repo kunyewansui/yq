@@ -39,7 +39,7 @@
                 AND DATE(sl.time) &lt;= #{dynamic.endTime}
             </if>
             <if test="dynamic!=null and dynamic.operation!=null and dynamic.operation!=''">
-                AND sl.operation LIKE CONCAT('%',#{operation},'%')
+                AND sl.operation LIKE CONCAT('%',#{dynamic.operation},'%')
             </if>
             <if test="dynamic!=null and dynamic.notSuperior!=null">
                 AND ss.id!=1

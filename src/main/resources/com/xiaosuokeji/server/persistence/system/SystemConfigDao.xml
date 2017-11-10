@@ -50,6 +50,9 @@
             <if test="dynamic!=null and dynamic.key!=null and dynamic.key!=''">
                 AND `key` LIKE CONCAT('%',#{dynamic.key},'%')
             </if>
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
         </trim>
     </sql>
 

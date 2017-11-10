@@ -86,6 +86,12 @@ public class SecStaff extends BaseModel implements UserDetails {
      */
     private Collection<GrantedAuthority> authorityList;
 
+    /**
+     * 超级管理员，0否，1是
+     */
+    @JsonIgnore
+    private Integer superior;
+
     public interface Save {}
 
     public interface Update {}
@@ -231,5 +237,13 @@ public class SecStaff extends BaseModel implements UserDetails {
 
     public void setAuthorityList(Collection<GrantedAuthority> authorityList) {
         this.authorityList = authorityList;
+    }
+
+    public Integer getSuperior() {
+        return superior;
+    }
+
+    public void setSuperior(Integer superior) {
+        this.superior = superior;
     }
 }

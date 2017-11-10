@@ -87,13 +87,19 @@
             </if>
             ,update_time=NOW()
         </trim>
-        WHERE id=#{id} AND superior=0
+        WHERE id=#{id}
+        <if test="superior!=null">
+            AND superior=#{superior}
+        </if>
     </update>
 
     <select id="get" parameterType="secStaff" resultType="secStaff">
         SELECT *
         FROM shuttle_common.sc_security_staff
-        WHERE id=#{id} AND superior=0
+        WHERE id=#{id}
+        <if test="superior!=null">
+            AND superior=#{superior}
+        </if>
     </select>
     
     <select id="getByUsername" parameterType="secStaff" resultType="secStaff">

@@ -47,6 +47,11 @@
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu animated fadeInRight w">
+                    <sec:authorize access="hasAnyRole(${xs:getPermissions('staff_update')})">
+                    <li>
+                        <a href="javascript:editPersonalInfo()">修改信息</a>
+                    </li>
+                    </sec:authorize>
                     <li>
                         <a href="javascript:logout()">登出</a>
                     </li>
@@ -65,3 +70,172 @@
         })
     }
 </script>
+<sec:authorize access="hasAnyRole(${xs:getPermissions('staff_update')})">
+    <%--修改个人信息--%>
+<%@include file="../common/validate.jsp" %>
+    <div class="modal fade" id="editPersonalInfo" data-backdrop="static" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">修改个人信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form name="editPersonalInfoForm" class="form-horizontal">
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">用户名</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input class="form-control" type="text" name="username"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label">密码</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input class="form-control" type="password" style="display: none"/>
+                                <input class="form-control" type="password" name="password" maxlength="20"
+                                       placeholder="留空则不修改"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">姓名</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input class="form-control" type="text" name="name"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">手机</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input class="form-control" type="text" name="mobile"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label">email</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input class="form-control" type="email" name="email"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label">QQ</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input class="form-control" type="text" name="qq"/>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-info" onclick="submitEditPersonalInfoForm()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        var $editPersonalInfoForm = $("form[name='editPersonalInfoForm']");
+        var editPersonalInfoValidate = $editPersonalInfoForm.validate({
+            rules: {
+                username: {
+                    required: true,
+                    notEmpty: true
+                },
+                password: {
+                    minlength: 6,
+                    maxlength: 20
+                },
+                mobile: {
+                    required: true,
+                    notEmpty: true,
+                    mobile: true
+                },
+                name: {
+                    required: true,
+                    notEmpty: true
+                },
+                status: {
+                    required: true
+                },
+                email: {
+                    email: true
+                }
+            },
+            messages: {
+                username: {
+                    required: "用户名不能为空",
+                    notEmpty: "用户名不能为空"
+                },
+                password: {
+                    minlength: "密码至少为6位",
+                    maxlength: "密码至多位20位"
+                },
+                mobile: {
+                    required: "手机不能为空",
+                    notEmpty: "手机不能为空",
+                    mobile: "手机格式不对"
+                },
+                name: {
+                    required: "名称不能为空",
+                    notEmpty: "名称不能为空"
+                },
+                status: {
+                    required: "请选择状态"
+                },
+                email: {
+                    email: "email格式不对"
+                }
+            },
+            submitHandler: function (form) {
+                var params = $(form).xsJson();
+                if (params.password == "") params.password = undefined;
+                doPost("<%=request.getContextPath()%>/admin/security/secStaff/info/update", params, function (data) {
+                    if (data.status) {
+                        alert("员工编辑成功");
+                        window.location.reload(true);
+                    } else {
+                        alert(data.msg);
+                    }
+                });
+            }
+        });
+
+        $('#editPersonalInfo').on('hide.bs.modal', function (e) {
+            editPersonalInfoValidate.resetForm();
+            $("#editPersonalInfo").find(".text-danger").removeClass("text-danger");
+        });
+
+        function editPersonalInfo() {
+            doPost("<%=request.getContextPath()%>/admin/security/secStaff/info/get", {id: <sec:authentication property="principal.id"/>}, function (data) {
+                if (data.status) {
+                    var _data = data.data;
+                    $editPersonalInfoForm.find("input[name='id']").val(_data.id);
+                    $editPersonalInfoForm.find("input[name='name']").val(_data.name);
+                    $editPersonalInfoForm.find("input[name='username']").val(_data.username);
+                    $editPersonalInfoForm.find("input[name='mobile']").val(_data.mobile);
+                    $editPersonalInfoForm.find("input[name='qq']").val(_data.qq);
+                    $editPersonalInfoForm.find("input[name='email']").val(_data.email);
+                    $("#editPersonalInfo").modal('show');
+                } else {
+                    alert(data.msg);
+                }
+            });
+        }
+
+        function submitEditPersonalInfoForm() {
+            $editPersonalInfoForm.submit();
+        }
+    </script>
+</sec:authorize>

@@ -36,7 +36,6 @@
                             <input name="dynamic[name]" type="text" class="form-control" placeholder="模糊查询"
                                    value="${search.dynamic.name}">
                         </div>
-
                         <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
                             <label class="control-label">开始时间：</label>
                         </div>
@@ -48,6 +47,13 @@
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
                             <input type="text" name="dynamic[endTime]" class="form-control datepicker" readonly>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                            <label class="control-label">操作：</label>
+                        </div>
+                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
+                            <input name="dynamic[operation]" type="text" class="form-control" placeholder="模糊查询"
+                                   value="${search.dynamic.operation}">
                         </div>
                     </div>
                     <div class="form-group m-t-n-md">
@@ -66,6 +72,7 @@
                             <th>时间</th>
                             <th>操作</th>
                             <th>状态</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
