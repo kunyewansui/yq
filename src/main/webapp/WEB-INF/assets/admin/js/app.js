@@ -314,7 +314,6 @@ function _isNewRequestData(url, _new) {
 
 
 function _ajaxRequest(url, method, data, success, error) {
-    setTimeout(function () {
         var time = setTimeout(function () {
             showLoadingView()
         }, 800);
@@ -339,7 +338,6 @@ function _ajaxRequest(url, method, data, success, error) {
                 delete __oldRequestDataMap__[url];
             }
         });
-    }, 1000);
 }
 
 function _doPostEvent(url, data, success, error) {
