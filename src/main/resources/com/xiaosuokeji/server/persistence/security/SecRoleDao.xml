@@ -7,11 +7,7 @@
     <insert id="save" parameterType="secRole">
         INSERT INTO shuttle_common.sc_security_role(`name`,status,superior,`desc`)
         VALUES (#{name},#{status},0,#{desc})
-        ON DUPLICATE KEY UPDATE
-        status=#{status},
-        superior=0,
-        `desc`=#{desc},
-        update_time=NOW()
+        ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <insert id="saveRoleRes" parameterType="secRole">

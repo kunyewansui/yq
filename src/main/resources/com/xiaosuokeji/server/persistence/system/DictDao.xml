@@ -7,10 +7,7 @@
     <insert id="save" parameterType="dict">
         INSERT INTO shuttle_common.sc_dict(`name`,`key`,`lock`)
         VALUES (#{name},#{key},#{lock})
-        ON DUPLICATE KEY UPDATE
-        `name`=#{name},
-        `lock`=#{lock},
-        update_time=NOW()
+        ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <delete id="remove" parameterType="dict">

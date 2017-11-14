@@ -7,10 +7,7 @@
     <insert id="save" parameterType="version">
         INSERT INTO shuttle_common.sc_version(id,`code`,`platform`,`name`,`url`,`status`,`desc`)
         VALUES (#{id},#{code},#{platform},#{name},#{url},#{status},#{desc})
-        ON DUPLICATE KEY UPDATE
-        `code`=#{code},
-        `platform`=#{platform},
-        update_time=NOW()
+        ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <delete id="remove" parameterType="version">

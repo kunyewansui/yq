@@ -7,17 +7,7 @@
     <insert id="save" parameterType="secResource" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO shuttle_common.sc_security_resource(`name`,`key`,pid,`type`,url,method,seq,`desc`,assign,log)
         VALUES (#{name},#{key},#{parent.id},#{type},#{url},#{method},#{seq},#{desc},#{assign},#{log})
-        ON DUPLICATE KEY UPDATE
-        `name`=#{name},
-        pid=#{parent.id},
-        `type`=#{type},
-        url=#{url},
-        method=#{method},
-        seq=#{seq},
-        `desc`=#{desc},
-        assign=#{assign},
-        log=#{log},
-        update_time=NOW()
+        ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <insert id="saveSuperiorRes" parameterType="secResource">

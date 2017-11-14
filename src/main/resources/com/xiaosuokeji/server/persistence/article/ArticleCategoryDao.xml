@@ -9,15 +9,7 @@
         display,`lock`)
         VALUES (#{id},#{key},#{name},#{prefix},#{icon},<if test="parent!=null and parent.id!=null and parent.id!=''">#{parent.id},</if>#{seq},
         #{display},#{lock})
-        ON DUPLICATE KEY UPDATE
-        `name`=#{name},
-        prefix=#{prefix},
-        icon=#{icon},
-        <if test="parent!=null">pid=#{parent.id},</if>
-        seq=#{seq},
-        display=#{display},
-        `lock`=#{lock},
-        update_time=NOW()
+        ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <delete id="remove" parameterType="articleCategory">

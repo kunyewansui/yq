@@ -7,10 +7,7 @@
     <insert id="save" parameterType="secOrganization">
         INSERT INTO shuttle_common.sc_security_organization(`name`,pid,status,`desc`)
         VALUES (#{name},#{parent.id},#{status},#{desc})
-        ON DUPLICATE KEY UPDATE
-        status=#{status},
-        `desc`=#{desc},
-        update_time=NOW()
+        ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <insert id="saveOrganizationRole" parameterType="secOrganization">

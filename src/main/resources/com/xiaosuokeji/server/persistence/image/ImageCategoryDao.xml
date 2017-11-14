@@ -7,13 +7,7 @@
     <insert id="save" parameterType="imageCategory">
         INSERT INTO shuttle_common.sc_image_category(id,`key`,`name`,pid,seq,display,`lock`)
         VALUES (#{id},#{key},#{name},#{parent.id},#{seq},#{display},#{lock})
-        ON DUPLICATE KEY UPDATE
-        `name`=#{name},
-        pid=#{parent.id},
-        seq=#{seq},
-        display=#{display},
-        `lock`=#{lock},
-        update_time=NOW()
+        ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <delete id="remove" parameterType="imageCategory">
