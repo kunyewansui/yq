@@ -43,7 +43,7 @@ public class SecStaffServiceImpl implements SecStaffService {
     @Override
     @Transactional
     public void remove(SecStaff secStaff) throws XSBusinessException {
-        SecStaff existent = secStaffDao.get(secStaff);
+        SecStaff existent = get(secStaff);
         secStaffDao.removeStaffOrganization(existent);
         secStaffDao.removeStaffRole(existent);
         secStaffDao.remove(existent);

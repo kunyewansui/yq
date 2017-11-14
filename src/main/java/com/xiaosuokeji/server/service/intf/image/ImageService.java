@@ -14,9 +14,9 @@ public interface ImageService {
 
     void save(Image image);
 
-    void remove(Image image);
+    void remove(Image image) throws XSBusinessException;
 
-    void update(Image image);
+    void update(Image image) throws XSBusinessException;
 
     Image get(Image image) throws XSBusinessException;
 

@@ -29,12 +29,14 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void remove(Image image) {
-        imageDao.remove(image);
+    public void remove(Image image) throws XSBusinessException {
+        Image existent = get(image);
+        imageDao.remove(existent);
     }
 
     @Override
-    public void update(Image image) {
+    public void update(Image image) throws XSBusinessException {
+        get(image);
         imageDao.update(image);
     }
 
