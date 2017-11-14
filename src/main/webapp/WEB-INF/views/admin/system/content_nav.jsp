@@ -12,14 +12,6 @@
         <div class="navi-wrap">
             <nav class="navi">
                 <ul id="a_nav" class="nav">
-                    <sec:authorize access="hasAnyRole(${xs:getPermissions('system_version')})">
-                    <li>
-                        <a href="<%=request.getContextPath()%>/admin/system/version">
-                            <i class="fa fa-empire"></i>
-                            <span>版本管理</span>
-                        </a>
-                    </li>
-                    </sec:authorize>
                     <sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict')})">
                     <li>
                         <a href="<%=request.getContextPath()%>/admin/system/dict">
@@ -75,6 +67,14 @@
                             <span>配置管理</span>
                         </a>
                     </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasAnyRole(${xs:getPermissions('system_version')})">
+                        <li>
+                            <a href="<%=request.getContextPath()%>/admin/system/version">
+                                <i class="fa fa-empire"></i>
+                                <span>版本管理</span>
+                            </a>
+                        </li>
                     </sec:authorize>
                 </ul>
             </nav>
