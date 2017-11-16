@@ -28,6 +28,13 @@ public interface SecResourceDao {
      */
     int removeSuperiorRes(SecResource secResource);
 
+    /**
+     * 批量删除指定资源和角色的映射
+     * @param secResource
+     * @return 受影响行数
+     */
+    int batchRemoveRoleRes(SecResource secResource);
+
     int update(SecResource secResource);
 
     int batchUpdate(SecResource secResource);

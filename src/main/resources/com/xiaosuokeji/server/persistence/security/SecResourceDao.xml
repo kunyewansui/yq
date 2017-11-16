@@ -25,6 +25,17 @@
         WHERE role_id=1 AND resource_id=#{id}
     </delete>
 
+    <delete id="batchRemoveRoleRes" parameterType="secResource">
+        DELETE FROM shuttle_common.sc_security_role_res
+        WHERE role_id!=1
+        <if test="list!=null and list.size>0">
+            AND resource_id IN
+            <foreach collection="list" open="(" item="item" close=")" separator=",">
+                #{item.id}
+            </foreach>
+        </if>
+    </delete>
+
     <update id="update" parameterType="secResource">
         UPDATE shuttle_common.sc_security_resource
         <trim prefix="SET" prefixOverrides=",">

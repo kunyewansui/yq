@@ -140,6 +140,10 @@ public class SecResourceServiceImpl implements SecResourceService {
             if (secResource.getAssign().equals(0)) {
                 List<SecResource> subTreeList = XSTreeUtil.listSubTree(map.get(existent.getId()));
                 latest.setList(subTreeList);
+                //回收所有角色拥有的不可分配资源
+                if (subTreeList.size() > 0) {
+                    secResourceDao.batchRemoveRoleRes(latest);
+                }
             }
             else {
                 List<SecResource> treePath = XSTreeUtil.getTreePath(map, map.get(existent.getId()));
