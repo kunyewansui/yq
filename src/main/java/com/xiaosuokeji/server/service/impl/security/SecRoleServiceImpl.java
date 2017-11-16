@@ -152,8 +152,16 @@ public class SecRoleServiceImpl implements SecRoleService {
             SecResource secResource = map.get(iterator.next().getId());
             if (secResource != null && secResource.getChildren() != null) {
                 for(SecResource item : secResource.getChildren()) {
-                    if (item.getType().equals(2) && item.getAssign().equals(1)) {
-                        urlResource.add(item);
+                    //非超级管理员不能够操作不可分配资源
+                    if (!secStaff.getId().equals(1L)) {
+                        if (item.getType().equals(2) && item.getAssign().equals(1)) {
+                            urlResource.add(item);
+                        }
+                    }
+                    else {
+                        if (item.getType().equals(2)) {
+                            urlResource.add(item);
+                        }
                     }
                 }
             }
