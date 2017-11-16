@@ -74,7 +74,7 @@
                         <tbody>
                         <c:if test="${dictDataList.size() eq 0}">
                             <tr>
-                                <td colspan="6">无数据</td>
+                                <td colspan="4">无数据</td>
                             </tr>
                         </c:if>
                         <c:forEach items="${dictDataList}" var="item">

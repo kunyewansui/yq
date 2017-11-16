@@ -96,7 +96,7 @@
                     <tbody>
                     <c:if test="${pageModel.list.size() eq 0}">
                         <tr>
-                            <td colspan="8">无数据</td>
+                            <td colspan="6">无数据</td>
                         </tr>
                     </c:if>
                     <c:forEach items="${pageModel.list}" var="resource">
