@@ -221,7 +221,7 @@
             function (data) {
                 if (data.status) {
                     setTimeout(function () {
-                        updateTree(false, true);
+                        updateTree(false, false);
                         alert("更新成功");
                     }, 380);
                 } else {
@@ -372,7 +372,7 @@
                             $("#createModel").modal("hide");
                             setTimeout(function () {
                                 alert("新增成功");
-                                updateTree(false);
+                                updateTree(false,false);
                             }, 380);
                         } else {
                             alert(data.msg);
