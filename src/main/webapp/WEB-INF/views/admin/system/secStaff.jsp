@@ -525,7 +525,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">角色授权</h4>
+                    <h4 class="modal-title">员工授权</h4>
                 </div>
                 <div class="modal-body pos-rlt" style="height: 500px;">
                     <ul id="authTree" class="ztree" style="overflow:auto;"></ul>
