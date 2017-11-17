@@ -196,10 +196,10 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-xs-3 text-right">
-                            <label class="control-label required">url：</label>
+                            <label class="control-label required">图片：</label>
                         </div>
                         <div class="col-xs-9">
-                            <input name="url" type="text" maxlength="255" class="form-control">
+                            <xs:imageUploader identifier="create" name="url" folder="banner"/>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -347,10 +347,10 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-xs-3 text-right">
-                            <label class="control-label required">url：</label>
+                            <label class="control-label required">图片：</label>
                         </div>
                         <div class="col-xs-9">
-                            <input name="url" type="text" maxlength="255" class="form-control">
+                            <xs:imageUploader identifier="update" name="url" folder="banner"/>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -468,6 +468,7 @@
         doPost("<%=request.getContextPath()%>/admin/content/image/get", {id: id}, function (data) {
             if (data.status) {
                 $updateForm.xsSetForm(data.data);
+                putImageIntoImageUploader("update",data.data.url);
                 $updateForm.xsSetInput("category.id", data.data.category.id);
                 $updateForm.xsSetInput("category.name", data.data.category.name);
                 $("#updateModel").modal("show");

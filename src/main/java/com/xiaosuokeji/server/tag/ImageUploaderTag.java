@@ -26,9 +26,9 @@ public class ImageUploaderTag extends TagSupport {
      */
     private String folder;
 
-    private Integer width=80;
+    private Integer width = 80;
 
-    private Integer height=80;
+    private Integer height = 80;
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
@@ -72,16 +72,16 @@ public class ImageUploaderTag extends TagSupport {
                 "    function updatePreviewDiv_{{id}}() {\n" +
                 "        var html = \"\";\n" +
                 "        $.each(images_{{id}}, function (index, image) {\n" +
-                "            html += \"<label style=\"width:" + width + "px;height:" + height + "px\">\" +\n" +
+                "            html += \"<label style=\'width:" + width + "px;height:" + height + "px\'>\" +\n" +
                 "                \"<img src='\" + image + \"'/>\" +\n" +
                 "                \"<a class='delete' href='#' onclick='deleteUpload_{{id}}(\" + index + \");return false;'>删除\" +\n" +
                 "                \"</a>\" +\n" +
                 "                \"</label>\";\n" +
                 "        });\n" +
                 "        if (images_{{id}}.length === 0) {\n" +
-                "            html += \"<label style=\"width:" + width + "px;height:" + height + "px\">\" +\n" +
+                "            html += \"<label style=\'width:" + width + "px;height:" + height + "px\'>\" +\n" +
                 "                \"<a id='addImage_{{id}}' class='add' href='#' onclick='selectImage_{{id}}();return false;'>\" +\n" +
-                "                \"<i class='fa fa-plus'></i>\" +\n" +
+                "                \"<i class='fa fa-plus'  style='line-height:" + height + "px'></i>\" +\n" +
                 "                \"</a>\" +\n" +
                 "                \"</label>\";\n" +
                 "        }\n" +
@@ -98,7 +98,7 @@ public class ImageUploaderTag extends TagSupport {
                 "    function uploadPreview_{{id}}(file) {\n" +
                 "        if (file.files && file.files[0]) {\n" +
                 "            lock_{{id}} = true;\n" +
-                "            $(\"#addImage_{{id}}\").html(\"<i class='fa fa-spinner fa-pulse'></i>\");\n" +
+                "            $(\"#addImage_{{id}}\").html(\"<i class='fa fa-spinner fa-pulse'  style='line-height:"+height+"px'></i>\");\n" +
                 "\n" +
                 "            imageUpload(\"<%=request.getContextPath()%>/admin/common/api/file/upload\", '{{folder}}', file.files[0], function (data) {\n" +
                 "                lock_{{id}} = false;\n" +
