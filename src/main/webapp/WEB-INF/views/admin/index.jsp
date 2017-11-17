@@ -14,7 +14,7 @@
     <%@include file="./common/head.jsp" %>
 </head>
 <body>
-<div class="app app-header-fixed app-aside-fixed">
+<div class="app app-header-fixed app-aside-fixed" style="padding-top: 0">
     <%@include file="./common/header.jsp" %>
     <div class="app-aside hidden-xs bg-black">
         <div class="aside-wrap ">
