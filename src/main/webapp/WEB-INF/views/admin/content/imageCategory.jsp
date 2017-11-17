@@ -248,7 +248,7 @@
     </sec:authorize>
 </script>
 
-<sec:authorize access="hasAnyRole(${xs:getPermissions('system_imageCategory_delete')})">
+<sec:authorize access="hasAnyRole(${xs:getPermissions('content_imageCategory_delete')})">
     <%@include file="../common/deleteConfirm.jsp" %>
     <script>
         function deleteItem() {
