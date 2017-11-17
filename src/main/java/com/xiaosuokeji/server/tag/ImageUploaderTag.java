@@ -26,6 +26,10 @@ public class ImageUploaderTag extends TagSupport {
      */
     private String folder;
 
+    private Integer width=80;
+
+    private Integer height=80;
+
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
@@ -37,6 +41,15 @@ public class ImageUploaderTag extends TagSupport {
     public void setFolder(String folder) {
         this.folder = folder;
     }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
 
     @Override
     public int doStartTag() throws JspException {
@@ -59,14 +72,14 @@ public class ImageUploaderTag extends TagSupport {
                 "    function updatePreviewDiv_{{id}}() {\n" +
                 "        var html = \"\";\n" +
                 "        $.each(images_{{id}}, function (index, image) {\n" +
-                "            html += \"<label>\" +\n" +
+                "            html += \"<label style=\"width:" + width + "px;height:" + height + "px\">\" +\n" +
                 "                \"<img src='\" + image + \"'/>\" +\n" +
                 "                \"<a class='delete' href='#' onclick='deleteUpload_{{id}}(\" + index + \");return false;'>删除\" +\n" +
                 "                \"</a>\" +\n" +
                 "                \"</label>\";\n" +
                 "        });\n" +
                 "        if (images_{{id}}.length === 0) {\n" +
-                "            html += \"<label>\" +\n" +
+                "            html += \"<label style=\"width:" + width + "px;height:" + height + "px\">\" +\n" +
                 "                \"<a id='addImage_{{id}}' class='add' href='#' onclick='selectImage_{{id}}();return false;'>\" +\n" +
                 "                \"<i class='fa fa-plus'></i>\" +\n" +
                 "                \"</a>\" +\n" +

@@ -7,7 +7,7 @@
 
     <security:http auto-config="false" use-expressions="true">
         <security:csrf disabled="true"/>
-        <security:form-login login-page="/admin/login" login-processing-url="/admin/security/login"
+        <security:form-login login-page="/admin/login" login-processing-url="/admin/login"
                              authentication-success-handler-ref="authenticationSuccessHandler"
                              authentication-failure-handler-ref="authenticationFailureHandler"/>
         <security:logout logout-url="/admin/logout" success-handler-ref="logoutSuccessHandler"/>

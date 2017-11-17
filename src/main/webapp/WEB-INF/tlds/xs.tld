@@ -88,6 +88,18 @@
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description>宽度</description>
+            <name>width</name>
+            <required>false</required>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description>高度</description>
+            <name>height</name>
+            <required>false</required>
+            <type>java.lang.Integer</type>
+        </attribute>
     </tag>
 
     <function>
