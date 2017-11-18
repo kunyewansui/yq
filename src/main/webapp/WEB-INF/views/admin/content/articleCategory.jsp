@@ -280,7 +280,7 @@
         showDeleteModel(null, function () {
             doPost("<%=request.getContextPath()%>/admin/content/article/category/remove", {id: selectedId}, function (data) {
                 if (data.status) {
-                    selectedId = "";
+                    selectedId = undefined;
                     updateTree(true, true);
                 } else {
                     alert(data.msg);
