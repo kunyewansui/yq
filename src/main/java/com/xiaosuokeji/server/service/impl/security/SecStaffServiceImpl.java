@@ -32,8 +32,8 @@ public class SecStaffServiceImpl implements SecStaffService {
     public void save(SecStaff secStaff) throws Exception {
         SecStaff criteria = new SecStaff();
         criteria.setUsername(secStaff.getUsername());
-        Long count = secStaffDao.count(criteria);
-        if (count.compareTo(0L) > 0) {
+        SecStaff existent = secStaffDao.getByUsername(criteria);
+        if (existent != null) {
             throw new XSBusinessException(SecStaffConsts.SEC_STAFF_EXIST);
         }
         secStaff.setPassword(XSMd5Util.encode(secStaff.getPassword()));
@@ -55,12 +55,9 @@ public class SecStaffServiceImpl implements SecStaffService {
         if (secStaff.getUsername() != null) {
             SecStaff criteria = new SecStaff();
             criteria.setUsername(secStaff.getUsername());
-            List<SecStaff> existents = secStaffDao.list(criteria);
-            if (existents.size() > 0) {
-                boolean isSelf = existents.get(0).getId().equals(existent.getId());
-                if (!isSelf) {
-                    throw new XSBusinessException(SecStaffConsts.SEC_STAFF_EXIST);
-                }
+            existent = secStaffDao.getByUsername(criteria);
+            if (existent != null && !existent.getId().equals(secStaff.getId())) {
+                throw new XSBusinessException(SecStaffConsts.SEC_STAFF_EXIST);
             }
         }
         if (secStaff.getPassword() != null) {

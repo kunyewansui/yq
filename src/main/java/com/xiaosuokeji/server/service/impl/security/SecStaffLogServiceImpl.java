@@ -83,10 +83,8 @@ public class SecStaffLogServiceImpl implements SecStaffLogService {
                 SecResource resource = secResourceService.getByRequest(criteria);
                 if (resource != null && resource.getLog().equals(1)) {
                     SecStaffLog latest = new SecStaffLog();
-                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                    if (authentication != null) {
-                        latest.setStaff((SecStaff) authentication.getPrincipal());
-                    }
+                    SecStaff secStaff = (SecStaff) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                    latest.setStaff(secStaff);
                     latest.setIp(xsLogger.getRequestIp());
                     latest.setTime(xsLogger.getRequestTime());
                     latest.setOperation(resource.getDesc());
