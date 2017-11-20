@@ -130,6 +130,7 @@
                                 <td>${item.seq}</td>
                                 <td><xs:dictDesc key="articleDisplay" value="${item.display}"/></td>
                                 <td>
+                                    <a class="btn btn-primary btn-xs" target="_blank" href="<c:url value='${item.url}'/>">预览</a>
                                     <sec:authorize access="hasAnyRole(${xs:getPermissions('content_article_update')})">
                                     <c:if test="${item.display eq 0}">
                                         <button class="btn btn-success btn-xs"

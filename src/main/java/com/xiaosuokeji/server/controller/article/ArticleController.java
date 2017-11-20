@@ -51,7 +51,7 @@ public class ArticleController {
     }
 
     @RequestMapping(value = "/admin/content/article/article/update", method = RequestMethod.GET)
-    public String update(Model model, HttpServletRequest request, Article article)throws Exception {
+    public String update(Model model, HttpServletRequest request, Article article) throws Exception {
         model.addAttribute("backUrl", request.getHeader("Referer"));
         try {
             model.addAttribute("article", articleService.get(article));

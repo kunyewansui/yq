@@ -49,7 +49,7 @@
                 <configuration>
                     <uriEncoding>UTF-8</uriEncoding>
                     <path>/xstemplate</path>
-                    <port>8080</port>
+                    <port>8081</port>
                 </configuration>
             </plugin>
         </plugins>
