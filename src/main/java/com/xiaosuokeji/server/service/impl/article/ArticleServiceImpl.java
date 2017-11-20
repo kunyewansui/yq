@@ -4,8 +4,10 @@ import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.framework.util.XSUuidUtil;
 import com.xiaosuokeji.server.constant.article.ArticleConsts;
+import com.xiaosuokeji.server.dao.article.ArticleCategoryDao;
 import com.xiaosuokeji.server.dao.article.ArticleDao;
 import com.xiaosuokeji.server.model.article.Article;
+import com.xiaosuokeji.server.model.article.ArticleCategory;
 import com.xiaosuokeji.server.service.intf.article.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +20,26 @@ import java.util.List;
  */
 @Service
 public class ArticleServiceImpl implements ArticleService {
-    
+
     @Autowired
     private ArticleDao articleDao;
+    @Autowired
+    private ArticleCategoryDao articleCategoryDao;
 
     @Override
     public void save(Article article) {
         article.setId(XSUuidUtil.generate());
+        //获取分类信息
+        ArticleCategory category = articleCategoryDao.get(article.getCategory());
+        String url = category.getPrefix();
+        if (url.contains("${id}")) {
+            url = url.replace("${id}", article.getId());
+        } else if (url.endsWith("/")) {
+            url += article.getId();
+        } else {
+            url += "/" + article.getId();
+        }
+        article.setUrl(url);
         articleDao.save(article);
     }
 
@@ -35,6 +50,17 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void update(Article article) {
+        //获取分类信息
+        ArticleCategory category = articleCategoryDao.get(article.getCategory());
+        String url = category.getPrefix();
+        if (url.contains("${id}")) {
+            url = url.replace("${id}", article.getId());
+        } else if (url.endsWith("/")) {
+            url += article.getId();
+        } else {
+            url += "/" + article.getId();
+        }
+        article.setUrl(url);
         articleDao.update(article);
     }
 

@@ -149,7 +149,7 @@
     }
 
     function submitForm() {
-        doPost('<%=request.getContextPath()%>/admin/content/article/save',
+        doPost('<%=request.getContextPath()%>/admin/content/article/article/save',
             {
                 title: $form.xsGetInput("title"),
                 seq: $form.xsGetInput("seq"),
