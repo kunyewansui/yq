@@ -2,6 +2,9 @@ package com.xiaosuokeji.server.controller.index;
 
 import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.server.constant.security.SecStaffConsts;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +21,15 @@ import java.util.Map;
  */
 @Controller("adminLoginController")
 public class LoginController {
+
+    @RequestMapping("admin")
+    public String admin(HttpServletRequest request){
+        if (request.getSession().getAttribute("SPRING_SECURITY_CONTEXT")==null) {
+            return "redirect:/admin/login";
+        } else {
+            return "redirect:/admin/index";
+        }
+    }
 
     @RequestMapping("admin/login")
     public ModelAndView loginPage(HttpServletRequest request) throws IOException {
