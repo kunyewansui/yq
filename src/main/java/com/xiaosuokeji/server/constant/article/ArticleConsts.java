@@ -8,5 +8,5 @@ import com.xiaosuokeji.framework.model.XSStatusPair;
  */
 public class ArticleConsts {
 
-    public static XSStatusPair ARTICLE_NOT_EXIST = XSStatusPair.build(10004, "文章不存在");
+    public static XSStatusPair ARTICLE_NOT_EXIST = XSStatusPair.build(10304, "文章不存在");
 }

@@ -110,7 +110,7 @@
     function simpleUpdateListItem(id) {
         doPost("<%=request.getContextPath()%>/admin/marketing/feedback/solve",{id:id},function (data) {
             if(data.status){
-                alert("标记成功");
+                bootoast({message: "标记成功！"});
                 window.location.reload(true);
             }else{
                 alert(data.msg);
@@ -128,7 +128,7 @@
             doPost("<%=request.getContextPath()%>/admin/marketing/feedback/remove", {id: id}, function (data) {
                 if (data.status) {
                     setTimeout(function () {
-                        alert("删除成功");
+                        bootoast({message: "删除成功！"});
                         window.location.reload(true);
                     }, 380);
                 } else {

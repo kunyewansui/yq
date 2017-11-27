@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 图片
@@ -56,6 +57,11 @@ public class Image extends BaseModel {
      */
     @XSAutoDesc("imageDisplay")
     private Integer display;
+
+    /**
+     * 分类列表
+     */
+    private List<ImageCategory> categoryList;
 
     public interface Save {}
 
@@ -115,5 +121,13 @@ public class Image extends BaseModel {
 
     public void setDisplay(Integer display) {
         this.display = display;
+    }
+
+    public List<ImageCategory> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<ImageCategory> categoryList) {
+        this.categoryList = categoryList;
     }
 }

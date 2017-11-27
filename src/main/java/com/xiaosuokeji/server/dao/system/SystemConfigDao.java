@@ -18,6 +18,8 @@ public interface SystemConfigDao {
 
     SystemConfig get(SystemConfig systemConfig);
 
+    SystemConfig getByKey(SystemConfig systemConfig);
+
     List<SystemConfig> list(SystemConfig systemConfig);
 
     Long count(SystemConfig systemConfig);

@@ -8,5 +8,5 @@ import com.xiaosuokeji.framework.model.XSStatusPair;
  */
 public class ImageConsts {
 
-    public static XSStatusPair IMAGE_NOT_EXIST = XSStatusPair.build(10310, "图片不存在");
+    public static XSStatusPair IMAGE_NOT_EXIST = XSStatusPair.build(10404, "图片不存在");
 }

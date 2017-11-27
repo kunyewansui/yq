@@ -71,23 +71,29 @@
             <if test="dynamic!=null and dynamic.content!=null and dynamic.content!=''">
                 AND a.content LIKE CONCAT('%',#{dynamic.content},'%')
             </if>
-            <if test="category!=null and category.id!=null and category.id!=''">
+            <if test="category!=null and category.id!=null and category.id!='' and categoryList==null">
                 AND a.category_id=#{category.id}
             </if>
             <if test="display!=null">
                 AND a.display=#{display}
             </if>
             <if test="dynamic!=null and dynamic.createTimeStart!=null and dynamic.createTimeStart!=''">
-                AND date(u.create_time) &gt;= #{dynamic.createTimeStart}
+                AND date(a.create_time) &gt;= #{dynamic.createTimeStart}
             </if>
             <if test="dynamic!=null and dynamic.createTimeEnd!=null and dynamic.createTimeEnd!=''">
-                AND date(u.create_time) &lt;= #{dynamic.createTimeEnd}
+                AND date(a.create_time) &lt;= #{dynamic.createTimeEnd}
             </if>
             <if test="dynamic!=null and dynamic.updateTimeStart!=null and dynamic.updateTimeStart!=''">
-                AND date(u.update_time) &gt;= #{dynamic.updateTimeStart}
+                AND date(a.update_time) &gt;= #{dynamic.updateTimeStart}
             </if>
             <if test="dynamic!=null and dynamic.updateTimeEnd!=null and dynamic.updateTimeEnd!=''">
-                AND date(u.update_time) &lt;= #{dynamic.updateTimeEnd}
+                AND date(a.update_time) &lt;= #{dynamic.updateTimeEnd}
+            </if>
+            <if test="categoryList!=null and categoryList.size>0">
+                AND a.category_id IN
+                <foreach collection="categoryList" open="(" item="item" close=")" separator=",">
+                    #{item.id}
+                </foreach>
             </if>
         </trim>
     </sql>

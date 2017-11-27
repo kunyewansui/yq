@@ -37,6 +37,9 @@ public class DictDescTag extends SimpleTagSupport {
     @Override
     public void doTag() throws JspException, IOException {
         JspWriter out = getJspContext().getOut();
-        out.println(dictDataService.getDesc(key, value));
+        String desc = dictDataService.getDesc(key, value);
+        if (desc != null) {
+            out.println(desc);
+        }
     }
 }

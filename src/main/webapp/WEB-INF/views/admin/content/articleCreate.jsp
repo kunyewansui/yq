@@ -162,7 +162,7 @@
                 lock: 0
             }, function (data) {
                 if (data.status) {
-                    alert("新增成功");
+                    bootoast({message: "新增成功！"});
                     window.location.href = '${backUrl}';
                 } else {
                     alert(data.msg);

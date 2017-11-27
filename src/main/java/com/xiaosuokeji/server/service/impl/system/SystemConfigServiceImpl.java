@@ -67,6 +67,26 @@ public class SystemConfigServiceImpl implements SystemConfigService {
     }
 
     @Override
+    public SystemConfig getByKey(SystemConfig systemConfig) throws XSBusinessException {
+        SystemConfig existent = systemConfigDao.getByKey(systemConfig);
+        if (existent == null) {
+            throw new XSBusinessException(SystemConfigConsts.SYSTEM_CONFIG_NOT_EXIST);
+        }
+        return existent;
+    }
+
+    @Override
+    public String getByKey(String key, String defaultValue) {
+        SystemConfig criteria = new SystemConfig();
+        criteria.setKey(key);
+        SystemConfig existent = systemConfigDao.getByKey(criteria);
+        if (existent == null) {
+            return defaultValue;
+        }
+        return existent.getValue();
+    }
+
+    @Override
     public XSPageModel<SystemConfig> listAndCount(SystemConfig systemConfig) {
         systemConfig.setDefaultSort("create_time", "DESC");
         return XSPageModel.build(systemConfigDao.list(systemConfig), systemConfigDao.count(systemConfig));

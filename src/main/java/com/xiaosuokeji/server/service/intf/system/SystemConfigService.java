@@ -18,5 +18,9 @@ public interface SystemConfigService {
 
     SystemConfig get(SystemConfig systemConfig) throws XSBusinessException;
 
+    SystemConfig getByKey(SystemConfig systemConfig) throws XSBusinessException;
+
+    String getByKey(String key, String defaultValue);
+
     XSPageModel<SystemConfig> listAndCount(SystemConfig systemConfig);
 }

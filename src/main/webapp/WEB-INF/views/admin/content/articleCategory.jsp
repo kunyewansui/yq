@@ -249,7 +249,7 @@
             function (data) {
                 if (data.status) {
                     updateTree(false, true);
-                    alert("更新成功");
+                    bootoast({message: "更新成功！", timeout: 1});
                 } else {
                     alert(data.msg);
                 }
@@ -264,7 +264,7 @@
             function (data) {
                 if (data.status) {
                     getItem(selectedId);
-                    alert(lock === 1 ? "锁定成功" : "解锁成功");
+                    bootoast({message: "更新成功！", timeout: 1});
                 } else {
                     alert(data.msg);
                 }
@@ -430,7 +430,7 @@
                         cleanImageInUploader('createIcon');
                         $("#createModel").modal("hide");
                         setTimeout(function () {
-                            alert("新增成功");
+                            bootoast({message: "新增成功！", timeout: 1});
                             updateTree(false);
                         }, 380);
 

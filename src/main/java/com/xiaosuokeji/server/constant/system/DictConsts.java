@@ -8,11 +8,11 @@ import com.xiaosuokeji.framework.model.XSStatusPair;
  */
 public class DictConsts {
 
-    public static XSStatusPair DICT_EXIST = XSStatusPair.build(10000, "字典已存在");
+    public static XSStatusPair DICT_EXIST = XSStatusPair.build(10100, "字典已存在");
 
-    public static XSStatusPair DICT_NOT_EXIST = XSStatusPair.build(10001, "字典不存在");
+    public static XSStatusPair DICT_NOT_EXIST = XSStatusPair.build(10101, "字典不存在");
 
-    public static XSStatusPair DICT_LOCKED = XSStatusPair.build(10002, "字典被锁定");
+    public static XSStatusPair DICT_LOCKED = XSStatusPair.build(10102, "字典被锁定");
 
-    public static XSStatusPair DICT_USED = XSStatusPair.build(10003, "字典被使用");
+    public static XSStatusPair DICT_USED = XSStatusPair.build(10103, "字典被使用");
 }

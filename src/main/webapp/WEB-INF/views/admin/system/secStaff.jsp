@@ -277,7 +277,7 @@
             submitHandler: function (form) {
                 doPost("<%=request.getContextPath()%>/admin/security/secStaff/save", $(form).serialize(), function (data) {
                     if (data.status) {
-                        alert("员工新增成功");
+                        bootoast({message: "新增成功！"});
                         window.location.reload(true);
                     } else {
                         alert(data.msg);
@@ -440,7 +440,7 @@
                 if (params.password == "") params.password = undefined;
                 doPost("<%=request.getContextPath()%>/admin/security/secStaff/update", params, function (data) {
                     if (data.status) {
-                        alert("员工编辑成功");
+                        bootoast({message: "更新成功！"});
                         window.location.reload(true);
                     } else {
                         alert(data.msg);
@@ -507,7 +507,7 @@
         function submitDelete() {
             doPost("<%=request.getContextPath()%>/admin/security/secStaff/remove", {id: deleteId}, function (data) {
                 if (data.status) {
-                    alert("员工删除成功");
+                    bootoast({message: "删除成功！"});
                     window.location.reload(true);
                 } else {
                     alert(data.msg);
@@ -597,7 +597,7 @@
                 roleIds: roleIds + ""
             }, function (data) {
                 if (data.status) {
-                    alert("员工授权成功！");
+                    bootoast({message: "授权成功！", timeout: 1});
                 } else {
                     alert(data.msg);
                 }
@@ -689,7 +689,7 @@
                 organizationIds: organizationIds + ""
             }, function (data) {
                 if (data.status) {
-                    alert("操作成功！");
+                    bootoast({message: "加入组织成功！", timeout: 1});
                 } else {
                     alert(data.msg);
                 }

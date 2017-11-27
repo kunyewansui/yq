@@ -8,6 +8,5 @@ import com.xiaosuokeji.framework.model.XSStatusPair;
  */
 public class FeedbackConsts {
 
-
-    public static XSStatusPair FEEDBACK_NOT_EXIST = XSStatusPair.build(20003, "反馈不存在");
+    public static XSStatusPair FEEDBACK_NOT_EXIST = XSStatusPair.build(10800, "反馈不存在");
 }

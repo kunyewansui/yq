@@ -233,7 +233,7 @@
             submitHandler: function (form) {
                 doPost("<%=request.getContextPath()%>/admin/security/secOrganization/save", $(form).serialize(), function (data) {
                     if (data.status) {
-                        alert("组织新增成功");
+                        bootoast({message: "新增成功！"});
                         window.location.reload(true);
                     } else {
                         alert(data.msg);
@@ -351,7 +351,7 @@
             submitHandler: function (form) {
                 doPost("<%=request.getContextPath()%>/admin/security/secOrganization/update", $(form).serialize(), function (data) {
                     if (data.status) {
-                        alert("组织编辑成功");
+                        bootoast({message: "更新成功！"});
                         window.location.reload(true);
                     } else {
                         alert(data.msg);
@@ -419,7 +419,7 @@
         function submitDelete() {
             doPost("<%=request.getContextPath()%>/admin/security/secOrganization/remove", {id: deleteId}, function (data) {
                 if (data.status) {
-                    alert("组织删除成功");
+                    bootoast({message: "删除成功！"});
                     window.location.reload(true);
                 } else {
                     alert(data.msg);
@@ -571,7 +571,7 @@
                 roleIds: roleIds + ""
             }, function (data) {
                 if (data.status) {
-                    alert("组织授权成功！");
+                    bootoast({message: "授权成功！", timeout: 1});
                 } else {
                     alert(data.msg);
                 }

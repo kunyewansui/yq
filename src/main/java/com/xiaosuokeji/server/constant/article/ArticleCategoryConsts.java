@@ -8,11 +8,11 @@ import com.xiaosuokeji.framework.model.XSStatusPair;
  */
 public class ArticleCategoryConsts {
 
-    public static XSStatusPair ARTICLE_CATEGORY_EXIST = XSStatusPair.build(10000, "文章分类已存在");
+    public static XSStatusPair ARTICLE_CATEGORY_EXIST = XSStatusPair.build(10300, "文章分类已存在");
 
-    public static XSStatusPair ARTICLE_CATEGORY_LOCKED = XSStatusPair.build(10001, "文章分类被锁定");
+    public static XSStatusPair ARTICLE_CATEGORY_LOCKED = XSStatusPair.build(10301, "文章分类被锁定");
 
-    public static XSStatusPair ARTICLE_CATEGORY_USED = XSStatusPair.build(10002, "文章分类被使用");
+    public static XSStatusPair ARTICLE_CATEGORY_USED = XSStatusPair.build(10302, "文章分类被使用");
 
-    public static XSStatusPair ARTICLE_CATEGORY_NOT_EXIST = XSStatusPair.build(10003, "文章分类不存在");
+    public static XSStatusPair ARTICLE_CATEGORY_NOT_EXIST = XSStatusPair.build(10303, "文章分类不存在");
 }

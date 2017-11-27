@@ -59,11 +59,17 @@
             <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
                 AND i.name LIKE CONCAT('%',#{dynamic.name},'%')
             </if>
-            <if test="category!=null and category.id!=null and category.id!=''">
+            <if test="category!=null and category.id!=null and category.id!='' and categoryList==null">
                 AND i.category_id=#{category.id}
             </if>
             <if test="display!=null">
                 AND i.display=#{display}
+            </if>
+            <if test="categoryList!=null and categoryList.size>0">
+                AND i.category_id IN
+                <foreach collection="categoryList" open="(" item="item" close=")" separator=",">
+                    #{item.id}
+                </foreach>
             </if>
         </trim>
     </sql>

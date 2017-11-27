@@ -167,7 +167,7 @@
                 content: (parseInt($form.xsGetInput("type")) === 1) ? undefined : ue.getContent()
             }, function (data) {
                 if (data.status) {
-                    alert("修改成功");
+                    bootoast({message: "更新成功！"});
                     window.location.href = '${backUrl}';
                 } else {
                     alert(data.msg);

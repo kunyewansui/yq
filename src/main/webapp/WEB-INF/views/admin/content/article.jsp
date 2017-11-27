@@ -126,7 +126,7 @@
                         <c:forEach items="${pageModel.list}" var="item">
                             <tr>
                                 <td>${item.title}</td>
-                                <td><img style="max-width: 200px" src="${item.image}"></td>
+                                <td><img style="max-width: 100px" src="${item.image}"></td>
                                 <td>${item.seq}</td>
                                 <td><xs:dictDesc key="articleDisplay" value="${item.display}"/></td>
                                 <td>
@@ -214,7 +214,7 @@
             doPost("<%=request.getContextPath()%>/admin/content/article/article/remove", {id: id}, function (data) {
                 if (data.status) {
                     setTimeout(function () {
-                        alert("删除成功");
+                        bootoast({message: "删除成功！"});
                         window.location.reload(true);
                     }, 380);
                 } else {

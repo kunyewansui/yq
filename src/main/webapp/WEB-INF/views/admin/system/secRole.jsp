@@ -191,7 +191,7 @@
             submitHandler: function (form) {
                 doPost("<%=request.getContextPath()%>/admin/security/secRole/save", $(form).serialize(), function (data) {
                     if (data.status) {
-                        alert("角色新增成功");
+                        bootoast({message: "新增成功！"});
                         window.location.reload(true);
                     } else {
                         alert(data.msg);
@@ -286,7 +286,7 @@
             submitHandler: function (form) {
                 doPost("<%=request.getContextPath()%>/admin/security/secRole/update", $(form).serialize(), function (data) {
                     if (data.status) {
-                        alert("角色编辑成功");
+                        bootoast({message: "更新成功！"});
                         window.location.reload(true);
                     } else {
                         alert(data.msg);
@@ -349,7 +349,7 @@
         function submitDelete() {
             doPost("<%=request.getContextPath()%>/admin/security/secRole/remove", {id: deleteId}, function (data) {
                 if (data.status) {
-                    alert("角色删除成功");
+                    bootoast({message: "删除成功！"});
                     window.location.reload(true);
                 } else {
                     alert(data.msg);
@@ -441,7 +441,7 @@
                 resourceIds: resources + ""
             }, function (data) {
                 if (data.status) {
-                    alert("角色授权成功！");
+                    bootoast({message: "授权成功！", timeout: 1});
                 } else {
                     alert(data.msg);
                 }

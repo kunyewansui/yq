@@ -41,6 +41,12 @@ public class SystemConfigController {
         return XSServiceResult.build().data(systemConfigService.get(systemConfig));
     }
 
+    @RequestMapping(value = "/admin/system/systemConfig/getByKey", method = RequestMethod.GET)
+    @ResponseBody
+    public XSServiceResult adminGetByKey(SystemConfig systemConfig) throws XSBusinessException {
+        return XSServiceResult.build().data(systemConfigService.getByKey(systemConfig).getValue());
+    }
+
     @RequestMapping(value = "/admin/system/systemConfig/save", method = RequestMethod.POST)
     @ResponseBody
     public XSServiceResult adminSave(@Validated(SystemConfig.Save.class) SystemConfig systemConfig) throws XSBusinessException {

@@ -38,6 +38,12 @@
         WHERE id=#{id}
     </select>
 
+    <select id="getByKey" parameterType="systemConfig" resultType="systemConfig">
+        SELECT *
+        FROM shuttle_common.sc_system_config
+        WHERE `key`=#{key}
+    </select>
+
     <sql id="listCondition">
         FROM shuttle_common.sc_system_config
         <trim prefix="WHERE" prefixOverrides="AND|OR">

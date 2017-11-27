@@ -8,5 +8,5 @@ import com.xiaosuokeji.framework.model.XSStatusPair;
  */
 public class TokenConsts {
 
-    public static final XSStatusPair TOKEN_INVALID = XSStatusPair.build(10100, "令牌无效");
+    public static final XSStatusPair TOKEN_INVALID = XSStatusPair.build(11000, "令牌无效");
 }

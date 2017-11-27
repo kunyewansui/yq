@@ -352,7 +352,7 @@
             submitHandler: function (form) {
                 doPost("<%=request.getContextPath()%>/admin/security/secResource/save", $(form).serialize(), function (data) {
                     if (data.status) {
-                        alert("资源新增成功");
+                        bootoast({message: "新增成功！"});
                         window.location.reload(true);
                     } else {
                         alert(data.msg);
@@ -572,7 +572,7 @@
             submitHandler: function (form) {
                 doPost("<%=request.getContextPath()%>/admin/security/secResource/update", $(form).serialize(), function (data) {
                     if (data.status) {
-                        alert("资源编辑成功");
+                        bootoast({message: "更新成功！"});
                         window.location.reload(true);
                     } else {
                         alert(data.msg);
@@ -650,7 +650,7 @@
         function submitDelete() {
             doPost("<%=request.getContextPath()%>/admin/security/secResource/remove", {id: deleteId}, function (data) {
                 if (data.status) {
-                    alert("资源删除成功");
+                    bootoast({message: "删除成功！"});
                     window.location.reload(true);
                 } else {
                     alert(data.msg);

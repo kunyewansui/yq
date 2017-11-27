@@ -2,6 +2,7 @@ package com.xiaosuokeji.server.service.impl.article;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
+import com.xiaosuokeji.framework.util.XSTreeUtil;
 import com.xiaosuokeji.framework.util.XSUuidUtil;
 import com.xiaosuokeji.server.constant.article.ArticleConsts;
 import com.xiaosuokeji.server.dao.article.ArticleCategoryDao;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文章ServiceImpl
@@ -23,6 +25,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private ArticleDao articleDao;
+
     @Autowired
     private ArticleCategoryDao articleCategoryDao;
 
@@ -76,6 +79,12 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public XSPageModel<Article> listAndCount(Article article) {
         article.setDefaultSort("create_time", "DESC");
+        if (article.getCategory() != null && article.getCategory().getId() != null) {
+            List<ArticleCategory> list = articleCategoryDao.listCombo(new ArticleCategory());
+            Map<String, ArticleCategory> map = XSTreeUtil.buildTree(list);
+            List<ArticleCategory> subTreeList = XSTreeUtil.listSubTree(map.get(article.getCategory().getId()));
+            article.setCategoryList(subTreeList);
+        }
         return XSPageModel.build(articleDao.list(article), articleDao.count(article));
     }
 

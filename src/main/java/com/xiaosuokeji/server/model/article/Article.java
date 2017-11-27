@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 文章
@@ -72,6 +73,11 @@ public class Article extends BaseModel {
      * 锁定，0否，1是
      */
     private Integer lock;
+
+    /**
+     * 分类列表
+     */
+    private List<ArticleCategory> categoryList;
 
     public interface Save {}
 
@@ -155,5 +161,13 @@ public class Article extends BaseModel {
 
     public void setLock(Integer lock) {
         this.lock = lock;
+    }
+
+    public List<ArticleCategory> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<ArticleCategory> categoryList) {
+        this.categoryList = categoryList;
     }
 }

@@ -203,7 +203,7 @@
                 if (params.password == "") params.password = undefined;
                 doPost("<%=request.getContextPath()%>/admin/security/secStaff/info/update", params, function (data) {
                     if (data.status) {
-                        alert("员工编辑成功");
+                        bootoast({message: "更新成功！"});
                         window.location.reload(true);
                     } else {
                         alert(data.msg);

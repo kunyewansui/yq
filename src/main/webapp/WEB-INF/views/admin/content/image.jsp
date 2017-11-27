@@ -87,7 +87,7 @@
                         <c:forEach items="${pageModel.list}" var="item">
                             <tr>
                                 <td>${item.name}</td>
-                                <td><img style="max-width: 200px" src="${item.url}"></td>
+                                <td><img style="max-width: 100px" src="${item.url}"></td>
                                 <td><a href="${item.link}">${item.link}</a></td>
                                 <td>${item.seq}</td>
                                 <td><xs:dictDesc key="imageDisplay" value="${item.display}"/></td>
@@ -298,7 +298,7 @@
                     if (data.status) {
                         $("#createModel").modal("hide");
                         setTimeout(function () {
-                            alert("新增成功");
+                            bootoast({message: "新增成功！"});
                             window.location.reload(true);
                         }, 380);
 
@@ -450,7 +450,7 @@
                     if (data.status) {
                         $("#updateModel").modal("hide");
                         setTimeout(function () {
-                            alert("修改成功");
+                            bootoast({message: "更新成功！"});
                             window.location.reload(true);
                         }, 380);
 
@@ -508,7 +508,7 @@
             doPost("<%=request.getContextPath()%>/admin/content/image/remove", {id: id}, function (data) {
                 if (data.status) {
                     setTimeout(function () {
-                        alert("删除成功");
+                        bootoast({message: "删除成功！"});
                         window.location.reload(true);
                     }, 380);
                 } else {

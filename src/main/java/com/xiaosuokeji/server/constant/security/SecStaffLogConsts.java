@@ -8,5 +8,5 @@ import com.xiaosuokeji.framework.model.XSStatusPair;
  */
 public class SecStaffLogConsts {
 
-    public static final XSStatusPair SEC_STAFF_LOG_NOT_EXIST = XSStatusPair.build(10302, "日志不存在");
+    public static final XSStatusPair SEC_STAFF_LOG_NOT_EXIST = XSStatusPair.build(10016, "日志不存在");
 }
