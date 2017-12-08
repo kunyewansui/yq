@@ -872,6 +872,7 @@
      */
     Tree.prototype.expandAll = function (options) {
         options = $.extend({}, _default.options, options);
+
         if (options && options.levels) {
             this.expandLevels(this.tree, options.levels, options);
         } else {
@@ -1079,13 +1080,12 @@
      Common code for processing multiple identifiers
      */
     Tree.prototype.forEachIdentifier = function (identifiers, options, callback) {
-
         options = $.extend({}, _default.options, options);
         if (!(identifiers instanceof Array)) {
             callback(this.nodes[identifiers], options);
         }else {
             for (var i = 0; i < identifiers.length; i++) {
-                callback(this.nodes[identifiers[0].id], options);
+                callback(this.nodes[identifiers[i].id], options);
             }
         }
     };
