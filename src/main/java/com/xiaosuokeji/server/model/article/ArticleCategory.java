@@ -82,6 +82,14 @@ public class ArticleCategory extends BaseModel implements XSTreeable<String, Art
 
     public interface Update {}
 
+
+    public ArticleCategory() {
+    }
+
+    public ArticleCategory(String id) {
+        this.id = id;
+    }
+
     @JsonIgnore
     @Override
     public String getNodeId() {

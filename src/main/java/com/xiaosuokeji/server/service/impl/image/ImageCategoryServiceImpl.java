@@ -91,10 +91,18 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
                 }
             }
         }
+        //不能选择自己或自己的下级作为父级
+        List<ImageCategory> list = imageCategoryDao.listCombo(new ImageCategory());
+        Map<String, ImageCategory> map = XSTreeUtil.buildTree(list);
+        List<ImageCategory> subList = XSTreeUtil.listSubTree(map.get(imageCategory.getId()));
+        if(imageCategory.getParent().getId() != null){
+            boolean isSelfSub = subList.stream().anyMatch(s -> s.getId().equals(imageCategory.getParent().getId()));
+            if(isSelfSub){
+                throw new XSBusinessException(ImageCategoryConsts.IMAGE_CATEGORY_NOT_SELF_OR_SUB);
+            }
+        }
         imageCategoryDao.update(imageCategory);
         if (imageCategory.getDisplay() != null) {
-            List<ImageCategory> list = imageCategoryDao.listCombo(new ImageCategory());
-            Map<String, ImageCategory> map = XSTreeUtil.buildTree(list);
             ImageCategory latest = new ImageCategory();
             latest.setDisplay(imageCategory.getDisplay());
             //取消展示则所有子级也取消，开启展示则直属父级和所有子级也开启

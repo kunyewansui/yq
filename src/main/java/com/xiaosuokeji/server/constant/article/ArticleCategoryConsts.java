@@ -15,4 +15,7 @@ public class ArticleCategoryConsts {
     public static XSStatusPair ARTICLE_CATEGORY_USED = XSStatusPair.build(10302, "文章分类被使用");
 
     public static XSStatusPair ARTICLE_CATEGORY_NOT_EXIST = XSStatusPair.build(10303, "文章分类不存在");
+
+    public static XSStatusPair ARTICLE_CATEGORY_NOT_SELF_OR_SUB = XSStatusPair.build(10004, "不能选择自己或自己的下级作为父级");
+
 }

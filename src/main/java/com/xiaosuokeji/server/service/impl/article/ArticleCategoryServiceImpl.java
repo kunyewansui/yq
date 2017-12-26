@@ -90,10 +90,19 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
             }
         }
         get(articleCategory);
+        //不能选择自己或自己的下级作为父级
+        List<ArticleCategory> list = articleCategoryDao.listCombo(new ArticleCategory());
+        Map<String, ArticleCategory> map = XSTreeUtil.buildTree(list);
+        List<ArticleCategory> subList = XSTreeUtil.listSubTree(map.get(articleCategory.getId()));
+        if(articleCategory.getParent().getId() != null){
+            boolean isSelfSub = subList.stream().anyMatch(s -> s.getId().equals(articleCategory.getParent().getId()));
+            if(isSelfSub){
+                throw new XSBusinessException(ArticleCategoryConsts.ARTICLE_CATEGORY_NOT_SELF_OR_SUB);
+            }
+        }
         articleCategoryDao.update(articleCategory);
+
         if (articleCategory.getDisplay() != null) {
-            List<ArticleCategory> list = articleCategoryDao.listCombo(new ArticleCategory());
-            Map<String, ArticleCategory> map = XSTreeUtil.buildTree(list);
             ArticleCategory existent = new ArticleCategory();
             existent.setDisplay(articleCategory.getDisplay());
             //取消展示则所有子级也取消，开启展示则所有父级也开启
@@ -144,7 +153,7 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
         List<ArticleCategory> list = articleCategoryDao.listCombo(articleCategory);
         XSTreeUtil.buildTree(list);
 
-        List list1 = XSTreeUtil.getSubTrees(list, articleCategory.getParent());
+        List list1 = XSTreeUtil.getSubTrees(list, new ArticleCategory(""));
         return list1;
     }
 }
