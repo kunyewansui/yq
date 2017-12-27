@@ -171,7 +171,7 @@
                 $("#categoryTree").treeview({
                     data: [{
                         "name": "无",
-                        "id": "null",
+                        "id": "",
                         "children": treeData
                     }],
                     onNodeSelected: function (event, node) {
@@ -236,16 +236,7 @@
     <sec:authorize access="hasAnyRole(${xs:getPermissions('content_articleCategory_update')})">
     function updateItem() {
         doPost("<%=request.getContextPath()%>/admin/content/article/category/update",
-            {
-                id: selectedId,
-                name: $form.xsGetInput("name"),
-                key: $form.xsGetInput("key"),
-                seq: $form.xsGetInput("seq"),
-                display: $form.xsGetInput("display"),
-                icon: $form.xsGetInput("icon"),
-                prefix: $form.xsGetInput("prefix"),
-                "parent.id": $form.xsGetInput('parent.id') === "null" ? undefined : $form.xsGetInput('parent.id')
-            },
+            $form.serialize(),
             function (data) {
                 if (data.status) {
                     updateTree(false, true);
@@ -325,7 +316,7 @@
                             <label class="control-label required">父级：</label>
                         </div>
                         <div class="col-xs-9">
-                            <input name="parent.id" type="hidden" value="null">
+                            <input name="parent.id" type="hidden">
                             <input type="text" name="parent.name" class="form-control" readonly data-value="无" value="无"
                                    onclick="showCategoryTree(0)">
                         </div>
@@ -350,7 +341,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-xs-3 text-right">
-                            <label class="control-label required">图标：</label>
+                            <label class="control-label">图标：</label>
                         </div>
                         <div class="col-xs-9">
                             <xs:imageUploader identifier="createIcon" name="icon" folder="article"/>
@@ -415,15 +406,7 @@
         submitHandler: function () {
             $createSubmit.attr("disabled", true);
             doPost("<%=request.getContextPath()%>/admin/content/article/category/save",
-                {
-                    name: $createForm.xsGetInput('name'),
-                    seq: $createForm.xsGetInput('seq'),
-                    "parent.id": $createForm.xsGetInput('parent.id') === "null" ? undefined : $createForm.xsGetInput('parent.id'),
-                    key: $createForm.xsGetInput('key'),
-                    display: $createForm.xsGetInput('display'),
-                    icon: $createForm.xsGetInput('icon'),
-                    prefix: $createForm.xsGetInput('prefix')
-                },
+                $createForm.serialize(),
                 function (data) {
                     $createSubmit.attr("disabled", false);
                     if (data.status) {

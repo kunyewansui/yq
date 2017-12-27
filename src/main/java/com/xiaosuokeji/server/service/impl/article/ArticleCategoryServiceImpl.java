@@ -78,18 +78,18 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
     @Override
     @Transactional
     public void update(ArticleCategory articleCategory) throws XSBusinessException {
+        ArticleCategory existent = get(articleCategory);
         if (articleCategory.getKey() != null) {
-            ArticleCategory existent = new ArticleCategory();
-            existent.setKey(articleCategory.getKey());
-            List<ArticleCategory> existents = articleCategoryDao.list(existent);
+            ArticleCategory criteria = new ArticleCategory();
+            criteria.setKey(articleCategory.getKey());
+            List<ArticleCategory> existents = articleCategoryDao.list(criteria);
             if (existents.size() > 0) {
-                boolean isSelf = existents.get(0).getId().equals(articleCategory.getId());
+                boolean isSelf = existents.get(0).getId().equals(existent.getId());
                 if (!isSelf) {
                     throw new XSBusinessException(ArticleCategoryConsts.ARTICLE_CATEGORY_EXIST);
                 }
             }
         }
-        get(articleCategory);
         //不能选择自己或自己的下级作为父级
         List<ArticleCategory> list = articleCategoryDao.listCombo(new ArticleCategory());
         Map<String, ArticleCategory> map = XSTreeUtil.buildTree(list);
@@ -101,20 +101,21 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
             }
         }
         articleCategoryDao.update(articleCategory);
-
         if (articleCategory.getDisplay() != null) {
-            ArticleCategory existent = new ArticleCategory();
-            existent.setDisplay(articleCategory.getDisplay());
+            ArticleCategory latest = new ArticleCategory();
+            latest.setDisplay(articleCategory.getDisplay());
             //取消展示则所有子级也取消，开启展示则所有父级也开启
             if (articleCategory.getDisplay().equals(0)) {
                 List<ArticleCategory> subTreeList = XSTreeUtil.listSubTree(map.get(articleCategory.getId()));
-                existent.setList(subTreeList);
+                latest.setList(subTreeList);
             }
             else {
                 List<ArticleCategory> treePath = XSTreeUtil.getTreePath(map, map.get(articleCategory.getId()));
-                existent.setList(treePath);
+                latest.setList(treePath);
+                List<ArticleCategory> subTreeList = XSTreeUtil.listSubTree(map.get(articleCategory.getId()));
+                latest.getList().addAll(subTreeList);
             }
-            articleCategoryDao.batchUpdate(existent);
+            articleCategoryDao.batchUpdate(latest);
         }
     }
 
