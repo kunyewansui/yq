@@ -4,7 +4,7 @@ import com.xiaosuokeji.framework.constant.XSStatusConstant;
 import com.xiaosuokeji.server.constant.security.SecStaffConsts;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.model.security.SecStaff;
-import com.xiaosuokeji.server.service.intf.security.SecStaffService;
+import com.xiaosuokeji.server.service.security.SecStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;

@@ -2,7 +2,7 @@ package com.xiaosuokeji.server.tag;
 
 import com.xiaosuokeji.framework.spring.XSSpringContext;
 import com.xiaosuokeji.server.model.security.SecResource;
-import com.xiaosuokeji.server.service.intf.security.SecResourceService;
+import com.xiaosuokeji.server.service.security.SecResourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +16,7 @@ public class PermissionTag extends SimpleTagSupport {
 
     private static final Logger logger = LoggerFactory.getLogger(PermissionTag.class);
 
-    private static SecResourceService secResourceService = XSSpringContext.getBean("secResourceServiceImpl");
+    private static SecResourceService secResourceService = XSSpringContext.getBean("secResourceService");
 
     public static String getPermissions(String resourceKey) {
         try {

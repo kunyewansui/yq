@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.service.impl.security;
+package com.xiaosuokeji.server.service.security;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
@@ -9,7 +9,6 @@ import com.xiaosuokeji.server.dao.security.SecStaffDao;
 import com.xiaosuokeji.server.model.security.SecOrganization;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.model.security.SecStaff;
-import com.xiaosuokeji.server.service.intf.security.SecStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,12 +22,11 @@ import java.util.List;
  * Created by xuxiaowei on 2017/10/27.
  */
 @Service
-public class SecStaffServiceImpl implements SecStaffService {
+public class SecStaffService {
 
     @Autowired
     private SecStaffDao secStaffDao;
 
-    @Override
     public void save(SecStaff secStaff) throws Exception {
         SecStaff criteria = new SecStaff();
         criteria.setUsername(secStaff.getUsername());
@@ -40,7 +38,6 @@ public class SecStaffServiceImpl implements SecStaffService {
         secStaffDao.save(secStaff);
     }
 
-    @Override
     @Transactional
     public void remove(SecStaff secStaff) throws XSBusinessException {
         SecStaff existent = get(secStaff);
@@ -49,7 +46,6 @@ public class SecStaffServiceImpl implements SecStaffService {
         secStaffDao.remove(existent);
     }
 
-    @Override
     public void update(SecStaff secStaff) throws Exception {
         SecStaff existent = get(secStaff);
         if (secStaff.getUsername() != null) {
@@ -66,7 +62,6 @@ public class SecStaffServiceImpl implements SecStaffService {
         secStaffDao.update(secStaff);
     }
 
-    @Override
     public SecStaff get(SecStaff secStaff) throws XSBusinessException {
         SecStaff existent = secStaffDao.get(secStaff);
         if (existent == null) {
@@ -76,7 +71,6 @@ public class SecStaffServiceImpl implements SecStaffService {
         return existent;
     }
 
-    @Override
     public SecStaff getByUsername(SecStaff secStaff) {
         SecStaff existent = secStaffDao.getByUsername(secStaff);
         if (existent != null && existent.isEnabled()) {
@@ -138,13 +132,11 @@ public class SecStaffServiceImpl implements SecStaffService {
         return existent;
     }
 
-    @Override
     public XSPageModel listAndCount(SecStaff secStaff) {
         secStaff.setDefaultSort("id", "DESC");
         return XSPageModel.build(secStaffDao.list(secStaff), secStaffDao.count(secStaff));
     }
 
-    @Override
     public List<SecRole> listRole(SecStaff secStaff) throws XSBusinessException {
         SecStaff existent = get(secStaff);
         List<SecRole> roleList = secStaffDao.listRoleCombo(new SecRole());
@@ -161,7 +153,6 @@ public class SecStaffServiceImpl implements SecStaffService {
         return roleList;
     }
 
-    @Override
     @Transactional
     public void authorizeRole(SecStaff secStaff) throws XSBusinessException {
         SecStaff existent = get(secStaff);
@@ -171,7 +162,6 @@ public class SecStaffServiceImpl implements SecStaffService {
         }
     }
 
-    @Override
     public List treeOrganization(SecStaff secStaff) throws XSBusinessException {
         SecStaff existent = get(secStaff);
         List<SecOrganization> orgList = secStaffDao.listOrganizationCombo(new SecOrganization());
@@ -189,7 +179,6 @@ public class SecStaffServiceImpl implements SecStaffService {
         return XSTreeUtil.getSubTrees(orgList, new SecOrganization(0L));
     }
 
-    @Override
     @Transactional
     public void authorizeOrganization(SecStaff secStaff) throws XSBusinessException {
         SecStaff existent = get(secStaff);

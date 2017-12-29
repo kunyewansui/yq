@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.service.impl.security;
+package com.xiaosuokeji.server.service.security;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -9,7 +9,6 @@ import com.xiaosuokeji.server.constant.security.SecResourceConsts;
 import com.xiaosuokeji.server.dao.security.SecResourceDao;
 import com.xiaosuokeji.server.model.security.SecResource;
 import com.xiaosuokeji.server.model.security.SecRole;
-import com.xiaosuokeji.server.service.intf.security.SecResourceService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +29,9 @@ import java.util.concurrent.TimeUnit;
  * Created by xuxiaowei on 2017/10/27.
  */
 @Service
-public class SecResourceServiceImpl implements SecResourceService {
+public class SecResourceService {
 
-    private static final Logger logger = LoggerFactory.getLogger(SecResourceServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(SecResourceService.class);
 
     @Autowired
     private SecResourceDao secResourceDao;
@@ -45,7 +44,6 @@ public class SecResourceServiceImpl implements SecResourceService {
         mapAll();
     }
 
-    @Override
     @Transactional
     public void save(SecResource secResource) throws XSBusinessException {
         SecResource criteria = new SecResource();
@@ -83,7 +81,6 @@ public class SecResourceServiceImpl implements SecResourceService {
         cache.invalidateAll();
     }
 
-    @Override
     @Transactional
     public void remove(SecResource secResource) throws XSBusinessException {
         SecResource existent = get(secResource);
@@ -103,7 +100,6 @@ public class SecResourceServiceImpl implements SecResourceService {
         cache.invalidateAll();
     }
 
-    @Override
     @Transactional
     public void update(SecResource secResource) throws XSBusinessException {
         SecResource existent = get(secResource);
@@ -156,7 +152,6 @@ public class SecResourceServiceImpl implements SecResourceService {
         cache.invalidateAll();
     }
 
-    @Override
     public SecResource get(SecResource secResource) throws XSBusinessException {
         SecResource existent = secResourceDao.get(secResource);
         if (existent == null) {
@@ -165,25 +160,21 @@ public class SecResourceServiceImpl implements SecResourceService {
         return existent;
     }
 
-    @Override
     public SecResource getByRequest(SecResource secResource) throws Exception {
         Map<String, SecResource> map = mapAll().get("request");
         return map.get(secResource.getUrl() + "_" + StringUtils.lowerCase(secResource.getMethod()));
     }
 
-    @Override
     public SecResource getByKey(SecResource secResource) throws Exception {
         Map<String, SecResource> map = mapAll().get("key");
         return map.get(secResource.getKey());
     }
 
-    @Override
     public XSPageModel listAndCount(SecResource secResource) {
         secResource.setDefaultSort(new String[]{"type", "seq"}, new String[]{"ASC", "DESC"});
         return XSPageModel.build(secResourceDao.list(secResource), secResourceDao.count(secResource));
     }
 
-    @Override
     public List<SecResource> tree(SecResource secResource) {
         secResource.setDefaultSort(new String[]{"type", "seq"}, new String[]{"ASC", "DESC"});
         List<SecResource> list = secResourceDao.listCombo(secResource);
@@ -198,7 +189,6 @@ public class SecResourceServiceImpl implements SecResourceService {
         return XSTreeUtil.getSubTrees(list, new SecResource(0L));
     }
 
-    @Override
     public void invalidateCache() {
         cache.invalidateAll();
     }

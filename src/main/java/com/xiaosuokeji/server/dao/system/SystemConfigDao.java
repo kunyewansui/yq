@@ -1,6 +1,7 @@
 package com.xiaosuokeji.server.dao.system;
 
 import com.xiaosuokeji.server.model.system.SystemConfig;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface SystemConfigDao {
 
     SystemConfig get(SystemConfig systemConfig);
 
-    SystemConfig getByKey(SystemConfig systemConfig);
+    SystemConfig getByKey(@Param("key") String key);
 
     List<SystemConfig> list(SystemConfig systemConfig);
 

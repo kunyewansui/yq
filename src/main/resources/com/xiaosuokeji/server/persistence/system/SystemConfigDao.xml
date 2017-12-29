@@ -38,7 +38,7 @@
         WHERE id=#{id}
     </select>
 
-    <select id="getByKey" parameterType="systemConfig" resultType="systemConfig">
+    <select id="getByKey" resultType="systemConfig">
         SELECT *
         FROM shuttle_common.sc_system_config
         WHERE `key`=#{key}

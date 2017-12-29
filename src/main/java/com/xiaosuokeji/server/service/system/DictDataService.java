@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.service.impl.system;
+package com.xiaosuokeji.server.service.system;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -8,7 +8,6 @@ import com.xiaosuokeji.server.constant.system.DictDataConsts;
 import com.xiaosuokeji.server.dao.system.DictDataDao;
 import com.xiaosuokeji.server.model.system.Dict;
 import com.xiaosuokeji.server.model.system.DictData;
-import com.xiaosuokeji.server.service.intf.system.DictDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +25,9 @@ import java.util.concurrent.TimeUnit;
  * Created by xuxiaowei on 2017/11/1.
  */
 @Service
-public class DictDataServiceImpl implements DictDataService {
+public class DictDataService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DictDataServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(DictDataService.class);
 
     @Autowired
     private DictDataDao dictDataDao;
@@ -40,7 +39,6 @@ public class DictDataServiceImpl implements DictDataService {
         cache = CacheBuilder.newBuilder().expireAfterAccess(1800L, TimeUnit.SECONDS).maximumSize(512).build();
     }
 
-    @Override
     public void save(DictData dictData) throws XSBusinessException {
         DictData criteria = new DictData();
         criteria.setDict(dictData.getDict());
@@ -55,7 +53,6 @@ public class DictDataServiceImpl implements DictDataService {
         cache.invalidate(existent.getDict().getKey());
     }
 
-    @Override
     public void remove(DictData dictData) throws XSBusinessException {
         DictData existent = get(dictData);
         if (existent.getLock().equals(1)) {
@@ -66,7 +63,6 @@ public class DictDataServiceImpl implements DictDataService {
         cache.invalidate(existent.getDict().getKey());
     }
 
-    @Override
     public void update(DictData dictData) throws XSBusinessException {
         DictData existent = get(dictData);
         if (dictData.getDict() != null || dictData.getValue() != null) {
@@ -86,7 +82,6 @@ public class DictDataServiceImpl implements DictDataService {
         cache.invalidate(existent.getDict().getKey());
     }
 
-    @Override
     public void updateLock(DictData dictData) throws XSBusinessException {
         DictData existent = get(dictData);
         DictData latest = new DictData(existent.getId());
@@ -99,7 +94,6 @@ public class DictDataServiceImpl implements DictDataService {
         dictDataDao.updateLock(latest);
     }
 
-    @Override
     public DictData get(DictData dictData) throws XSBusinessException {
         DictData existent = dictDataDao.get(dictData);
         if (existent == null) {
@@ -108,24 +102,20 @@ public class DictDataServiceImpl implements DictDataService {
         return existent;
     }
 
-    @Override
     public String getDesc(String dictKey, String dictDataValue) {
         return mapByDict(dictKey).get(dictDataValue);
     }
 
-    @Override
     public List<DictData> list(DictData dictData) {
         dictData.setDefaultSort("id", "DESC");
         return dictDataDao.list(dictData);
     }
 
-    @Override
     public XSPageModel<DictData> listAndCount(DictData dictData) {
         dictData.setDefaultSort("id", "DESC");
         return XSPageModel.build(dictDataDao.list(dictData), dictDataDao.count(dictData));
     }
 
-    @Override
     public Map<String, String> mapByDict(String dictKey) {
         Map<String, String> map = null;
         //先查询缓存，若未命中则查询数据库

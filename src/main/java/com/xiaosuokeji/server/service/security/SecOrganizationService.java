@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.service.impl.security;
+package com.xiaosuokeji.server.service.security;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
@@ -7,7 +7,6 @@ import com.xiaosuokeji.server.constant.security.SecOrganizationConsts;
 import com.xiaosuokeji.server.dao.security.SecOrganizationDao;
 import com.xiaosuokeji.server.model.security.SecOrganization;
 import com.xiaosuokeji.server.model.security.SecRole;
-import com.xiaosuokeji.server.service.intf.security.SecOrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +20,11 @@ import java.util.Map;
  * Created by xuxiaowei on 2017/10/27.
  */
 @Service
-public class SecOrganizationServiceImpl implements SecOrganizationService {
+public class SecOrganizationService {
 
     @Autowired
     private SecOrganizationDao secOrganizationDao;
 
-    @Override
     public void save(SecOrganization secOrganization) throws XSBusinessException {
         SecOrganization criteria = new SecOrganization();
         criteria.setName(secOrganization.getName());
@@ -48,7 +46,6 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
         secOrganizationDao.save(secOrganization);
     }
 
-    @Override
     @Transactional
     public void remove(SecOrganization secOrganization) throws XSBusinessException {
         SecOrganization existent = get(secOrganization);
@@ -67,7 +64,6 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
         secOrganizationDao.remove(existent);
     }
 
-    @Override
     @Transactional
     public void update(SecOrganization secOrganization) throws XSBusinessException {
         SecOrganization existent = get(secOrganization);
@@ -104,7 +100,6 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
         }
     }
 
-    @Override
     public SecOrganization get(SecOrganization secOrganization) throws XSBusinessException {
         SecOrganization existent = secOrganizationDao.get(secOrganization);
         if (existent == null) {
@@ -113,20 +108,17 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
         return existent;
     }
 
-    @Override
     public XSPageModel listAndCount(SecOrganization secOrganization) {
         secOrganization.setDefaultSort("id", "DESC");
         return XSPageModel.build(secOrganizationDao.list(secOrganization), secOrganizationDao.count(secOrganization));
     }
 
-    @Override
     public List<SecOrganization> tree(SecOrganization secOrganization) {
         List<SecOrganization> list = secOrganizationDao.listCombo(secOrganization);
         XSTreeUtil.buildTree(list);
         return XSTreeUtil.getSubTrees(list, new SecOrganization(0L));
     }
 
-    @Override
     public List<SecRole> listRole(SecOrganization secOrganization) throws XSBusinessException {
         SecOrganization existent = get(secOrganization);
         List<SecRole> roleList = secOrganizationDao.listRoleCombo(new SecRole());
@@ -143,7 +135,6 @@ public class SecOrganizationServiceImpl implements SecOrganizationService {
         return roleList;
     }
 
-    @Override
     @Transactional
     public void authorizeRole(SecOrganization secOrganization) throws XSBusinessException {
         SecOrganization existent = get(secOrganization);

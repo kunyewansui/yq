@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.service.impl.security;
+package com.xiaosuokeji.server.service.security;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
@@ -8,8 +8,6 @@ import com.xiaosuokeji.server.dao.security.SecRoleDao;
 import com.xiaosuokeji.server.model.security.SecResource;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.model.security.SecStaff;
-import com.xiaosuokeji.server.service.intf.security.SecResourceService;
-import com.xiaosuokeji.server.service.intf.security.SecRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +22,7 @@ import java.util.Map;
  * Created by xuxiaowei on 2017/10/27.
  */
 @Service
-public class SecRoleServiceImpl implements SecRoleService {
+public class SecRoleService {
 
     @Autowired
     private SecRoleDao secRoleDao;
@@ -32,7 +30,6 @@ public class SecRoleServiceImpl implements SecRoleService {
     @Autowired
     private SecResourceService secResourceService;
 
-    @Override
     public void save(SecRole secRole) throws XSBusinessException {
         SecRole criteria = new SecRole();
         criteria.setName(secRole.getName());
@@ -43,7 +40,6 @@ public class SecRoleServiceImpl implements SecRoleService {
         secRoleDao.save(secRole);
     }
 
-    @Override
     @Transactional
     public void remove(SecRole secRole) throws XSBusinessException {
         SecRole existent = get(secRole);
@@ -62,7 +58,6 @@ public class SecRoleServiceImpl implements SecRoleService {
         secResourceService.invalidateCache();
     }
 
-    @Override
     public void update(SecRole secRole) throws XSBusinessException {
         get(secRole);
         if (secRole.getName() != null) {
@@ -80,7 +75,6 @@ public class SecRoleServiceImpl implements SecRoleService {
         secResourceService.invalidateCache();
     }
 
-    @Override
     public SecRole get(SecRole secRole) throws XSBusinessException {
         SecRole existent = secRoleDao.get(secRole);
         if (existent == null) {
@@ -89,13 +83,11 @@ public class SecRoleServiceImpl implements SecRoleService {
         return existent;
     }
 
-    @Override
     public XSPageModel listAndCount(SecRole secRole) {
         secRole.setDefaultSort("id", "DESC");
         return XSPageModel.build(secRoleDao.list(secRole), secRoleDao.count(secRole));
     }
 
-    @Override
     public List treeResource(SecRole secRole, SecStaff secStaff) throws XSBusinessException {
         SecRole existent = get(secRole);
         SecResource criteria = new SecResource();
@@ -128,7 +120,6 @@ public class SecRoleServiceImpl implements SecRoleService {
         return XSTreeUtil.getSubTrees(resourceList, new SecResource(0L));
     }
 
-    @Override
     @Transactional
     public void authorizeResource(SecRole secRole, SecStaff secStaff) throws XSBusinessException {
         SecRole existent = get(secRole);

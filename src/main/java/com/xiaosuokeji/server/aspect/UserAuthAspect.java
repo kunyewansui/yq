@@ -5,7 +5,7 @@ import com.xiaosuokeji.server.annotation.UserAuth;
 import com.xiaosuokeji.server.constant.user.TokenConsts;
 import com.xiaosuokeji.server.model.base.BaseModel;
 import com.xiaosuokeji.server.model.user.User;
-import com.xiaosuokeji.server.service.intf.user.TokenService;
+import com.xiaosuokeji.server.service.user.TokenService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

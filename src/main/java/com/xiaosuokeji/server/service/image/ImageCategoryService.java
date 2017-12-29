@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.service.impl.image;
+package com.xiaosuokeji.server.service.image;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.util.XSTreeUtil;
@@ -8,7 +8,6 @@ import com.xiaosuokeji.server.dao.image.ImageCategoryDao;
 import com.xiaosuokeji.server.dao.image.ImageDao;
 import com.xiaosuokeji.server.model.image.Image;
 import com.xiaosuokeji.server.model.image.ImageCategory;
-import com.xiaosuokeji.server.service.intf.image.ImageCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,7 @@ import java.util.Map;
  * Created by xuxiaowei on 2017/10/23.
  */
 @Service
-public class ImageCategoryServiceImpl implements ImageCategoryService {
+public class ImageCategoryService {
 
     @Autowired
     private ImageCategoryDao imageCategoryDao;
@@ -29,7 +28,6 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
     @Autowired
     private ImageDao imageDao;
 
-    @Override
     public void save(ImageCategory imageCategory) throws XSBusinessException {
         ImageCategory criteria = new ImageCategory();
         criteria.setKey(imageCategory.getKey());
@@ -53,7 +51,6 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         imageCategoryDao.save(imageCategory);
     }
 
-    @Override
     public void remove(ImageCategory imageCategory) throws XSBusinessException {
         ImageCategory existent = get(imageCategory);
         if (existent.getLock().equals(1)) {
@@ -76,7 +73,6 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         imageCategoryDao.remove(existent);
     }
 
-    @Override
     @Transactional
     public void update(ImageCategory imageCategory) throws XSBusinessException {
         ImageCategory existent = get(imageCategory);
@@ -120,7 +116,6 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         }
     }
 
-    @Override
     public void updateLock(ImageCategory imageCategory) throws XSBusinessException {
         ImageCategory existent = get(imageCategory);
         List<ImageCategory> list = imageCategoryDao.listCombo(new ImageCategory());
@@ -142,7 +137,6 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         imageCategoryDao.batchUpdateLock(latest);
     }
 
-    @Override
     public ImageCategory get(ImageCategory imageCategory) throws XSBusinessException {
         ImageCategory existent = imageCategoryDao.get(imageCategory);
         if (existent == null) {
@@ -151,7 +145,6 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
         return existent;
     }
 
-    @Override
     public List tree(ImageCategory imageCategory) {
         imageCategory.setDefaultSort("seq", "DESC");
         List<ImageCategory> list = imageCategoryDao.listCombo(imageCategory);

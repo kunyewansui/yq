@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.service.impl.system;
+package com.xiaosuokeji.server.service.system;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
@@ -6,7 +6,6 @@ import com.xiaosuokeji.framework.util.XSUuidUtil;
 import com.xiaosuokeji.server.constant.system.SystemConfigConsts;
 import com.xiaosuokeji.server.dao.system.SystemConfigDao;
 import com.xiaosuokeji.server.model.system.SystemConfig;
-import com.xiaosuokeji.server.service.intf.system.SystemConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +16,11 @@ import java.util.List;
  * Created by xuxiaowei on 2017/10/28.
  */
 @Service
-public class SystemConfigServiceImpl implements SystemConfigService {
+public class SystemConfigService {
     
     @Autowired
     private SystemConfigDao systemConfigDao;
 
-    @Override
     public void save(SystemConfig systemConfig) throws XSBusinessException {
         SystemConfig criteria = new SystemConfig();
         criteria.setKey(systemConfig.getKey());
@@ -34,13 +32,11 @@ public class SystemConfigServiceImpl implements SystemConfigService {
         systemConfigDao.save(systemConfig);
     }
 
-    @Override
     public void remove(SystemConfig systemConfig) throws XSBusinessException {
         SystemConfig existent = get(systemConfig);
         systemConfigDao.remove(existent);
     }
 
-    @Override
     public void update(SystemConfig systemConfig) throws XSBusinessException {
         SystemConfig existent = get(systemConfig);
         if (systemConfig.getKey() != null) {
@@ -57,7 +53,6 @@ public class SystemConfigServiceImpl implements SystemConfigService {
         systemConfigDao.update(systemConfig);
     }
 
-    @Override
     public SystemConfig get(SystemConfig systemConfig) throws XSBusinessException {
         SystemConfig existent = systemConfigDao.get(systemConfig);
         if (existent == null) {
@@ -66,29 +61,16 @@ public class SystemConfigServiceImpl implements SystemConfigService {
         return existent;
     }
 
-    @Override
-    public SystemConfig getByKey(SystemConfig systemConfig) throws XSBusinessException {
-        SystemConfig existent = systemConfigDao.getByKey(systemConfig);
-        if (existent == null) {
-            throw new XSBusinessException(SystemConfigConsts.SYSTEM_CONFIG_NOT_EXIST);
-        }
-        return existent;
-    }
-
-    @Override
-    public String getByKey(String key, String defaultValue) {
-        SystemConfig criteria = new SystemConfig();
-        criteria.setKey(key);
-        SystemConfig existent = systemConfigDao.getByKey(criteria);
-        if (existent == null) {
-            return defaultValue;
-        }
-        return existent.getValue();
-    }
-
-    @Override
     public XSPageModel<SystemConfig> listAndCount(SystemConfig systemConfig) {
         systemConfig.setDefaultSort("create_time", "DESC");
         return XSPageModel.build(systemConfigDao.list(systemConfig), systemConfigDao.count(systemConfig));
+    }
+
+    public String getByKey(String key) throws XSBusinessException {
+        SystemConfig existent = systemConfigDao.getByKey(key);
+        if (existent == null) {
+            throw new XSBusinessException(SystemConfigConsts.SYSTEM_CONFIG_NOT_EXIST);
+        }
+        return existent.getValue();
     }
 }

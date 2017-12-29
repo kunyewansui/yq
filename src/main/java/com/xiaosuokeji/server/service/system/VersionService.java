@@ -1,11 +1,10 @@
-package com.xiaosuokeji.server.service.impl.system;
+package com.xiaosuokeji.server.service.system;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.constant.system.VersionConsts;
 import com.xiaosuokeji.server.dao.system.VersionDao;
 import com.xiaosuokeji.server.model.system.Version;
-import com.xiaosuokeji.server.service.intf.system.VersionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +13,11 @@ import org.springframework.stereotype.Service;
  * Created by gustinlau on 11/1/17.
  */
 @Service
-public class VersionServiceImpl implements VersionService {
+public class VersionService {
 
     @Autowired
     VersionDao versionDao;
 
-    @Override
     public void save(Version version) throws XSBusinessException {
         Version existent = new Version();
         existent.setCode(version.getCode());
@@ -31,18 +29,15 @@ public class VersionServiceImpl implements VersionService {
         versionDao.save(version);
     }
 
-    @Override
     public void remove(Version version) throws XSBusinessException {
         Version existent = get(version);
         versionDao.remove(existent);
     }
 
-    @Override
     public void update(Version version) throws XSBusinessException {
         versionDao.update(version);
     }
 
-    @Override
     public Version get(Version version) throws XSBusinessException {
         Version existent = versionDao.get(version);
         if (existent == null) {
@@ -51,7 +46,6 @@ public class VersionServiceImpl implements VersionService {
         return existent;
     }
 
-    @Override
     public XSPageModel<Version> listAndCount(Version version) {
         version.setDefaultSort("code", "DESC");
         return XSPageModel.build(versionDao.list(version), versionDao.count(version));

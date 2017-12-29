@@ -8,7 +8,7 @@ import com.xiaosuokeji.framework.json.XSJackson;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.security.SecOrganization;
 import com.xiaosuokeji.server.model.security.SecRole;
-import com.xiaosuokeji.server.service.intf.security.SecOrganizationService;
+import com.xiaosuokeji.server.service.security.SecOrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

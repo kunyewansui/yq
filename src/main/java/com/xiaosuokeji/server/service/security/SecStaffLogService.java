@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.service.impl.security;
+package com.xiaosuokeji.server.service.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
@@ -10,8 +10,6 @@ import com.xiaosuokeji.server.dao.security.SecStaffLogDao;
 import com.xiaosuokeji.server.model.security.SecResource;
 import com.xiaosuokeji.server.model.security.SecStaff;
 import com.xiaosuokeji.server.model.security.SecStaffLog;
-import com.xiaosuokeji.server.service.intf.security.SecResourceService;
-import com.xiaosuokeji.server.service.intf.security.SecStaffLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +24,9 @@ import java.util.HashMap;
  * Created by xuxiaowei on 2017/11/2.
  */
 @Service
-public class SecStaffLogServiceImpl implements SecStaffLogService {
+public class SecStaffLogService {
 
-    private static final Logger logger = LoggerFactory.getLogger(SecStaffLogServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(SecStaffLogService.class);
 
     @Autowired
     private SecStaffLogDao secStaffLogDao;
@@ -36,18 +34,15 @@ public class SecStaffLogServiceImpl implements SecStaffLogService {
     @Autowired
     private SecResourceService secResourceService;
 
-    @Override
     public void save(SecStaffLog secStaffLog) {
         secStaffLogDao.save(secStaffLog);
     }
 
-    @Override
     public void remove(SecStaffLog secStaffLog) throws XSBusinessException {
         SecStaffLog existent = get(secStaffLog);
         secStaffLogDao.remove(existent);
     }
 
-    @Override
     public SecStaffLog get(SecStaffLog secStaffLog) throws XSBusinessException {
         SecStaffLog existent = secStaffLogDao.get(secStaffLog);
         if (existent == null) {
@@ -56,7 +51,6 @@ public class SecStaffLogServiceImpl implements SecStaffLogService {
         return existent;
     }
 
-    @Override
     public XSPageModel<SecStaffLog> listAndCount(SecStaffLog secStaffLog) {
         secStaffLog.setDefaultSort("sl.id", "DESC");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -73,7 +67,6 @@ public class SecStaffLogServiceImpl implements SecStaffLogService {
         return XSPageModel.build(secStaffLogDao.list(secStaffLog), secStaffLogDao.count(secStaffLog));
     }
 
-    @Override
     public void handle(XSLogger xsLogger) {
         if (xsLogger.getRequestUrl().contains("admin")) {
             try {

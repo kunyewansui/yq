@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.service.impl.user;
+package com.xiaosuokeji.server.service.user;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -8,7 +8,6 @@ import com.xiaosuokeji.server.constant.user.TokenConsts;
 import com.xiaosuokeji.server.dao.user.TokenDao;
 import com.xiaosuokeji.server.model.user.Token;
 import com.xiaosuokeji.server.model.user.User;
-import com.xiaosuokeji.server.service.intf.user.TokenService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +25,9 @@ import java.util.concurrent.TimeUnit;
  * Created by xuxiaowei on 2017/10/26.
  */
 @Service
-public class TokenServiceImpl implements TokenService {
+public class TokenService {
 
-    private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
 
     @Autowired
     private TokenDao tokenDao;
@@ -40,7 +39,6 @@ public class TokenServiceImpl implements TokenService {
         cache = CacheBuilder.newBuilder().expireAfterAccess(1800L, TimeUnit.SECONDS).maximumSize(4096).build();
     }
 
-    @Override
     @Scheduled(cron = "0 0 0 * * ?")
     public void removeExpired() {
         Long st = System.currentTimeMillis();
@@ -53,7 +51,6 @@ public class TokenServiceImpl implements TokenService {
         }
     }
 
-    @Override
     public User verify(String tokenStr) throws Exception {
         if (StringUtils.isBlank(tokenStr)) {
             throw new XSBusinessException(TokenConsts.TOKEN_INVALID);

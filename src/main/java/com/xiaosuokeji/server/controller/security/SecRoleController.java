@@ -7,7 +7,7 @@ import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.security.SecResource;
 import com.xiaosuokeji.server.model.security.SecRole;
 import com.xiaosuokeji.server.model.security.SecStaff;
-import com.xiaosuokeji.server.service.intf.security.SecRoleService;
+import com.xiaosuokeji.server.service.security.SecRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Controller;

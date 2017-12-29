@@ -5,7 +5,7 @@ import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.system.Version;
-import com.xiaosuokeji.server.service.intf.system.VersionService;
+import com.xiaosuokeji.server.service.system.VersionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -5,7 +5,7 @@ import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.marketing.Feedback;
-import com.xiaosuokeji.server.service.intf.marketing.FeedbackService;
+import com.xiaosuokeji.server.service.marketing.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

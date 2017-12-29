@@ -5,7 +5,7 @@ import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.image.ImageCategory;
-import com.xiaosuokeji.server.service.intf.image.ImageCategoryService;
+import com.xiaosuokeji.server.service.image.ImageCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;

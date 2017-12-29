@@ -4,7 +4,7 @@ import com.xiaosuokeji.framework.constant.XSStatusConstant;
 import com.xiaosuokeji.framework.util.XSIpUtil;
 import com.xiaosuokeji.server.model.security.SecStaff;
 import com.xiaosuokeji.server.model.security.SecStaffLog;
-import com.xiaosuokeji.server.service.intf.security.SecStaffLogService;
+import com.xiaosuokeji.server.service.security.SecStaffLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

@@ -1,7 +1,7 @@
 package com.xiaosuokeji.server.tag;
 
 import com.xiaosuokeji.framework.spring.XSSpringContext;
-import com.xiaosuokeji.server.service.intf.system.DictDataService;
+import com.xiaosuokeji.server.service.system.DictDataService;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class DictOptionsTag extends SimpleTagSupport {
 
-    private static DictDataService dictDataService=XSSpringContext.getBean("dictDataServiceImpl");
+    private static DictDataService dictDataService=XSSpringContext.getBean("dictDataService");
 
     /**
      * 字典key

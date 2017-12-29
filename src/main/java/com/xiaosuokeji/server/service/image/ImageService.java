@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.service.impl.image;
+package com.xiaosuokeji.server.service.image;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
@@ -9,7 +9,6 @@ import com.xiaosuokeji.server.dao.image.ImageCategoryDao;
 import com.xiaosuokeji.server.dao.image.ImageDao;
 import com.xiaosuokeji.server.model.image.Image;
 import com.xiaosuokeji.server.model.image.ImageCategory;
-import com.xiaosuokeji.server.service.intf.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,7 @@ import java.util.Map;
  * Created by xuxiaowei on 2017/10/26.
  */
 @Service
-public class ImageServiceImpl implements ImageService {
+public class ImageService {
 
     @Autowired
     private ImageDao imageDao;
@@ -29,25 +28,21 @@ public class ImageServiceImpl implements ImageService {
     @Autowired
     private ImageCategoryDao imageCategoryDao;
 
-    @Override
     public void save(Image image) {
         image.setId(XSUuidUtil.generate());
         imageDao.save(image);
     }
 
-    @Override
     public void remove(Image image) throws XSBusinessException {
         Image existent = get(image);
         imageDao.remove(existent);
     }
 
-    @Override
     public void update(Image image) throws XSBusinessException {
         get(image);
         imageDao.update(image);
     }
 
-    @Override
     public Image get(Image image) throws XSBusinessException {
         Image existent = imageDao.get(image);
         if (existent == null) {
@@ -56,7 +51,6 @@ public class ImageServiceImpl implements ImageService {
         return existent;
     }
 
-    @Override
     public XSPageModel<Image> listAndCount(Image image) {
         image.setDefaultSort("create_time", "DESC");
         if (image.getCategory() != null && image.getCategory().getId() != null) {
@@ -68,7 +62,6 @@ public class ImageServiceImpl implements ImageService {
         return XSPageModel.build(imageDao.list(image), imageDao.count(image));
     }
 
-    @Override
     public List<Image> listCombo(Image image) {
         image.setDefaultSort("seq", "DESC");
         return imageDao.listCombo(image);

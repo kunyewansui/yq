@@ -5,7 +5,7 @@ import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.system.SystemConfig;
-import com.xiaosuokeji.server.service.intf.system.SystemConfigService;
+import com.xiaosuokeji.server.service.system.SystemConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,7 +44,7 @@ public class SystemConfigController {
     @RequestMapping(value = "/admin/system/systemConfig/getByKey", method = RequestMethod.GET)
     @ResponseBody
     public XSServiceResult adminGetByKey(SystemConfig systemConfig) throws XSBusinessException {
-        return XSServiceResult.build().data(systemConfigService.getByKey(systemConfig).getValue());
+        return XSServiceResult.build().data(systemConfigService.getByKey(systemConfig.getKey()));
     }
 
     @RequestMapping(value = "/admin/system/systemConfig/save", method = RequestMethod.POST)

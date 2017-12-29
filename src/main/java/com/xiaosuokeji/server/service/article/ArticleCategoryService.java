@@ -1,4 +1,4 @@
-package com.xiaosuokeji.server.service.impl.article;
+package com.xiaosuokeji.server.service.article;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.util.XSTreeUtil;
@@ -8,7 +8,6 @@ import com.xiaosuokeji.server.dao.article.ArticleCategoryDao;
 import com.xiaosuokeji.server.dao.article.ArticleDao;
 import com.xiaosuokeji.server.model.article.Article;
 import com.xiaosuokeji.server.model.article.ArticleCategory;
-import com.xiaosuokeji.server.service.intf.article.ArticleCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,7 @@ import java.util.Map;
  * Created by xuxiaowei on 2017/10/28.
  */
 @Service
-public class ArticleCategoryServiceImpl implements ArticleCategoryService {
+public class ArticleCategoryService {
 
     @Autowired
     private ArticleCategoryDao articleCategoryDao;
@@ -29,7 +28,6 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
     @Autowired
     private ArticleDao articleDao;
 
-    @Override
     public void save(ArticleCategory articleCategory) throws XSBusinessException {
         ArticleCategory existent = new ArticleCategory();
         existent.setKey(articleCategory.getKey());
@@ -52,7 +50,6 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
         articleCategoryDao.save(articleCategory);
     }
 
-    @Override
     public void remove(ArticleCategory articleCategory) throws XSBusinessException {
         ArticleCategory existent = get(articleCategory);
         if (existent.getLock().equals(1)) {
@@ -75,7 +72,6 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
         articleCategoryDao.remove(articleCategory);
     }
 
-    @Override
     @Transactional
     public void update(ArticleCategory articleCategory) throws XSBusinessException {
         ArticleCategory existent = get(articleCategory);
@@ -119,7 +115,6 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
         }
     }
 
-    @Override
     public void updateLock(ArticleCategory articleCategory) throws XSBusinessException {
         ArticleCategory existent = get(articleCategory);
         List<ArticleCategory> list = articleCategoryDao.listCombo(new ArticleCategory());
@@ -139,7 +134,6 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
         articleCategoryDao.batchUpdateLock(latest);
     }
 
-    @Override
     public ArticleCategory get(ArticleCategory articleCategory) throws XSBusinessException {
         ArticleCategory existent = articleCategoryDao.get(articleCategory);
         if (existent == null) {
@@ -148,7 +142,6 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
         return existent;
     }
 
-    @Override
     public List tree(ArticleCategory articleCategory) {
         articleCategory.setDefaultSort("seq", "DESC");
         List<ArticleCategory> list = articleCategoryDao.listCombo(articleCategory);

@@ -2,7 +2,7 @@ package com.xiaosuokeji.server.manager.security;
 
 import com.xiaosuokeji.server.model.security.SecResource;
 import com.xiaosuokeji.server.model.security.SecRole;
-import com.xiaosuokeji.server.service.intf.security.SecResourceService;
+import com.xiaosuokeji.server.service.security.SecResourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,11 +1,10 @@
-package com.xiaosuokeji.server.service.impl.system;
+package com.xiaosuokeji.server.service.system;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.constant.system.DictConsts;
 import com.xiaosuokeji.server.dao.system.DictDao;
 import com.xiaosuokeji.server.model.system.Dict;
-import com.xiaosuokeji.server.service.intf.system.DictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +15,11 @@ import java.util.List;
  * Created by xuxiaowei on 2017/11/1.
  */
 @Service
-public class DictServiceImpl implements DictService {
+public class DictService {
 
     @Autowired
     private DictDao dictDao;
 
-    @Override
     public void save(Dict dict) throws XSBusinessException {
         Dict criteria = new Dict();
         criteria.setKey(dict.getKey());
@@ -32,7 +30,6 @@ public class DictServiceImpl implements DictService {
         dictDao.save(dict);
     }
 
-    @Override
     public void remove(Dict dict) throws XSBusinessException {
         Dict existent = get(dict);
         if (existent.getLock().equals(1)) {
@@ -46,7 +43,6 @@ public class DictServiceImpl implements DictService {
         dictDao.remove(existent);
     }
 
-    @Override
     public void update(Dict dict) throws XSBusinessException {
         Dict existent = get(dict);
         if (dict.getKey() != null) {
@@ -63,7 +59,6 @@ public class DictServiceImpl implements DictService {
         dictDao.update(dict);
     }
 
-    @Override
     public void updateLock(Dict dict) throws XSBusinessException {
         Dict existent = get(dict);
         Dict latest = new Dict(existent.getId());
@@ -76,7 +71,6 @@ public class DictServiceImpl implements DictService {
         dictDao.updateLock(latest);
     }
 
-    @Override
     public Dict get(Dict dict) throws XSBusinessException {
         Dict existent = dictDao.get(dict);
         if (existent == null) {
@@ -85,7 +79,6 @@ public class DictServiceImpl implements DictService {
         return existent;
     }
 
-    @Override
     public XSPageModel<Dict> listAndCount(Dict dict) {
         dict.setDefaultSort("id", "DESC");
         return XSPageModel.build(dictDao.list(dict), dictDao.count(dict));
