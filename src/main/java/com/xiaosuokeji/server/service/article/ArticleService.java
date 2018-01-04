@@ -72,7 +72,7 @@ public class ArticleService {
     }
 
     public XSPageModel<Article> listAndCount(Article article) {
-        article.setDefaultSort("create_time", "DESC");
+        article.setDefaultSort(new String[]{"a.seq","a.create_time"},new String[]{"DESC","DESC"});
         if (article.getCategory() != null && article.getCategory().getId() != null) {
             List<ArticleCategory> list = articleCategoryDao.listCombo(new ArticleCategory());
             Map<String, ArticleCategory> map = XSTreeUtil.buildTree(list);
@@ -83,7 +83,7 @@ public class ArticleService {
     }
 
     public List<Article> listCombo(Article article) {
-        article.setDefaultSort("seq", "DESC");
+        article.setDefaultSort("a.seq", "DESC");
         return articleDao.listCombo(article);
     }
 }

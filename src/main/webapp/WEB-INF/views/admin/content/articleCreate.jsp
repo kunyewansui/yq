@@ -46,7 +46,7 @@
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
                             <input name="seq" type="number" class="form-control" value="0"/>
                         </div>
-                        <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
+                        <div class="col-xs-4 col-md-2 col-lg-1 no-padder m-b-md text-right">
                             <label class="control-label required">分类：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
@@ -54,7 +54,7 @@
                                    onclick="showCategoryModel()"/>
                             <input type="hidden" name="category.id">
                         </div>
-                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                        <div class="col-xs-4 col-md-2 col-lg-1 no-padder m-b-md text-right">
                             <label class="control-label required">类型：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
@@ -62,7 +62,7 @@
                                 <xs:dictOptions key="articleType"/>
                             </select>
                         </div>
-                        <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
+                        <div class="col-xs-4 col-md-2 col-lg-1 no-padder m-b-md text-right">
                             <label class="control-label required">是否展示：</label>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
@@ -70,11 +70,43 @@
                                 <xs:dictOptions key="articleDisplay"/>
                             </select>
                         </div>
+                        <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
+                            <label class="control-label required">是否热门：</label>
+                        </div>
+                        <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
+                            <select name="hot" class="form-control">
+                                <xs:dictOptions key="isHot"/>
+                            </select>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                            <label class="control-label">seo标题：</label>
+                        </div>
+                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
+                            <input name="seoTitle" type="text" class="form-control"/>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                            <label class="control-label">seo关键字：</label>
+                        </div>
+                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
+                            <input name="seoKeywords" type="text" class="form-control"/>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                            <label class="control-label">seo描述：</label>
+                        </div>
+                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
+                            <input name="seoDescription" type="text" class="form-control"/>
+                        </div>
                         <div class="col-xs-4 col-md-2 col-lg-1 no-padder m-b-md text-right">
                             <label class="control-label">图标：</label>
                         </div>
-                        <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
+                        <div class="col-xs-8 col-md-4 col-lg-3">
                             <xs:imageUploader identifier="articleIcon" name="image" folder="article"/>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
+                            <label class="control-label">简介：</label>
+                        </div>
+                        <div class="col-xs-8 col-md-4 col-lg-7  m-b-md">
+                            <textarea name="intro" type="text" class="form-control" rows="3"></textarea>
                         </div>
                     </div>
                     <div id="richText">
@@ -156,6 +188,11 @@
                 type: $form.xsGetInput("type"),
                 display: $form.xsGetInput("display"),
                 image: $form.xsGetInput("image"),
+                intro: $form.xsGetInput("intro"),
+                seoTitle: $form.xsGetInput("seoTitle"),
+                seoKeywords: $form.xsGetInput("seoKeywords"),
+                seoDescription: $form.xsGetInput("seoDescription"),
+                hot: $form.xsGetInput("hot"),
                 "category.id": $form.xsGetInput("category.id"),
                 url: (parseInt($form.xsGetInput("type")) === 0) ? undefined : $form.xsGetInput("url"),
                 content: (parseInt($form.xsGetInput("type")) === 1) ? undefined : ue.getContent(),

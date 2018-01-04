@@ -75,6 +75,32 @@ public class Article extends BaseModel {
     private Integer lock;
 
     /**
+     * 简介
+     */
+    @Length(message = "简介最多为255个字符", groups = {Save.class, Update.class})
+    private String intro;
+
+    /**
+     * seo标题
+     */
+    private String seoTitle;
+
+    /**
+     * seo关键字
+     */
+    private String seoKeywords;
+
+    /**
+     * seo描述
+     */
+    private String seoDescription;
+
+    /**
+     * 是否热门，0否，1是
+     */
+    private Integer hot;
+
+    /**
      * 分类列表
      */
     private List<ArticleCategory> categoryList;
@@ -133,6 +159,46 @@ public class Article extends BaseModel {
 
     public ArticleCategory getCategory() {
         return category;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public String getSeoTitle() {
+        return seoTitle;
+    }
+
+    public void setSeoTitle(String seoTitle) {
+        this.seoTitle = seoTitle;
+    }
+
+    public String getSeoKeywords() {
+        return seoKeywords;
+    }
+
+    public void setSeoKeywords(String seoKeywords) {
+        this.seoKeywords = seoKeywords;
+    }
+
+    public String getSeoDescription() {
+        return seoDescription;
+    }
+
+    public void setSeoDescription(String seoDescription) {
+        this.seoDescription = seoDescription;
+    }
+
+    public Integer getHot() {
+        return hot;
+    }
+
+    public void setHot(Integer hot) {
+        this.hot = hot;
     }
 
     public void setCategory(ArticleCategory category) {

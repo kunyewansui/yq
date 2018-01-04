@@ -5,8 +5,8 @@
 <mapper namespace="com.xiaosuokeji.server.dao.article.ArticleDao">
 
     <insert id="save" parameterType="article">
-        INSERT INTO shuttle_common.sc_article(id,title,`type`,content,url,image,category_id,seq,display,`lock`)
-        VALUES (#{id},#{title},#{type},#{content},#{url},#{image},#{category.id},#{seq},#{display},#{lock})
+        INSERT INTO shuttle_common.sc_article(id,title,`type`,content,url,image,category_id,seq,display,`lock`,hot,intro,seo_title,seo_keywords,seo_description)
+        VALUES (#{id},#{title},#{type},#{content},#{url},#{image},#{category.id},#{seq},#{display},#{lock},#{hot},#{intro},#{seoTitle},#{seoKeywords},#{seoDescription})
     </insert>
 
     <delete id="remove" parameterType="article">
@@ -34,6 +34,21 @@
             </if>
             <if test="category!=null and category.id!=null">
                 ,category_id=#{category.id}
+            </if>
+            <if test="seoTitle!=null">
+                ,seo_title=#{seoTitle}
+            </if>
+            <if test="seoKeywords!=null">
+                ,seo_keywords=#{seoKeywords}
+            </if>
+            <if test="seoDescription!=null">
+                ,seo_description=#{seoDescription}
+            </if>
+            <if test="hot!=null">
+                ,hot=#{hot}
+            </if>
+            <if test="intro!=null">
+                ,intro=#{intro}
             </if>
             <if test="seq!=null">
                 ,seq=#{seq}
@@ -74,8 +89,14 @@
             <if test="category!=null and category.id!=null and category.id!='' and categoryList==null">
                 AND a.category_id=#{category.id}
             </if>
+            <if test="category!=null and category.key!=null and category.key!=''">
+                AND c.key=#{category.key}
+            </if>
             <if test="display!=null">
                 AND a.display=#{display}
+            </if>
+            <if test="hot!=null">
+                AND a.hot=#{hot}
             </if>
             <if test="dynamic!=null and dynamic.createTimeStart!=null and dynamic.createTimeStart!=''">
                 AND date(a.create_time) &gt;= #{dynamic.createTimeStart}

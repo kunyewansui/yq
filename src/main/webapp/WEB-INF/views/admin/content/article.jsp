@@ -126,7 +126,7 @@
                         <c:forEach items="${pageModel.list}" var="item">
                             <tr>
                                 <td>${item.title}</td>
-                                <td><img style="max-width: 100px" src="${item.image}"></td>
+                                <td><img style="max-width:100px;height: 50px;" src="${item.image}"></td>
                                 <td>${item.seq}</td>
                                 <td><xs:dictDesc key="articleDisplay" value="${item.display}"/></td>
                                 <td>
