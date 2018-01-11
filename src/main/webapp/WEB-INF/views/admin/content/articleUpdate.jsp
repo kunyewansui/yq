@@ -223,7 +223,7 @@
             }
         });
         $("#tree").treeview('selectNode','${article.category.id}');
-        $("input[name='type']").trigger("change");
+        $("select[name='type']").trigger("change");
     });
 
 

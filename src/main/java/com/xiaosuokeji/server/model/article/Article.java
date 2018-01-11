@@ -41,8 +41,8 @@ public class Article extends BaseModel {
     /**
      * url
      */
-    @URL(message = "url格式错误", groups = {Save.class, Update.class})
-    @Length(max = 255, message = "url长度最多为255个字符", groups = {Save.class, Update.class})
+/*    @URL(message = "url格式错误", groups = {Save.class, Update.class})
+    @Length(max = 255, message = "url长度最多为255个字符", groups = {Save.class, Update.class})*/
     private String url;
 
     /**
