@@ -21,6 +21,10 @@ public interface SystemConfigDao {
 
     SystemConfig getByKey(@Param("key") String key);
 
+    List<SystemConfig> getByKeyList(List<String> list);
+
+    int updateBatch(List<SystemConfig> list);
+
     List<SystemConfig> list(SystemConfig systemConfig);
 
     Long count(SystemConfig systemConfig);

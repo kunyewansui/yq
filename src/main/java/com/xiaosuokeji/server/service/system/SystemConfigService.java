@@ -8,8 +8,11 @@ import com.xiaosuokeji.server.dao.system.SystemConfigDao;
 import com.xiaosuokeji.server.model.system.SystemConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统配置ServiceImpl
@@ -72,5 +75,19 @@ public class SystemConfigService {
             throw new XSBusinessException(SystemConfigConsts.SYSTEM_CONFIG_NOT_EXIST);
         }
         return existent.getValue();
+    }
+
+    public Map getByKeyList(List<String> keys){
+        List<SystemConfig> systemConfigs = systemConfigDao.getByKeyList(keys);
+        Map map = new HashMap();
+        for (SystemConfig systemConfig:systemConfigs){
+            map.put(systemConfig.getKey(),systemConfig.getValue());
+        }
+        return map;
+    }
+
+    @Transactional
+    public void updateBatch(List<SystemConfig> systemConfigs){
+        systemConfigDao.updateBatch(systemConfigs);
     }
 }
