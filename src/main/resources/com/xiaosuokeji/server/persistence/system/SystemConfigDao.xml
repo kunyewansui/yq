@@ -44,6 +44,32 @@
         WHERE `key`=#{key}
     </select>
 
+    <select id="getByKeyList" parameterType="list" resultType="systemConfig">
+        SELECT *
+        FROM shuttle_common.sc_system_config
+        WHERE `key`in
+        <foreach collection="list" open="(" item="item" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <update id="updateBatch" parameterType="list">
+        update shuttle_common.sc_system_config
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="value = case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.value!=null">
+                        when `key` = #{i.key} then #{i.value}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="list" separator="or" item="i" index="index" >
+            `key` = #{i.key}
+        </foreach>
+    </update>
+
     <sql id="listCondition">
         FROM shuttle_common.sc_system_config
         <trim prefix="WHERE" prefixOverrides="AND|OR">
