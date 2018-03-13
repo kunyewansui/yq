@@ -125,6 +125,7 @@ public class PaginationTag extends TagSupport {
                     .append("<span class=\"pagination-change-page\"></span>")
                     .append("<a href=\"#\" class=\"submit\" onclick=\"xsChangePageSubmit();return false;\">确定</a>")
                     .append("</div>")
+                    .append("</div>")
                     .append("<script>")
                     .append("var $xsPage=$(\"#xsPage\");\n")
                     .append("function xsChangePageSubmit() {\n")
@@ -150,9 +151,11 @@ public class PaginationTag extends TagSupport {
         for (Map.Entry<String, String[]> entry : params.entrySet()) {
             if (entry.getKey().equals(PAGE))
                 continue;
+            if (entry.getKey().equals("limit"))
+                continue;
             sb.append("&").append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue()[0], "UTF-8"));
         }
-
+        sb.append("&limit=").append(limit);
         return sb.toString();
     }
 }
