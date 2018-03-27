@@ -51,15 +51,17 @@ public class ArticleService {
     public void update(Article article) {
         //获取分类信息
         ArticleCategory category = articleCategoryDao.get(article.getCategory());
-        String url = category.getPrefix();
-        if (url.contains("${id}")) {
-            url = url.replace("${id}", article.getId());
-        } else if (url.endsWith("/")) {
-            url += article.getId();
-        } else {
-            url += "/" + article.getId();
+        if(category!=null) {
+            String url = category.getPrefix();
+            if (url.contains("${id}")) {
+                url = url.replace("${id}", article.getId());
+            } else if (url.endsWith("/")) {
+                url += article.getId();
+            } else {
+                url += "/" + article.getId();
+            }
+            article.setUrl(url);
         }
-        article.setUrl(url);
         articleDao.update(article);
     }
 
