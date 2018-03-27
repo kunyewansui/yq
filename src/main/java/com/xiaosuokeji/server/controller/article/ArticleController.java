@@ -37,6 +37,9 @@ public class ArticleController {
 
     @RequestMapping(value = "/admin/content/article/article", method = RequestMethod.GET)
     public String index(Model model, Article article) throws Exception {
+        if(article.getPage() == null) {
+            article.setPage(1L);
+        }
         model.addAttribute("search", article);
         model.addAttribute("pageModel", articleService.listAndCount(article));
         model.addAttribute("categoryTree", XSJackson.toJsonString(articleCategoryService.tree(new ArticleCategory())));
