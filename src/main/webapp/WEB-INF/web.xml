@@ -74,4 +74,9 @@
         <error-code>500</error-code>
         <location>/admin/error/500</location>
     </error-page>
+
+    <error-page>
+        <error-code>600</error-code>
+        <location>/admin/error/500</location>
+    </error-page>
 </web-app>
