@@ -5,12 +5,12 @@
 <mapper namespace="com.xiaosuokeji.server.dao.security.SecStaffLogDao">
 
     <insert id="save" parameterType="secStaffLog">
-        INSERT INTO shuttle_common.sc_security_staff_log(staff_id,ip,`time`,operation,status,parameters,result)
+        INSERT INTO sc_security_staff_log(staff_id,ip,`time`,operation,status,parameters,result)
         VALUES (#{staff.id},#{ip},#{time},#{operation},#{status},#{parameters},#{result})
     </insert>
 
     <delete id="remove" parameterType="secStaffLog">
-        DELETE FROM shuttle_common.sc_security_role
+        DELETE FROM sc_security_role
         WHERE id=#{id}
     </delete>
 
@@ -20,14 +20,14 @@
 
     <select id="get" parameterType="secStaffLog" resultMap="secStaffLogMap">
         SELECT sl.*,ss.name AS s_name
-        FROM shuttle_common.sc_security_staff_log sl
-        LEFT JOIN shuttle_common.sc_security_staff ss ON sl.staff_id=ss.id
+        FROM sc_security_staff_log sl
+        LEFT JOIN sc_security_staff ss ON sl.staff_id=ss.id
         WHERE sl.id=#{id}
     </select>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_security_staff_log sl
-        LEFT JOIN shuttle_common.sc_security_staff ss ON sl.staff_id=ss.id
+        FROM sc_security_staff_log sl
+        LEFT JOIN sc_security_staff ss ON sl.staff_id=ss.id
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
                 AND ss.name LIKE CONCAT('%',#{dynamic.name},'%')

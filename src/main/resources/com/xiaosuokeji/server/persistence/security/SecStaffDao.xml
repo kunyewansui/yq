@@ -5,13 +5,13 @@
 <mapper namespace="com.xiaosuokeji.server.dao.security.SecStaffDao">
 
     <insert id="save" parameterType="secStaff">
-        INSERT INTO shuttle_common.sc_security_staff(username,password,status,`name`,mobile,email,qq,superior)
+        INSERT INTO sc_security_staff(username,password,status,`name`,mobile,email,qq,superior)
         VALUES (#{username},#{password},#{status},#{name},#{mobile},#{email},#{qq},0)
         ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <insert id="saveStaffRole" parameterType="secStaff">
-        INSERT IGNORE INTO shuttle_common.sc_security_staff_role
+        INSERT IGNORE INTO sc_security_staff_role
         VALUES
         <foreach collection="roleList" item="item" separator=",">
             (#{id},#{item.id})
@@ -19,7 +19,7 @@
     </insert>
 
     <insert id="saveStaffOrganization" parameterType="secStaff">
-        INSERT IGNORE INTO shuttle_common.sc_security_staff_org
+        INSERT IGNORE INTO sc_security_staff_org
         VALUES
         <foreach collection="organizationList" item="item" separator=",">
             (#{id},#{item.id})
@@ -27,12 +27,12 @@
     </insert>
 
     <delete id="remove" parameterType="secStaff">
-        DELETE FROM shuttle_common.sc_security_staff
+        DELETE FROM sc_security_staff
         WHERE id=#{id} AND superior=0
     </delete>
 
     <delete id="removeStaffRole" parameterType="secStaff">
-        DELETE FROM shuttle_common.sc_security_staff_role
+        DELETE FROM sc_security_staff_role
         WHERE staff_id=#{id}
         <if test="roleList!=null and roleList.size>0">
             AND role_id IN
@@ -43,7 +43,7 @@
     </delete>
 
     <delete id="removeStaffOrganization" parameterType="secStaff">
-        DELETE FROM shuttle_common.sc_security_staff_org
+        DELETE FROM sc_security_staff_org
         WHERE staff_id=#{id}
         <if test="organizationList!=null and organizationList.size>0">
             AND organization_id IN
@@ -54,7 +54,7 @@
     </delete>
 
     <update id="update" parameterType="secStaff">
-        UPDATE shuttle_common.sc_security_staff
+        UPDATE sc_security_staff
         <trim prefix="SET" prefixOverrides=",">
             <if test="username!=null">
                 ,username=#{username}
@@ -87,7 +87,7 @@
 
     <select id="get" parameterType="secStaff" resultType="secStaff">
         SELECT *
-        FROM shuttle_common.sc_security_staff
+        FROM sc_security_staff
         WHERE id=#{id}
         <if test="superior!=null">
             AND superior=#{superior}
@@ -96,12 +96,12 @@
     
     <select id="getByUsername" parameterType="secStaff" resultType="secStaff">
         SELECT *
-        FROM shuttle_common.sc_security_staff
+        FROM sc_security_staff
         WHERE username=#{username}
     </select>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_security_staff
+        FROM sc_security_staff
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="username!=null and username!=''">
                 AND username=#{username}
@@ -131,21 +131,21 @@
 
     <select id="listRoleCombo" resultType="secRole">
         SELECT id,`name`
-        FROM shuttle_common.sc_security_role
+        FROM sc_security_role
         WHERE superior=0
     </select>
 
     <select id="listRole" parameterType="secStaff" resultType="secRole">
         SELECT r.id,r.status,r.name
-        FROM shuttle_common.sc_security_staff_role sr
-        JOIN shuttle_common.sc_security_role r ON sr.role_id=r.id
+        FROM sc_security_staff_role sr
+        JOIN sc_security_role r ON sr.role_id=r.id
         WHERE sr.staff_id=#{id}
     </select>
 
     <select id="listRoleByOrganization" parameterType="secOrganization" resultType="secRole">
         SELECT r.id,r.name,r.status
-        FROM shuttle_common.sc_security_org_role rr
-        JOIN shuttle_common.sc_security_role r ON rr.role_id=r.id
+        FROM sc_security_org_role rr
+        JOIN sc_security_role r ON rr.role_id=r.id
         WHERE rr.organization_id IN
         <foreach collection="organizationList" item="item" open="(" close=")" separator=",">
             #{item.id}
@@ -158,13 +158,13 @@
 
     <select id="listOrganizationCombo" resultMap="secOrganizationMap">
         SELECT id,`name`,pid AS p_id
-        FROM shuttle_common.sc_security_organization
+        FROM sc_security_organization
     </select>
 
     <select id="listOrganization" parameterType="secStaff" resultType="secOrganization">
         SELECT o.id,o.status
-        FROM shuttle_common.sc_security_staff_org so
-        JOIN shuttle_common.sc_security_organization o ON so.organization_id=o.id
+        FROM sc_security_staff_org so
+        JOIN sc_security_organization o ON so.organization_id=o.id
         WHERE so.staff_id=#{id}
     </select>
 

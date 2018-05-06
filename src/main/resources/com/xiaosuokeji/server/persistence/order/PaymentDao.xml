@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.server.dao.order.PaymentDao">
+
+	<insert id="save" parameterType="payment" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO yq_payment(id,orderNo,merchant_id,amount,remark,creator)
+		VALUES (#{id},#{orderno},#{merchantId},#{amount},#{remark},#{creator})
+	</insert>
+
+	<delete id="remove" parameterType="payment">
+		DELETE FROM yq_payment
+		WHERE id=#{id}
+	</delete>
+
+	<update id="update" parameterType="payment">
+		UPDATE yq_payment
+		<trim prefix="SET" prefixOverrides=",">
+			<if test="orderno!=null">
+				,orderNo=#{orderno}
+			</if>
+			<if test="merchantId!=null">
+				,merchant_id=#{merchantId}
+			</if>
+			<if test="amount!=null">
+				,amount=#{amount}
+			</if>
+			<if test="remark!=null">
+				,remark=#{remark}
+			</if>
+			<if test="creator!=null">
+				,creator=#{creator}
+			</if>
+			,update_time=NOW()
+		</trim>
+		WHERE id=#{id}
+	</update>
+
+	<select id="get" parameterType="payment" resultType="payment">
+		SELECT *
+		FROM yq_payment
+		WHERE id=#{id}
+	</select>
+
+	<sql id="listCondition">
+		FROM yq_payment
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null">
+				AND id=#{id}
+			</if>
+			<if test="orderno!=null and orderno!=''">
+				AND orderNo=#{orderno}
+			</if>
+			<if test="dynamic!=null and dynamic.orderno!=null and dynamic.orderno!=''">
+				AND orderNo LIKE CONCAT('%',#{dynamic.orderno},'%')
+			</if>
+			<if test="merchantId!=null">
+				AND merchant_id=#{merchantId}
+			</if>
+			<if test="amount!=null">
+				AND amount=#{amount}
+			</if>
+			<if test="remark!=null and remark!=''">
+				AND remark=#{remark}
+			</if>
+			<if test="dynamic!=null and dynamic.remark!=null and dynamic.remark!=''">
+				AND remark LIKE CONCAT('%',#{dynamic.remark},'%')
+			</if>
+			<if test="creator!=null and creator!=''">
+				AND creator=#{creator}
+			</if>
+			<if test="dynamic!=null and dynamic.creator!=null and dynamic.creator!=''">
+				AND creator LIKE CONCAT('%',#{dynamic.creator},'%')
+			</if>
+		</trim>
+	</sql>
+
+	<select id="list" parameterType="payment" resultType="payment">
+		SELECT *
+		<include refid="listCondition"/>
+		<include refid="XSBaseMapper.sort"/>
+		<include refid="XSBaseMapper.limit"/>
+	</select>
+
+	<select id="count" parameterType="payment" resultType="long">
+		SELECT COUNT(*)
+		<include refid="listCondition"/>
+	</select>
+</mapper>

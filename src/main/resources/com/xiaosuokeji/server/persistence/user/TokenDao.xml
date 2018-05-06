@@ -5,17 +5,17 @@
 <mapper namespace="com.xiaosuokeji.server.dao.user.TokenDao">
 
     <insert id="save" parameterType="token">
-        INSERT INTO shuttle_common.sc_token(id,user_id)
+        INSERT INTO sc_token(id,user_id)
         VALUES (#{id},#{user.id})
     </insert>
 
     <delete id="remove" parameterType="token">
-        DELETE FROM shuttle_common.sc_token
+        DELETE FROM sc_token
         WHERE id=#{id}
     </delete>
 
     <delete id="removeExpired">
-        DELETE FROM shuttle_common.sc_token
+        DELETE FROM sc_token
         WHERE DATE_ADD(create_time,INTERVAL #{day} DAY) &lt;= #{now}
     </delete>
 
@@ -25,7 +25,7 @@
 
     <select id="get" parameterType="token" resultMap="tokenMap">
         SELECT *,user_id AS u_id
-        FROM shuttle_common.sc_token
+        FROM sc_token
         WHERE id=#{id}
     </select>
 </mapper>

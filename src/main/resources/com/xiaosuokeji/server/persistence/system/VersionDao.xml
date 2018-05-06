@@ -5,18 +5,18 @@
 <mapper namespace="com.xiaosuokeji.server.dao.system.VersionDao">
 
     <insert id="save" parameterType="version">
-        INSERT INTO shuttle_common.sc_version(id,`code`,`platform`,`name`,`url`,`status`,`desc`)
+        INSERT INTO sc_version(id,`code`,`platform`,`name`,`url`,`status`,`desc`)
         VALUES (#{id},#{code},#{platform},#{name},#{url},#{status},#{desc})
         ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <delete id="remove" parameterType="version">
-        DELETE FROM shuttle_common.sc_version
+        DELETE FROM sc_version
         WHERE id=#{id}
     </delete>
 
     <update id="update" parameterType="version">
-        UPDATE shuttle_common.sc_version
+        UPDATE sc_version
         <trim prefix="SET" prefixOverrides=",">
             <if test="code!=null">
                 ,`code`=#{code}
@@ -43,12 +43,12 @@
 
     <select id="get" parameterType="version" resultType="version">
         SELECT *
-        FROM shuttle_common.sc_version
+        FROM sc_version
         WHERE id=#{id}
     </select>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_version
+        FROM sc_version
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="code!=null and code!=''">
                 AND `code`=#{code}

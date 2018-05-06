@@ -5,18 +5,18 @@
 <mapper namespace="com.xiaosuokeji.server.dao.system.DictDataDao">
 
     <insert id="save" parameterType="dictData" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO shuttle_common.sc_dict_data(`name`,dict_id,`value`,`desc`,`lock`)
+        INSERT INTO sc_dict_data(`name`,dict_id,`value`,`desc`,`lock`)
         VALUES (#{name},#{dict.id},#{value},#{desc},#{lock})
         ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <delete id="remove" parameterType="dictData">
-        DELETE FROM shuttle_common.sc_dict_data
+        DELETE FROM sc_dict_data
         WHERE id=#{id}
     </delete>
 
     <update id="update" parameterType="dictData">
-        UPDATE shuttle_common.sc_dict_data
+        UPDATE sc_dict_data
         <trim prefix="SET" prefixOverrides=",">
             <if test="name!=null">
                 ,`name`=#{name}
@@ -36,7 +36,7 @@
     </update>
 
     <update id="updateLock" parameterType="dictData">
-        UPDATE shuttle_common.sc_dict_data
+        UPDATE sc_dict_data
         SET `lock`=#{lock},update_time=NOW()
         WHERE id=#{id}
     </update>
@@ -47,13 +47,13 @@
 
     <select id="get" parameterType="dictData" resultMap="dictDataMap">
         SELECT dd.*,d.id AS d_id, d.name AS d_name,d.key AS d_key
-        FROM shuttle_common.sc_dict d
-        JOIN shuttle_common.sc_dict_data dd ON d.id=dd.dict_id
+        FROM sc_dict d
+        JOIN sc_dict_data dd ON d.id=dd.dict_id
         WHERE dd.id=#{id}
     </select>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_dict_data
+        FROM sc_dict_data
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="dict!=null and dict.id!=null">
                 AND dict_id=#{dict.id}
@@ -73,8 +73,8 @@
 
     <select id="listByDict" parameterType="dict" resultType="dictData">
         SELECT dd.value,dd.desc
-        FROM shuttle_common.sc_dict d
-        JOIN shuttle_common.sc_dict_data dd ON d.id=dd.dict_id
+        FROM sc_dict d
+        JOIN sc_dict_data dd ON d.id=dd.dict_id
         WHERE d.key=#{key}
     </select>
 

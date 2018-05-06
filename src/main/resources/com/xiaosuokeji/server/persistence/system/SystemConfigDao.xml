@@ -5,18 +5,18 @@
 <mapper namespace="com.xiaosuokeji.server.dao.system.SystemConfigDao">
 
     <insert id="save" parameterType="systemConfig">
-        INSERT INTO shuttle_common.sc_system_config(id,`key`,`value`,`name`)
+        INSERT INTO sc_system_config(id,`key`,`value`,`name`)
         VALUES (#{id},#{key},#{value},#{name})
         ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <delete id="remove" parameterType="systemConfig">
-        DELETE FROM shuttle_common.sc_system_config
+        DELETE FROM sc_system_config
         WHERE id=#{id}
     </delete>
 
     <update id="update" parameterType="systemConfig">
-        UPDATE shuttle_common.sc_system_config
+        UPDATE sc_system_config
         <trim prefix="SET" prefixOverrides=",">
             <if test="key!=null">
                 ,`key`=#{key}
@@ -34,19 +34,19 @@
 
     <select id="get" parameterType="systemConfig" resultType="systemConfig">
         SELECT *
-        FROM shuttle_common.sc_system_config
+        FROM sc_system_config
         WHERE id=#{id}
     </select>
 
     <select id="getByKey" resultType="systemConfig">
         SELECT *
-        FROM shuttle_common.sc_system_config
+        FROM sc_system_config
         WHERE `key`=#{key}
     </select>
 
     <select id="getByKeyList" parameterType="list" resultType="systemConfig">
         SELECT *
-        FROM shuttle_common.sc_system_config
+        FROM sc_system_config
         WHERE `key`in
         <foreach collection="list" open="(" item="item" close=")" separator=",">
             #{item}
@@ -54,7 +54,7 @@
     </select>
 
     <update id="updateBatch" parameterType="list">
-        update shuttle_common.sc_system_config
+        update sc_system_config
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="value = case" suffix="end,">
                 <foreach collection="list" item="i" index="index">
@@ -71,7 +71,7 @@
     </update>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_system_config
+        FROM sc_system_config
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="key!=null and key!=''">
                 AND `key`=#{key}

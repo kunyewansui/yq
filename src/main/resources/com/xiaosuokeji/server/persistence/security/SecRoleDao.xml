@@ -5,13 +5,13 @@
 <mapper namespace="com.xiaosuokeji.server.dao.security.SecRoleDao">
 
     <insert id="save" parameterType="secRole">
-        INSERT INTO shuttle_common.sc_security_role(`name`,status,superior,`desc`)
+        INSERT INTO sc_security_role(`name`,status,superior,`desc`)
         VALUES (#{name},#{status},0,#{desc})
         ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <insert id="saveRoleRes" parameterType="secRole">
-        INSERT IGNORE INTO shuttle_common.sc_security_role_res
+        INSERT IGNORE INTO sc_security_role_res
         VALUES
         <foreach collection="resourceList" item="item" separator=",">
             (#{id},#{item.id})
@@ -19,12 +19,12 @@
     </insert>
 
     <delete id="remove" parameterType="secRole">
-        DELETE FROM shuttle_common.sc_security_role
+        DELETE FROM sc_security_role
         WHERE id=#{id} AND superior=0
     </delete>
 
     <delete id="removeRoleRes" parameterType="secRole">
-        DELETE FROM shuttle_common.sc_security_role_res
+        DELETE FROM sc_security_role_res
         WHERE role_id=#{id}
         <if test="resourceList!=null and resourceList.size>0">
             AND resource_id IN
@@ -35,7 +35,7 @@
     </delete>
 
     <update id="update" parameterType="secRole">
-        UPDATE shuttle_common.sc_security_role
+        UPDATE sc_security_role
         <trim prefix="SET" prefixOverrides=",">
             <if test="name!=null">
                 ,`name`=#{name}
@@ -53,12 +53,12 @@
 
     <select id="get" parameterType="secRole" resultType="secRole">
         SELECT *
-        FROM shuttle_common.sc_security_role
+        FROM sc_security_role
         WHERE id=#{id} AND superior=0
     </select>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_security_role
+        FROM sc_security_role
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="name!=null and name!=''">
                 AND `name`=#{name}
@@ -86,13 +86,13 @@
 
     <select id="listResource" parameterType="secRole" resultType="secResource">
         SELECT resource_id AS id
-        FROM shuttle_common.sc_security_role_res
+        FROM sc_security_role_res
         WHERE role_id=#{id}
     </select>
 
     <select id="listResourceCombo" resultMap="secResourceMap">
         SELECT id,`name`,`type`,assign,pid AS p_id
-        FROM shuttle_common.sc_security_resource
+        FROM sc_security_resource
         <include refid="XSBaseMapper.sort"/>
     </select>
 
@@ -103,13 +103,13 @@
 
     <select id="countStaff" parameterType="secRole" resultType="long">
         SELECT COUNT(*)
-        FROM shuttle_common.sc_security_staff_role
+        FROM sc_security_staff_role
         WHERE role_id=#{id}
     </select>
 
     <select id="countOrganization" parameterType="secRole" resultType="long">
         SELECT COUNT(*)
-        FROM shuttle_common.sc_security_org_role
+        FROM sc_security_org_role
         WHERE role_id=#{id}
     </select>
 </mapper>

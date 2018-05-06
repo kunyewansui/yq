@@ -5,17 +5,17 @@
 <mapper namespace="com.xiaosuokeji.server.dao.article.ArticleDao">
 
     <insert id="save" parameterType="article">
-        INSERT INTO shuttle_common.sc_article(id,title,`type`,content,url,image,category_id,seq,display,`lock`,hot,intro,seo_title,seo_keywords,seo_description)
+        INSERT INTO sc_article(id,title,`type`,content,url,image,category_id,seq,display,`lock`,hot,intro,seo_title,seo_keywords,seo_description)
         VALUES (#{id},#{title},#{type},#{content},#{url},#{image},#{category.id},#{seq},#{display},#{lock},#{hot},#{intro},#{seoTitle},#{seoKeywords},#{seoDescription})
     </insert>
 
     <delete id="remove" parameterType="article">
-        DELETE FROM shuttle_common.sc_article
+        DELETE FROM sc_article
         WHERE id=#{id}
     </delete>
 
     <update id="update" parameterType="article">
-        UPDATE shuttle_common.sc_article
+        UPDATE sc_article
         <trim prefix="SET" prefixOverrides=",">
             <if test="title!=null">
                 ,title=#{title}
@@ -71,14 +71,14 @@
     <select id="get" parameterType="article" resultMap="articleMap">
         SELECT a.*,
         c.id AS c_id,c.name AS c_name
-        FROM shuttle_common.sc_article a
-        LEFT JOIN shuttle_common.sc_article_category c ON a.category_id=c.id
+        FROM sc_article a
+        LEFT JOIN sc_article_category c ON a.category_id=c.id
         WHERE a.id=#{id}
     </select>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_article a
-        LEFT JOIN shuttle_common.sc_article_category c ON a.category_id=c.id
+        FROM sc_article a
+        LEFT JOIN sc_article_category c ON a.category_id=c.id
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="dynamic!=null and dynamic.title!=null and dynamic.title!=''">
                 AND a.title LIKE CONCAT('%',#{dynamic.title},'%')
@@ -129,7 +129,7 @@
 
     <select id="listCombo" parameterType="article" resultType="article">
         SELECT id,title,`type`,image,url
-        FROM shuttle_common.sc_article
+        FROM sc_article
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="category!=null and category.id!=null and category.id!=''">
                 AND category_id=#{category.id}

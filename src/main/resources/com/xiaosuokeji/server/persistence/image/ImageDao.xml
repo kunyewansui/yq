@@ -5,17 +5,17 @@
 <mapper namespace="com.xiaosuokeji.server.dao.image.ImageDao">
 
     <insert id="save" parameterType="image">
-        INSERT INTO shuttle_common.sc_image(id,`name`,url,link,category_id,seq,display)
+        INSERT INTO sc_image(id,`name`,url,link,category_id,seq,display)
         VALUES (#{id},#{name},#{url},#{link},#{category.id},#{seq},#{display})
     </insert>
 
     <delete id="remove" parameterType="image">
-        DELETE FROM shuttle_common.sc_image
+        DELETE FROM sc_image
         WHERE id=#{id}
     </delete>
 
     <update id="update" parameterType="image">
-        UPDATE shuttle_common.sc_image
+        UPDATE sc_image
         <trim prefix="SET" prefixOverrides=",">
             <if test="name!=null">
                 ,`name`=#{name}
@@ -47,14 +47,14 @@
     <select id="get" parameterType="image" resultMap="imageMap">
         SELECT i.*,
         c.id AS c_id,c.name AS c_name
-        FROM shuttle_common.sc_image i
-        LEFT JOIN shuttle_common.sc_image_category c ON i.category_id=c.id
+        FROM sc_image i
+        LEFT JOIN sc_image_category c ON i.category_id=c.id
         WHERE i.id=#{id}
     </select>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_image i
-        LEFT JOIN shuttle_common.sc_image_category c ON i.category_id=c.id
+        FROM sc_image i
+        LEFT JOIN sc_image_category c ON i.category_id=c.id
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
                 AND i.name LIKE CONCAT('%',#{dynamic.name},'%')
@@ -84,7 +84,7 @@
 
     <select id="listCombo" parameterType="image" resultType="image">
         SELECT id,`name`,url,link
-        FROM shuttle_common.sc_image
+        FROM sc_image
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="category!=null and category.id!=null">
                 AND category_id=#{category.id}

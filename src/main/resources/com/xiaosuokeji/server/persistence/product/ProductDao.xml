@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.server.dao.product.ProductDao">
+
+	<insert id="save" parameterType="product" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO yq_product(id,name,cate_id,code,shop_stock,factory_stock,cost,image,pics,manu_price)
+		VALUES (#{id},#{name},#{cateId},#{code},#{shopStock},#{factoryStock},#{cost},#{image},#{pics},#{manuPrice})
+	</insert>
+
+	<delete id="remove" parameterType="product">
+		DELETE FROM yq_product
+		WHERE id=#{id}
+	</delete>
+
+	<update id="update" parameterType="product">
+		UPDATE yq_product
+		<trim prefix="SET" prefixOverrides=",">
+			<if test="name!=null">
+				,name=#{name}
+			</if>
+			<if test="cateId!=null">
+				,cate_id=#{cateId}
+			</if>
+			<if test="code!=null">
+				,code=#{code}
+			</if>
+			<if test="shopStock!=null">
+				,shop_stock=#{shopStock}
+			</if>
+			<if test="factoryStock!=null">
+				,factory_stock=#{factoryStock}
+			</if>
+			<if test="cost!=null">
+				,cost=#{cost}
+			</if>
+			<if test="image!=null">
+				,image=#{image}
+			</if>
+			<if test="pics!=null">
+				,pics=#{pics}
+			</if>
+			<if test="manuPrice!=null">
+				,manu_price=#{manuPrice}
+			</if>
+			,update_time=NOW()
+		</trim>
+		WHERE id=#{id}
+	</update>
+
+	<select id="get" parameterType="product" resultType="product">
+		SELECT *
+		FROM yq_product
+		WHERE id=#{id}
+	</select>
+
+	<sql id="listCondition">
+		FROM yq_product
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null">
+				AND id=#{id}
+			</if>
+			<if test="name!=null and name!=''">
+				AND name=#{name}
+			</if>
+			<if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+				AND name LIKE CONCAT('%',#{dynamic.name},'%')
+			</if>
+			<if test="cateId!=null">
+				AND cate_id=#{cateId}
+			</if>
+			<if test="code!=null and code!=''">
+				AND code=#{code}
+			</if>
+			<if test="dynamic!=null and dynamic.code!=null and dynamic.code!=''">
+				AND code LIKE CONCAT('%',#{dynamic.code},'%')
+			</if>
+			<if test="shopStock!=null">
+				AND shop_stock=#{shopStock}
+			</if>
+			<if test="factoryStock!=null">
+				AND factory_stock=#{factoryStock}
+			</if>
+			<if test="cost!=null">
+				AND cost=#{cost}
+			</if>
+			<if test="image!=null and image!=''">
+				AND image=#{image}
+			</if>
+			<if test="dynamic!=null and dynamic.image!=null and dynamic.image!=''">
+				AND image LIKE CONCAT('%',#{dynamic.image},'%')
+			</if>
+			<if test="pics!=null and pics!=''">
+				AND pics=#{pics}
+			</if>
+			<if test="dynamic!=null and dynamic.pics!=null and dynamic.pics!=''">
+				AND pics LIKE CONCAT('%',#{dynamic.pics},'%')
+			</if>
+			<if test="manuPrice!=null">
+				AND manu_price=#{manuPrice}
+			</if>
+		</trim>
+	</sql>
+
+	<select id="list" parameterType="product" resultType="product">
+		SELECT *
+		<include refid="listCondition"/>
+		<include refid="XSBaseMapper.sort"/>
+		<include refid="XSBaseMapper.limit"/>
+	</select>
+
+	<select id="count" parameterType="product" resultType="long">
+		SELECT COUNT(*)
+		<include refid="listCondition"/>
+	</select>
+</mapper>

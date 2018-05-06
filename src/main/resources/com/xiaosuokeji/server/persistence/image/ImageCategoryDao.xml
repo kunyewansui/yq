@@ -5,18 +5,18 @@
 <mapper namespace="com.xiaosuokeji.server.dao.image.ImageCategoryDao">
 
     <insert id="save" parameterType="imageCategory">
-        INSERT INTO shuttle_common.sc_image_category(id,`key`,`name`,pid,seq,display,`lock`)
+        INSERT INTO sc_image_category(id,`key`,`name`,pid,seq,display,`lock`)
         VALUES (#{id},#{key},#{name},#{parent.id},#{seq},#{display},#{lock})
         ON DUPLICATE KEY UPDATE update_time=NOW()
     </insert>
 
     <delete id="remove" parameterType="imageCategory">
-        DELETE FROM shuttle_common.sc_image_category
+        DELETE FROM sc_image_category
         WHERE id=#{id}
     </delete>
 
     <update id="update" parameterType="imageCategory">
-        UPDATE shuttle_common.sc_image_category
+        UPDATE sc_image_category
         <trim prefix="SET" prefixOverrides=",">
             <if test="key!=null">
                 ,`key`=#{key}
@@ -39,7 +39,7 @@
     </update>
 
     <update id="batchUpdate" parameterType="imageCategory">
-        UPDATE shuttle_common.sc_image_category
+        UPDATE sc_image_category
         <trim prefix="SET" prefixOverrides=",">
             <if test="display!=null">
                 ,display=#{display}
@@ -55,7 +55,7 @@
     </update>
 
     <update id="batchUpdateLock" parameterType="imageCategory">
-        UPDATE shuttle_common.sc_image_category
+        UPDATE sc_image_category
         SET `lock`=#{lock},update_time=NOW()
         <if test="list!=null and list.size>0">
             WHERE id IN
@@ -72,14 +72,14 @@
     <select id="get" parameterType="imageCategory" resultMap="imageCategoryMap">
         SELECT c.*,
         p.id AS p_id,p.name AS p_name
-        FROM shuttle_common.sc_image_category c
-        LEFT JOIN shuttle_common.sc_image_category p ON c.pid=p.id
+        FROM sc_image_category c
+        LEFT JOIN sc_image_category p ON c.pid=p.id
         WHERE c.id=#{id}
     </select>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_image_category c
-        LEFT JOIN shuttle_common.sc_image_category p ON c.pid=p.id
+        FROM sc_image_category c
+        LEFT JOIN sc_image_category p ON c.pid=p.id
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="key!=null">
                 AND c.key=#{key}
@@ -98,7 +98,7 @@
 
     <select id="listCombo" parameterType="imageCategory" resultMap="imageCategoryMap">
         SELECT id,`name`,pid AS p_id
-        FROM shuttle_common.sc_image_category
+        FROM sc_image_category
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="display!=null">
                 AND display=#{display}

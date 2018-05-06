@@ -5,7 +5,7 @@
 <mapper namespace="com.xiaosuokeji.server.dao.article.ArticleCategoryDao">
 
     <insert id="save" parameterType="articleCategory">
-        INSERT INTO shuttle_common.sc_article_category(id,`key`,`name`,prefix,icon,pid,seq,
+        INSERT INTO sc_article_category(id,`key`,`name`,prefix,icon,pid,seq,
         display,`lock`)
         VALUES (#{id},#{key},#{name},#{prefix},#{icon},#{parent.id},#{seq},
         #{display},#{lock})
@@ -13,12 +13,12 @@
     </insert>
 
     <delete id="remove" parameterType="articleCategory">
-        DELETE FROM shuttle_common.sc_article_category
+        DELETE FROM sc_article_category
         WHERE id=#{id}
     </delete>
 
     <update id="update" parameterType="articleCategory">
-        UPDATE shuttle_common.sc_article_category
+        UPDATE sc_article_category
         <trim prefix="SET" prefixOverrides=",">
             <if test="key!=null">
                 ,`key`=#{key}
@@ -47,7 +47,7 @@
     </update>
 
     <update id="batchUpdate" parameterType="articleCategory">
-        UPDATE shuttle_common.sc_article_category
+        UPDATE sc_article_category
         <trim prefix="SET" prefixOverrides=",">
             <if test="display!=null">
                 ,display=#{display}
@@ -63,7 +63,7 @@
     </update>
 
     <update id="batchUpdateLock" parameterType="articleCategory">
-        UPDATE shuttle_common.sc_article_category
+        UPDATE sc_article_category
         SET `lock`=#{lock},update_time=NOW()
         <if test="list!=null and list.size>0">
             WHERE id IN
@@ -80,14 +80,14 @@
     <select id="get" parameterType="articleCategory" resultMap="imageCategoryMap">
         SELECT c.*,
         p.id AS p_id,p.name AS p_name
-        FROM shuttle_common.sc_article_category c
-        LEFT JOIN shuttle_common.sc_article_category p ON c.pid=p.id
+        FROM sc_article_category c
+        LEFT JOIN sc_article_category p ON c.pid=p.id
         WHERE c.id=#{id}
     </select>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_article_category c
-        LEFT JOIN shuttle_common.sc_article_category p ON c.pid=p.id
+        FROM sc_article_category c
+        LEFT JOIN sc_article_category p ON c.pid=p.id
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="key!=null">
                 AND c.key=#{key}
@@ -106,7 +106,7 @@
 
     <select id="listCombo" parameterType="articleCategory" resultMap="imageCategoryMap">
         SELECT id,`name`,icon,pid AS p_id
-        FROM shuttle_common.sc_article_category
+        FROM sc_article_category
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="display!=null">
                 AND display=#{display}

@@ -5,28 +5,28 @@
 <mapper namespace="com.xiaosuokeji.server.dao.marketing.FeedbackDao">
 
     <insert id="save" parameterType="feedback">
-        INSERT INTO shuttle_common.sc_feedback(id,`name`,`mobile`,`title`,`content`,`status`)
+        INSERT INTO sc_feedback(id,`name`,`mobile`,`title`,`content`,`status`)
         VALUES (#{id},#{name},#{mobile},#{title},#{content},0)
     </insert>
 
     <delete id="remove" parameterType="feedback">
-        DELETE FROM shuttle_common.sc_feedback
+        DELETE FROM sc_feedback
         WHERE id=#{id}
     </delete>
 
      <select id="get" parameterType="feedback" resultType="feedback">
         SELECT *
-        FROM shuttle_common.sc_feedback
+        FROM sc_feedback
         WHERE id=#{id}
     </select>
 
     <update id="update" parameterType="feedback">
-        UPDATE shuttle_common.sc_feedback SET `status`=1,update_time=NOW()
+        UPDATE sc_feedback SET `status`=1,update_time=NOW()
         WHERE id=#{id}
     </update>
 
     <sql id="listCondition">
-        FROM shuttle_common.sc_feedback
+        FROM sc_feedback
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
                 AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
