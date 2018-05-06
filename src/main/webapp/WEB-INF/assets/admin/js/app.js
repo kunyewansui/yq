@@ -3,20 +3,7 @@
  */
 $(function () {
     //Nav
-    var c_href = window.location.href;
     var nav = $("#a_nav");
-
-    nav.find("a").each(function () {
-        var a_href = $(this).context.href.trim();
-        if (a_href !== "" && a_href !== $(this).context.origin + "/" && c_href.indexOf(a_href) === 0) {
-            var nexStr = c_href.substr(a_href.length, 1);
-            if (nexStr === "" || nexStr === "?" || nexStr === "#" || nexStr === "/") {
-                $(this).parent("li").addClass("active");
-                return false;
-            }
-        }
-    });
-
 
     nav.find("li").each(function () {
         var $this = $(this);
@@ -39,16 +26,6 @@ $(function () {
             $this.find("li.active").each(function () {
                 $(this).parent("ul").siblings("a.auto").parent("li").addClass("active");
             });
-        }
-    });
-
-    var tNav = $("#t_nav");
-    tNav.find("a").each(function () {
-        var a_href = $(this).context.href.trim();
-        if (a_href !== "" && a_href !== $(this).context.origin + "/" && c_href.indexOf(a_href) === 0) {
-            var nexStr = c_href.substr(a_href.length, 1);
-            if (nexStr === "" || nexStr === "?" || nexStr === "#" || nexStr === "/")
-                $(this).addClass("active");
         }
     });
 

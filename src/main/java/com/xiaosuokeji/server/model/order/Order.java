@@ -1,6 +1,11 @@
 package com.xiaosuokeji.server.model.order;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xiaosuokeji.server.model.base.BaseModel;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 订单

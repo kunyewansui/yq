@@ -10,27 +10,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>管理后台</title>
+    <title>首页</title>
     <%@include file="./common/head.jsp" %>
 </head>
 <body>
-<div class="app app-header-fixed app-aside-fixed" style="padding-top: 0">
-    <%@include file="./common/header.jsp" %>
-    <div class="app-aside hidden-xs bg-black">
-        <div class="aside-wrap ">
-        </div>
-    </div>
-    <div class="app-content ">
-        <div class="app-content-body">
-        </div>
+<%@include file="./common/header.jsp" %>
+<%@include file="./common/content_nav.jsp" %>
+
+<div class="app-content ">
+    <div class="app-content-body">
     </div>
 </div>
-<script>
-    var topLinks=$("#t_nav").find("a");
-    if(topLinks.length>0){
-        window.location.href=$(topLinks[0]).attr("href");
-    }
-</script>
 </body>
 </html>
 

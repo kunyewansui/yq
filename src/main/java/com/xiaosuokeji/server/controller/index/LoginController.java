@@ -1,13 +1,12 @@
 package com.xiaosuokeji.server.controller.index;
 
-import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.server.constant.security.SecStaffConsts;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
@@ -22,7 +21,7 @@ import java.util.Map;
 @Controller("adminLoginController")
 public class LoginController {
 
-    @RequestMapping("admin")
+    @RequestMapping(value = {"admin",""})
     public String admin(HttpServletRequest request){
         if (request.getSession().getAttribute("SPRING_SECURITY_CONTEXT")==null) {
             return "redirect:/admin/login";
@@ -49,6 +48,16 @@ public class LoginController {
 
     @RequestMapping(value = "admin/index", method = RequestMethod.GET)
     public String index(HttpServletRequest request){
-        return "admin/index";
+        return redirectUrl("admin/index");
+    }
+
+    private String redirectUrl(String url) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession()
+                .getAttribute("SPRING_SECURITY_CONTEXT");
+        if (securityContextImpl == null) {
+            return "admin/login";
+        }
+        return url;
     }
 }

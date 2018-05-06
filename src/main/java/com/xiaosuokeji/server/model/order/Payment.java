@@ -2,6 +2,8 @@ package com.xiaosuokeji.server.model.order;
 
 import com.xiaosuokeji.server.model.base.BaseModel;
 
+import java.math.BigDecimal;
+
 /**
  * 还款
  * Created by kunye on 2018/05/06.

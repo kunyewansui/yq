@@ -23,7 +23,7 @@
         </a>
     </div>
     <div class="collapse pos-rlt navbar-collapse box-shadow bg-white-only">
-        <div id="t_nav" class="nav navbar-nav">
+       <%-- <div id="t_nav" class="nav navbar-nav">
                 <sec:authorize access="hasAnyRole(${xs:getPermissions('content')})">
                 <a href="<%=request.getContextPath()%>/admin/content" class="btn no-shadow navbar-btn">
                     图文
@@ -39,7 +39,7 @@
                     系统
                 </a>
                 </sec:authorize>
-        </div>
+        </div>--%>
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle clear">

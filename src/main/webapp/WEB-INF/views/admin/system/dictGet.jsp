@@ -17,7 +17,7 @@
 </head>
 <body>
 <%@include file="../common/header.jsp" %>
-<%@include file="./content_nav.jsp" %>
+<%@include file="../common/content_nav.jsp" %>
 <c:if test="${dict eq null}">
     <script>
         alert("字典不存在");

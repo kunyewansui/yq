@@ -17,7 +17,7 @@
 </head>
 <body>
 <%@include file="../common/header.jsp" %>
-<%@include file="./content_nav.jsp" %>
+<%@include file="../common/content_nav.jsp" %>
 <div class="app-content ">
     <div class="app-content-body">
         <div class="bg-light lter b-b wrapper-md ">

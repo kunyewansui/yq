@@ -17,9 +17,11 @@
     <%@include file="../common/datepicker.jsp" %>
 </head>
 <body>
-<%@include file="../common/header.jsp" %>
-<%@include file="./content_nav.jsp" %>
 
+<%@include file="../common/header.jsp" %>
+<jsp:include page="../common/content_nav.jsp">
+    <jsp:param name="index" value="content_manage"/>
+</jsp:include>
 <div class="app-content ">
     <div class="app-content-body">
         <div class="bg-light lter b-b wrapper-md ">

@@ -48,7 +48,7 @@
                 <version>2.2</version>
                 <configuration>
                     <uriEncoding>UTF-8</uriEncoding>
-                    <path>/xstemplate</path>
+                    <path>/</path>
                     <port>8081</port>
                 </configuration>
             </plugin>

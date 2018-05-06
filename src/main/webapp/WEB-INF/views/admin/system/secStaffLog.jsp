@@ -16,9 +16,10 @@
     <%@include file="../common/head.jsp" %>
     <%@include file="../common/validate.jsp" %>
     <%@include file="../common/datepicker.jsp" %>
+</head>
 <body>
 <%@include file="../common/header.jsp" %>
-<%@include file="./content_nav.jsp" %>
+<%@include file="../common/content_nav.jsp" %>
 
 <div class="app-content ">
     <div class="app-content-body">

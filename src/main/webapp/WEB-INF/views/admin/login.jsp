@@ -39,11 +39,11 @@
                 </div>
                 <div class="list-group list-group-sm">
                     <div class="list-group-item">
-                        <input type="text" name="username" placeholder="用户名" class="form-control no-border"
+                        <input type="text" name="username" placeholder="用户名" class="form-control no-border" value="system"
                                required>
                     </div>
                     <div class="list-group-item">
-                        <input type="password" placeholder="密　码" name="password" class="form-control no-border"
+                        <input type="password" placeholder="密　码" name="password" class="form-control no-border" value="123456"
                                required>
                     </div>
                 </div>
