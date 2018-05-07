@@ -1,8 +1,12 @@
 package com.xiaosuokeji.server.model.product;
 
+import com.xiaosuokeji.server.model.article.Article;
 import com.xiaosuokeji.server.model.base.BaseModel;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 产品
@@ -18,31 +22,41 @@ public class Product extends BaseModel {
 	/**
 	 * 产品名称
 	 */
+	@NotNull(message = "产品名称不能为空", groups = Save.class)
+	@Length(min = 1, max = 255, message = "产品名称长度为1-255个字符", groups = {Save.class, Update.class})
 	private String name;
 
 	/**
 	 * 类型
 	 */
+	@NotNull(message = "产品类型不能为空", groups = {Save.class, Update.class})
 	private Long cateId;
 
+	private String cateName;
+
 	/**
-	 * 编码
+	 * 款号
 	 */
+	@NotNull(message = "款号不能为空", groups = Save.class)
+	@Length(min = 1, max = 255, message = "款号长度为1-255个字符", groups = {Save.class, Update.class})
 	private String code;
 
 	/**
 	 * 档口库存
 	 */
+	@NotNull(message = "档口库存不能为空", groups = {Save.class, Update.class})
 	private Long shopStock;
 
 	/**
 	 * 工厂库存
 	 */
+	@NotNull(message = "工厂库存不能为空", groups = {Save.class, Update.class})
 	private Long factoryStock;
 
 	/**
 	 * 成本
 	 */
+	@NotNull(message = "成本不能为空", groups = {Save.class, Update.class})
 	private BigDecimal cost;
 
 	/**
@@ -58,7 +72,12 @@ public class Product extends BaseModel {
 	/**
 	 * 出厂价
 	 */
+	@NotNull(message = "出厂价不能为空", groups = {Save.class, Update.class})
 	private BigDecimal manuPrice;
+
+	private List<Long> cateList;
+
+	private List<String> picList;
 
 	public interface Save {}
 
@@ -75,7 +94,23 @@ public class Product extends BaseModel {
 	public String getName() {
 		return name;
 	}
-	
+
+	public List<Long> getCateList() {
+		return cateList;
+	}
+
+	public void setCateList(List<Long> cateList) {
+		this.cateList = cateList;
+	}
+
+	public List<String> getPicList() {
+		return picList;
+	}
+
+	public void setPicList(List<String> picList) {
+		this.picList = picList;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -139,7 +174,15 @@ public class Product extends BaseModel {
 	public BigDecimal getManuPrice() {
 		return manuPrice;
 	}
-	
+
+	public String getCateName() {
+		return cateName;
+	}
+
+	public void setCateName(String cateName) {
+		this.cateName = cateName;
+	}
+
 	public void setManuPrice(BigDecimal manuPrice) {
 		this.manuPrice = manuPrice;
 	}

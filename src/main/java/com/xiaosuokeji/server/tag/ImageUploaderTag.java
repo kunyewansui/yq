@@ -57,7 +57,7 @@ public class ImageUploaderTag extends TagSupport {
         JspWriter out = pageContext.getOut();
         String template = "\n" +
                 "<div id=\"previewDiv_{{id}}\" class=\"img-preview\"></div>\n" +
-                "<input id=\"input_{{id}}\" class=\"hidden\" type=\"file\"\n" +
+                "<input id=\"input_{{id}}\" name=\"files\" class=\"hidden\" type=\"file\"\n" +
                 "       onchange=\"uploadPreview_{{id}}(this)\"\n" +
                 "       accept=\"image/png,image/jpg,image/jpeg,image/bmp,image/gif\"/>\n" +
                 "<input id=\"url_{{id}}\" type=\"hidden\" name=\"{{name}}\"/>\n" +
@@ -96,11 +96,19 @@ public class ImageUploaderTag extends TagSupport {
                 "    });\n" +
                 "\n" +
                 "    function uploadPreview_{{id}}(file) {\n" +
-                "        if (file.files && file.files[0]) {\n" +
+                "        if (file.value!='') {\n" +
                 "            lock_{{id}} = true;\n" +
                 "            $(\"#addImage_{{id}}\").html(\"<i class='fa fa-spinner fa-pulse'  style='line-height:"+height+"px'></i>\");\n" +
                 "\n" +
-                "            imageUpload(\"<%=request.getContextPath()%>/admin/common/api/file/upload\", '{{folder}}', file.files[0], function (data) {\n" +
+                "            $.ajaxFileUpload({\n" +
+                "                url: '<%=request.getContextPath()%>/admin/common/api/file/upload2',\n" +
+                "                secureuri: false,\n" +
+                "                fileElementId: 'input_{{id}}',\n" +
+                "                data: {folders: '{{folder}}'},\n" +
+                "                dataType: 'text',\n" +
+                "                type: 'post',\n" +
+                "                success: function(str) {\n" +
+                "                var data = JSON.parse(str);\n" +
                 "                lock_{{id}} = false;\n" +
                 "                if (data.status) {\n" +
                 "                    var url = data.data[0];\n" +
@@ -110,11 +118,11 @@ public class ImageUploaderTag extends TagSupport {
                 "                    alert(data.msg);\n" +
                 "                }\n" +
                 "                updatePreviewDiv_{{id}}();\n" +
-                "            }, function (res) {\n" +
+                "            }, error: function (res) {\n" +
                 "                alert(\"请求失败：\" + res.statusText + \"\\n错误码：\" + res.status);\n" +
                 "                lock_{{id}} = false;\n" +
                 "                updatePreviewDiv_{{id}}();\n" +
-                "            });\n" +
+                "            }});\n" +
                 "            $input_{{id}}.val(\"\");\n" +
                 "        }\n" +
                 "    }\n" +

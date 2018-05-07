@@ -21,44 +21,47 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @XSLog
 @XSExceptionHandler
+@RequestMapping("/admin/product/category")
 public class CategoryController {
 
 	@Autowired
 	private CategoryService categoryService;
 
-	@RequestMapping(value = "/admin/product/category", method = RequestMethod.GET)
-	public String index(Model model, Category category) {
-		if(category.getPage() == null) {
-			category.setPage(1L);
-		}
-		model.addAttribute("search", category);
-		model.addAttribute("pageModel", categoryService.listAndCount(category));
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public String index() {
 		return "admin/product/category";
 	}
 
-	@RequestMapping(value = "/admin/product/category/get", method = RequestMethod.POST)
+	@RequestMapping(value = "/tree", method = RequestMethod.POST)
+	@ResponseBody
+	public XSServiceResult tree() {
+		return XSServiceResult.build().data(categoryService.tree(0L));
+	}
+
+	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	@ResponseBody
 	public XSServiceResult get(Category category) throws XSBusinessException {
 		return XSServiceResult.build().data(categoryService.get(category));
 	}
 
-	@RequestMapping(value = "/admin/product/category/save", method = RequestMethod.POST)
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	@ResponseBody
 	public XSServiceResult save(@Validated(Category.Save.class) Category category) throws XSBusinessException {
 		categoryService.save(category);
 		return XSServiceResult.build();
 	}
 
-	@RequestMapping(value = "/admin/product/category/remove", method = RequestMethod.POST)
+	@RequestMapping(value = "/remove", method = RequestMethod.POST)
 	@ResponseBody
 	public XSServiceResult remove(Category category) throws XSBusinessException {
 		categoryService.remove(category);
 		return XSServiceResult.build();
 	}
 
-	@RequestMapping(value = "/admin/product/category/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
-	public XSServiceResult update(@Validated(Category.Update.class) Category category) throws XSBusinessException {
+	public XSServiceResult update(@Validated(Category.Update.class) Category category)
+			throws XSBusinessException {
 		categoryService.update(category);
 		return XSServiceResult.build();
 	}

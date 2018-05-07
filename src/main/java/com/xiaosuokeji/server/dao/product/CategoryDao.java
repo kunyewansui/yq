@@ -20,4 +20,6 @@ public interface CategoryDao {
 	List<Category> list(Category category);
 
 	Long count(Category category);
+
+	List<Category> listCombo(Category category);
 }

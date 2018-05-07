@@ -147,14 +147,14 @@
                         </a>
                         <ul class="nav nav-sub">
                             <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                <li class="${index eq "marketing_feedback"?"active":""}">
+                                <li class="${index eq ""?"active":""}">
                                     <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
                                         <span>订单管理</span>
                                     </a>
                                 </li>
                             </sec:authorize>
                             <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                <li class="${index eq "marketing_feedback"?"active":""}">
+                                <li class="${index eq ""?"active":""}">
                                     <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
                                         <span>还款管理</span>
                                     </a>
@@ -169,7 +169,7 @@
                         </a>
                         <ul class="nav nav-sub">
                             <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                <li class="${index eq "marketing_feedback"?"active":""}">
+                                <li class="${index eq ""?"active":""}">
                                     <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
                                         <span>客户管理</span>
                                     </a>
@@ -183,17 +183,17 @@
                             <span>产品</span>
                         </a>
                         <ul class="nav nav-sub">
-                            <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                <li class="${index eq "marketing_feedback"?"active":""}">
-                                    <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
-                                        <span>产品类型</span>
+                            <sec:authorize access="hasAnyRole(${xs:getPermissions('product_manage')})">
+                                <li class="${index eq "product_manage"?"active":""}">
+                                    <a href="<%=request.getContextPath()%>/admin/product/product">
+                                        <span>产品管理</span>
                                     </a>
                                 </li>
                             </sec:authorize>
-                            <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                <li class="${index eq "marketing_feedback"?"active":""}">
-                                    <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
-                                        <span>产品管理</span>
+                            <sec:authorize access="hasAnyRole(${xs:getPermissions('product_category')})">
+                                <li class="${index eq "product_category"?"active":""}">
+                                    <a href="<%=request.getContextPath()%>/admin/product/category">
+                                        <span>产品类型</span>
                                     </a>
                                 </li>
                             </sec:authorize>

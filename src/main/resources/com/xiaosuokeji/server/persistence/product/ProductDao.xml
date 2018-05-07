@@ -5,8 +5,8 @@
 <mapper namespace="com.xiaosuokeji.server.dao.product.ProductDao">
 
 	<insert id="save" parameterType="product" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO yq_product(id,name,cate_id,code,shop_stock,factory_stock,cost,image,pics,manu_price)
-		VALUES (#{id},#{name},#{cateId},#{code},#{shopStock},#{factoryStock},#{cost},#{image},#{pics},#{manuPrice})
+		INSERT INTO yq_product(`name`,cate_id,code,shop_stock,factory_stock,cost,image,pics,manu_price)
+		VALUES (#{name},#{cateId},#{code},#{shopStock},#{factoryStock},#{cost},#{image},#{pics},#{manuPrice})
 	</insert>
 
 	<delete id="remove" parameterType="product">
@@ -18,7 +18,7 @@
 		UPDATE yq_product
 		<trim prefix="SET" prefixOverrides=",">
 			<if test="name!=null">
-				,name=#{name}
+				,`name`=#{name}
 			</if>
 			<if test="cateId!=null">
 				,cate_id=#{cateId}
@@ -56,55 +56,31 @@
 	</select>
 
 	<sql id="listCondition">
-		FROM yq_product
+		FROM yq_product a LEFT JOIN yq_category b ON a.cate_id=b.id
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
-			<if test="id!=null">
-				AND id=#{id}
-			</if>
 			<if test="name!=null and name!=''">
-				AND name=#{name}
+				AND a.`name` LIKE CONCAT('%',#{name},'%')
 			</if>
-			<if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
-				AND name LIKE CONCAT('%',#{dynamic.name},'%')
-			</if>
-			<if test="cateId!=null">
-				AND cate_id=#{cateId}
+			<if test="cateList!=null and cateList.size>0">
+				AND a.cate_id IN
+				<foreach collection="cateList" open="(" item="item" close=")" separator=",">
+					#{item}
+				</foreach>
 			</if>
 			<if test="code!=null and code!=''">
-				AND code=#{code}
+				AND a.code LIKE CONCAT('%',#{code},'%')
 			</if>
-			<if test="dynamic!=null and dynamic.code!=null and dynamic.code!=''">
-				AND code LIKE CONCAT('%',#{dynamic.code},'%')
+			<if test="dynamic!=null and dynamic.startTime!=null and dynamic.startTime!=''">
+				AND DATE(a.create_time) &gt;= #{dynamic.startTime}
 			</if>
-			<if test="shopStock!=null">
-				AND shop_stock=#{shopStock}
-			</if>
-			<if test="factoryStock!=null">
-				AND factory_stock=#{factoryStock}
-			</if>
-			<if test="cost!=null">
-				AND cost=#{cost}
-			</if>
-			<if test="image!=null and image!=''">
-				AND image=#{image}
-			</if>
-			<if test="dynamic!=null and dynamic.image!=null and dynamic.image!=''">
-				AND image LIKE CONCAT('%',#{dynamic.image},'%')
-			</if>
-			<if test="pics!=null and pics!=''">
-				AND pics=#{pics}
-			</if>
-			<if test="dynamic!=null and dynamic.pics!=null and dynamic.pics!=''">
-				AND pics LIKE CONCAT('%',#{dynamic.pics},'%')
-			</if>
-			<if test="manuPrice!=null">
-				AND manu_price=#{manuPrice}
+			<if test="dynamic!=null and dynamic.endTime!=null and dynamic.endTime!=''">
+				AND DATE(a.create_time) &lt;= #{dynamic.endTime}
 			</if>
 		</trim>
 	</sql>
 
 	<select id="list" parameterType="product" resultType="product">
-		SELECT *
+		SELECT a.*,b.name AS cateName
 		<include refid="listCondition"/>
 		<include refid="XSBaseMapper.sort"/>
 		<include refid="XSBaseMapper.limit"/>

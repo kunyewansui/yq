@@ -11,4 +11,6 @@ public class ProductConsts {
 	public static XSStatusPair PRODUCT_EXIST = XSStatusPair.build(24000, "产品已存在");
 
 	public static XSStatusPair PRODUCT_NOT_EXIST = XSStatusPair.build(24001, "产品不存在");
+
+	public static XSStatusPair PRODUCT_CODE_EXISTED = XSStatusPair.build(24002, "产品款号已存在");
 }

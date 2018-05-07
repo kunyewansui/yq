@@ -3,10 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.xiaosuokeji.server.dao.product.CategoryDao">
-
 	<insert id="save" parameterType="category" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO yq_category(id,name,p_id,level,seq)
-		VALUES (#{id},#{name},#{pId},#{level},#{seq})
+		INSERT INTO yq_category(`name`,`level`,p_id,seq)
+		VALUES (#{name},#{level},#{pId},#{seq})
 	</insert>
 
 	<delete id="remove" parameterType="category">
@@ -18,13 +17,13 @@
 		UPDATE yq_category
 		<trim prefix="SET" prefixOverrides=",">
 			<if test="name!=null">
-				,name=#{name}
+				,`name`=#{name}
+			</if>
+			<if test="level!=null">
+				,`level`=#{level}
 			</if>
 			<if test="pId!=null">
 				,p_id=#{pId}
-			</if>
-			<if test="level!=null">
-				,level=#{level}
 			</if>
 			<if test="seq!=null">
 				,seq=#{seq}
@@ -47,19 +46,16 @@
 				AND id=#{id}
 			</if>
 			<if test="name!=null and name!=''">
-				AND name=#{name}
+				AND `name`=#{name}
 			</if>
 			<if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
-				AND name LIKE CONCAT('%',#{dynamic.name},'%')
+				AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
 			</if>
 			<if test="pId!=null">
 				AND p_id=#{pId}
 			</if>
 			<if test="level!=null">
-				AND level=#{level}
-			</if>
-			<if test="seq!=null">
-				AND seq=#{seq}
+				AND `level`=#{level}
 			</if>
 		</trim>
 	</sql>
@@ -74,5 +70,11 @@
 	<select id="count" parameterType="category" resultType="long">
 		SELECT COUNT(*)
 		<include refid="listCondition"/>
+	</select>
+
+	<select id="listCombo" parameterType="category" resultType="category">
+		SELECT id,`name`,p_id
+		FROM yq_category
+		<include refid="XSBaseMapper.sort"/>
 	</select>
 </mapper>

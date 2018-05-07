@@ -17,3 +17,4 @@
 <script src="<%=request.getContextPath()%>/assets/admin/js/bootstrap.min.js"></script>
 <script src="<%=request.getContextPath()%>/assets/admin/js/app.js"></script>
 <script src="<%=request.getContextPath()%>/assets/admin/js/bootoast.js"></script>
+<script src="<%=request.getContextPath()%>/assets/admin/js/ajaxfileupload.js"></script>

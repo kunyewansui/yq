@@ -4,7 +4,7 @@
  * Website: http://www.ptbird.cn
  * License: MIT
  */
-function PostbirdImgGlass() {
+var PostbirdImgGlass = {
     /**
      * 初始化操作    
      * domSelector  - dom选择器           默认 img 
@@ -14,7 +14,7 @@ function PostbirdImgGlass() {
      * boxBgColor   - 放大镜容器的背景色   默认  rgba(0,0,0,0.8)
      * animation    - 是否开启CSS3动画     默认 false IE10+ 才有效
      */
-    this.init=function (objParam) {
+    init: function (objParam) {
         this.domSelector = objParam.domSelector || "img";
         this.width = objParam.width || "auto";
         this.height = objParam.height || "auto";
@@ -29,7 +29,7 @@ function PostbirdImgGlass() {
      *  返回创建的div
      *  包括一个 div 和 img
      */
-     this.initImageClassContainer= function () {
+    initImageClassContainer: function () {
         var _this = this,
             img = document.createElement('img');
         img.style.width = _this.width;
@@ -50,7 +50,7 @@ function PostbirdImgGlass() {
      * 使用 querySelectorAll 进行dom查找
      * 使用 addEventListener 进行事件绑定（因此需要IE9+）
      */
-     this.startGlass= function () {
+    startGlass: function () {
         var domList = document.querySelectorAll(this.domSelector);
         var _this = this;
         for (var i = 0, len = domList.length; i < len; i++) {
@@ -64,7 +64,7 @@ function PostbirdImgGlass() {
     /**
      * 显示放大镜
      */
-     this.showImageGlass= function (src) {
+    showImageGlass: function (src) {
         this.box.childNodes[0].src = src;
         this.box.style.display = 'block';
         if (this.animation) {
@@ -74,7 +74,7 @@ function PostbirdImgGlass() {
     /**
      * 隐藏放大镜
      */
-     this.hideImageGlass= function () {
+    hideImageGlass: function () {
         this.box.style.display = 'none';
         if (this.animation) {
             this.removeCssAnimation();
@@ -83,20 +83,20 @@ function PostbirdImgGlass() {
     /**
      * 显示放大镜后 增加动画 class
      */
-     this.addCssAnimation= function () {
+    addCssAnimation: function () {
         this.box.className = this.box.className + ' postbird-img-glass-box-move';
     },
     /**
      * 隐藏放大镜后 移除动画 class
      */
-     this.removeCssAnimation= function () {
+    removeCssAnimation: function () {
         this.box.className = this.box.className.replace(' postbird-img-glass-box-move', '');
     },
     /**
      * 向head中写入style
      * 包含基本的css和动画css
      */
-     this.initCssClass= function () {
+    initCssClass: function () {
         var style = document.createElement('style');
         var styleContent = '.' + this.boxClassName + '{position:fixed;top:0;left:0;width:100%;height:100%;text-align:center;cursor:zoom-out;background-color:' + this.boxBgColor + ';display:none;text-align:center;overflow:hidden;z-index:9999;}';
         styleContent += '.' + this.boxClassName + ' img {position:relative;top:50%;transform:translateY(-50%);max-width:90%;}';
