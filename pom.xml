@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.xiaosuokeji</groupId>
-    <artifactId>xs-server</artifactId>
+    <artifactId>yq</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
-    <name>xstemplate</name>
+    <name>yq</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,7 +19,7 @@
     </properties>
 
     <build>
-        <finalName>xstemplate</finalName>
+        <finalName>yq</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
