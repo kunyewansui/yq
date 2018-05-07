@@ -12,7 +12,7 @@
         <div class="navi-wrap">
             <nav class="navi">
                 <ul id="a_nav" class="nav">
-                    <li>
+                    <li class="${index eq "index"?"active":""}">
                         <a href="<%=request.getContextPath()%>/admin">
                             <i class="glyphicon glyphicon-home text-dark"></i>
                             <span>首页</span>
@@ -26,28 +26,28 @@
                             </a>
                             <ul class="nav nav-sub">
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('content_article')})">
-                                    <li class="${param.index eq "content_manage"?"active":""}">
+                                    <li class="${index eq "content_article"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/content/article/article">
                                             <span>文章管理</span>
                                         </a>
                                     </li>
                                 </sec:authorize>
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('content_articleCategory')})">
-                                    <li>
+                                    <li class="${index eq "content_articleCategory"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/content/article/category">
                                             <span>文章分类</span>
                                         </a>
                                     </li>
                                 </sec:authorize>
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('content_image')})">
-                                    <li>
+                                    <li class="${index eq "content_image"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/content/image">
                                             <span>图片管理</span>
                                         </a>
                                     </li>
                                 </sec:authorize>
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('content_imageCategory')})">
-                                    <li>
+                                    <li class="${index eq "content_imageCategory"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/content/imageCategory">
                                             <span>图片分类</span>
                                         </a>
@@ -64,7 +64,7 @@
                             </a>
                             <ul class="nav nav-sub">
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                    <li>
+                                    <li class="${index eq "marketing_feedback"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
                                             <span>意见反馈</span>
                                         </a>
@@ -81,56 +81,56 @@
                             </a>
                             <ul class="nav nav-sub">
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('system_dict')})">
-                                    <li>
+                                    <li class="${index eq "system_dict"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/system/dict">
                                             <span>字典管理</span>
                                         </a>
                                     </li>
                                 </sec:authorize>
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('system_resource')})">
-                                    <li>
+                                    <li class="${index eq "system_resource"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/system/secResource">
                                             <span>资源管理</span>
                                         </a>
                                     </li>
                                 </sec:authorize>
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('system_role')})">
-                                    <li>
+                                    <li class="${index eq "system_role"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/system/secRole">
                                             <span>角色管理</span>
                                         </a>
                                     </li>
                                 </sec:authorize>
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('system_organization')})">
-                                    <li>
+                                    <li class="${index eq "system_organization"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/system/secOrganization">
                                             <span>组织管理</span>
                                         </a>
                                     </li>
                                 </sec:authorize>
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('system_staff')})">
-                                    <li>
+                                    <li class="${index eq "system_staff"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/system/secStaff">
                                             <span>员工管理</span>
                                         </a>
                                     </li>
                                 </sec:authorize>
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('system_log')})">
-                                    <li>
+                                    <li class="${index eq "system_log"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/system/secStaffLog">
                                             <span>系统日志</span>
                                         </a>
                                     </li>
                                 </sec:authorize>
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('system_config')})">
-                                    <li>
+                                    <li class="${index eq "system_config"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/system/systemConfig">
                                             <span>配置管理</span>
                                         </a>
                                     </li>
                                 </sec:authorize>
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('system_version')})">
-                                    <li>
+                                    <li class="${index eq "system_version"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/system/version">
                                             <span>版本管理</span>
                                         </a>
@@ -147,14 +147,14 @@
                         </a>
                         <ul class="nav nav-sub">
                             <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                <li>
+                                <li class="${index eq "marketing_feedback"?"active":""}">
                                     <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
                                         <span>订单管理</span>
                                     </a>
                                 </li>
                             </sec:authorize>
                             <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                <li>
+                                <li class="${index eq "marketing_feedback"?"active":""}">
                                     <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
                                         <span>还款管理</span>
                                     </a>
@@ -169,7 +169,7 @@
                         </a>
                         <ul class="nav nav-sub">
                             <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                <li>
+                                <li class="${index eq "marketing_feedback"?"active":""}">
                                     <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
                                         <span>客户管理</span>
                                     </a>
@@ -184,14 +184,14 @@
                         </a>
                         <ul class="nav nav-sub">
                             <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                <li>
+                                <li class="${index eq "marketing_feedback"?"active":""}">
                                     <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
                                         <span>产品类型</span>
                                     </a>
                                 </li>
                             </sec:authorize>
                             <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                <li>
+                                <li class="${index eq "marketing_feedback"?"active":""}">
                                     <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
                                         <span>产品管理</span>
                                     </a>

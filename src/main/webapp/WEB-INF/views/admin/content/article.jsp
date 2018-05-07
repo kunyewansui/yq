@@ -19,9 +19,10 @@
 <body>
 
 <%@include file="../common/header.jsp" %>
-<jsp:include page="../common/content_nav.jsp">
-    <jsp:param name="index" value="content_manage"/>
-</jsp:include>
+<%-- index参数的设置要在content_nav.jsp包含之前。jsp:include不可用，具体原因：未解之谜 --%>
+<c:set var="index" value="content_article"/>
+<%@include file="../common/content_nav.jsp" %>
+
 <div class="app-content ">
     <div class="app-content-body">
         <div class="bg-light lter b-b wrapper-md ">
