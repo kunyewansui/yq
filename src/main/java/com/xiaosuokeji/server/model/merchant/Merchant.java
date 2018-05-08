@@ -1,7 +1,9 @@
 package com.xiaosuokeji.server.model.merchant;
 
 import com.xiaosuokeji.server.model.base.BaseModel;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
@@ -18,6 +20,8 @@ public class Merchant extends BaseModel {
 	/**
 	 * 商户名
 	 */
+	@NotNull(message = "商户名不能为空", groups = Save.class)
+	@Length(min = 1, max = 255, message = "商户名长度为1-255个字符", groups = {Save.class, Update.class})
 	private String name;
 
 	/**
@@ -28,6 +32,7 @@ public class Merchant extends BaseModel {
 	/**
 	 * 商户联系电话
 	 */
+	@NotNull(message = "联系电话不能为空", groups = Save.class)
 	private String mobile;
 
 	/**
@@ -38,6 +43,7 @@ public class Merchant extends BaseModel {
 	/**
 	 * 欠款
 	 */
+	@NotNull(message = "欠款不能为空", groups = {Save.class})
 	private BigDecimal debt;
 
 	/**

@@ -168,9 +168,9 @@
                             <span>客户</span>
                         </a>
                         <ul class="nav nav-sub">
-                            <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                <li class="${index eq ""?"active":""}">
-                                    <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
+                            <sec:authorize access="hasAnyRole(${xs:getPermissions('merchant_manage')})">
+                                <li class="${index eq "merchant_manage"?"active":""}">
+                                    <a href="<%=request.getContextPath()%>/admin/merchant/merchant">
                                         <span>客户管理</span>
                                     </a>
                                 </li>

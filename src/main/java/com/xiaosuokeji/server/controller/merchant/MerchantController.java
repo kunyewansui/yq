@@ -1,5 +1,6 @@
 package com.xiaosuokeji.server.controller.merchant;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xiaosuokeji.framework.annotation.XSExceptionHandler;
 import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
@@ -21,12 +22,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @XSLog
 @XSExceptionHandler
+@RequestMapping("/admin/merchant/merchant")
 public class MerchantController {
 
 	@Autowired
 	private MerchantService merchantService;
 
-	@RequestMapping(value = "/admin/merchant/merchant", method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String index(Model model, Merchant merchant) {
 		if(merchant.getPage() == null) {
 			merchant.setPage(1L);
@@ -36,27 +38,32 @@ public class MerchantController {
 		return "admin/merchant/merchant";
 	}
 
-	@RequestMapping(value = "/admin/merchant/merchant/get", method = RequestMethod.POST)
-	@ResponseBody
-	public XSServiceResult get(Merchant merchant) throws XSBusinessException {
-		return XSServiceResult.build().data(merchantService.get(merchant));
+	@RequestMapping(value = "/toadd", method = RequestMethod.GET)
+	public String toadd() throws Exception {
+		return "admin/merchant/merchant_add";
 	}
 
-	@RequestMapping(value = "/admin/merchant/merchant/save", method = RequestMethod.POST)
+	@RequestMapping(value = "/detail", method = RequestMethod.GET)
+	public String detail(Model model, Merchant merchant) throws XSBusinessException, JsonProcessingException {
+		model.addAttribute("merchant", merchantService.get(merchant));
+		return "admin/merchant/merchant_detail";
+	}
+
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	@ResponseBody
 	public XSServiceResult save(@Validated(Merchant.Save.class) Merchant merchant) throws XSBusinessException {
 		merchantService.save(merchant);
 		return XSServiceResult.build();
 	}
 
-	@RequestMapping(value = "/admin/merchant/merchant/remove", method = RequestMethod.POST)
+	@RequestMapping(value = "/remove", method = RequestMethod.POST)
 	@ResponseBody
 	public XSServiceResult remove(Merchant merchant) throws XSBusinessException {
 		merchantService.remove(merchant);
 		return XSServiceResult.build();
 	}
 
-	@RequestMapping(value = "/admin/merchant/merchant/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
 	public XSServiceResult update(@Validated(Merchant.Update.class) Merchant merchant) throws XSBusinessException {
 		merchantService.update(merchant);

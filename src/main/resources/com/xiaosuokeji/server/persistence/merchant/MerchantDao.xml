@@ -5,8 +5,8 @@
 <mapper namespace="com.xiaosuokeji.server.dao.merchant.MerchantDao">
 
 	<insert id="save" parameterType="merchant" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO yq_merchant(id,name,sex,mobile,business_card,debt,country)
-		VALUES (#{id},#{name},#{sex},#{mobile},#{businessCard},#{debt},#{country})
+		INSERT INTO yq_merchant(`name`,sex,mobile,business_card,debt,country)
+		VALUES (#{name},#{sex},#{mobile},#{businessCard},#{debt},#{country})
 	</insert>
 
 	<delete id="remove" parameterType="merchant">
@@ -18,7 +18,7 @@
 		UPDATE yq_merchant
 		<trim prefix="SET" prefixOverrides=",">
 			<if test="name!=null">
-				,name=#{name}
+				,`name`=#{name}
 			</if>
 			<if test="sex!=null">
 				,sex=#{sex}
@@ -52,35 +52,17 @@
 			<if test="id!=null">
 				AND id=#{id}
 			</if>
-			<if test="name!=null and name!=''">
-				AND name=#{name}
-			</if>
 			<if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
-				AND name LIKE CONCAT('%',#{dynamic.name},'%')
+				AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
 			</if>
 			<if test="sex!=null">
 				AND sex=#{sex}
 			</if>
 			<if test="mobile!=null and mobile!=''">
-				AND mobile=#{mobile}
-			</if>
-			<if test="dynamic!=null and dynamic.mobile!=null and dynamic.mobile!=''">
-				AND mobile LIKE CONCAT('%',#{dynamic.mobile},'%')
-			</if>
-			<if test="businessCard!=null and businessCard!=''">
-				AND business_card=#{businessCard}
-			</if>
-			<if test="dynamic!=null and dynamic.businessCard!=null and dynamic.businessCard!=''">
-				AND business_card LIKE CONCAT('%',#{dynamic.businessCard},'%')
-			</if>
-			<if test="debt!=null">
-				AND debt=#{debt}
+				AND mobile LIKE CONCAT('%',#{mobile},'%')
 			</if>
 			<if test="country!=null and country!=''">
-				AND country=#{country}
-			</if>
-			<if test="dynamic!=null and dynamic.country!=null and dynamic.country!=''">
-				AND country LIKE CONCAT('%',#{dynamic.country},'%')
+				AND country LIKE CONCAT('%',#{country},'%')
 			</if>
 		</trim>
 	</sql>

@@ -19,6 +19,8 @@
 </head>
 <body>
 <%@include file="../common/header.jsp" %>
+<%-- index参数的设置要在content_nav.jsp包含之前。jsp:include不可用，具体原因：未解之谜 --%>
+<c:set var="index" value="product_manage"/>
 <%@include file="../common/content_nav.jsp" %>
 
 <div class="app-content ">
