@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @XSLog
 @XSExceptionHandler
+@RequestMapping("/admin/order/order")
 public class OrderController {
 
 	@Autowired

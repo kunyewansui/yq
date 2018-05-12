@@ -34,7 +34,7 @@ public class Order extends BaseModel {
 	private BigDecimal amount;
 
 	/**
-	 * 订单状态，0-已下单，1-交易中，2-已完成，3-已关闭
+	 * 订单状态，0-交易中，1-已完成，2-已关闭
 	 */
 	private Integer status;
 

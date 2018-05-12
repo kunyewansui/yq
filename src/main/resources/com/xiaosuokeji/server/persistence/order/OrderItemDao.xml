@@ -5,8 +5,8 @@
 <mapper namespace="com.xiaosuokeji.server.dao.order.OrderItemDao">
 
 	<insert id="save" parameterType="orderItem" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO yq_order_item(id,orderNo,product_id,quantity,price,total)
-		VALUES (#{id},#{orderno},#{productId},#{quantity},#{price},#{total})
+		INSERT INTO yq_order_item(id,orderNo,product_id,quantity,price,total,remark)
+		VALUES (#{id},#{orderno},#{productId},#{quantity},#{price},#{total},#{remark})
 	</insert>
 
 	<delete id="remove" parameterType="orderItem">
@@ -31,6 +31,9 @@
 			</if>
 			<if test="total!=null">
 				,total=#{total}
+			</if>
+			<if test="remark!=null">
+				,remark=#{remark}
 			</if>
 			,update_time=NOW()
 		</trim>

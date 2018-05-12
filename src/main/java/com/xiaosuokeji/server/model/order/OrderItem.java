@@ -40,6 +40,11 @@ public class OrderItem extends BaseModel {
 	 */
 	private BigDecimal total;
 
+	/**
+	 * 备注
+	 */
+	private String remark;
+
 	public interface Save {}
 
 	public interface Update {}
@@ -82,6 +87,14 @@ public class OrderItem extends BaseModel {
 	
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	public BigDecimal getTotal() {
