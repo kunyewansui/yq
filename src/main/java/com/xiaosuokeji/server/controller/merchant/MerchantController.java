@@ -6,6 +6,7 @@ import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.merchant.Merchant;
+import com.xiaosuokeji.server.model.order.Payment;
 import com.xiaosuokeji.server.service.merchant.MerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,15 @@ public class MerchantController {
 		model.addAttribute("search", merchant);
 		model.addAttribute("pageModel", merchantService.listAndCount(merchant));
 		return "admin/merchant/merchant";
+	}
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ResponseBody
+	public XSServiceResult list(Merchant merchant) throws XSBusinessException {
+		if(merchant.getPage() == null) {
+			merchant.setPage(1L);
+		}
+		return XSServiceResult.build().data(merchantService.listAndCount(merchant));
 	}
 
 	@RequestMapping(value = "/toadd", method = RequestMethod.GET)

@@ -1,8 +1,13 @@
 package com.xiaosuokeji.server.model.order;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xiaosuokeji.server.model.base.BaseModel;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 还款
@@ -23,12 +28,23 @@ public class Payment extends BaseModel {
 	/**
 	 * 商户
 	 */
+	@NotNull(message = "商户不能为空", groups = Save.class)
 	private Long merchantId;
+
+	private String merchantName;
 
 	/**
 	 * 还款金额
 	 */
+	@NotNull(message = "还款金额不能为空", groups = Save.class)
 	private BigDecimal amount;
+
+	/**
+	 * 还款时间
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date refundTime;
 
 	/**
 	 * 备注说明
@@ -74,6 +90,22 @@ public class Payment extends BaseModel {
 	
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
+	}
+
+	public Date getRefundTime() {
+		return refundTime;
+	}
+
+	public void setRefundTime(Date refundTime) {
+		this.refundTime = refundTime;
 	}
 
 	public String getRemark() {

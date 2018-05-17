@@ -41,7 +41,7 @@ public class PaymentService {
 	}
 
 	public XSPageModel<Payment> listAndCount(Payment payment) {
-		payment.setDefaultSort("id", "DESC");
+		payment.setDefaultSort("a.id", "DESC");
 		return XSPageModel.build(paymentDao.list(payment), paymentDao.count(payment));
 	}
 }

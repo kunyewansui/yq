@@ -5,8 +5,8 @@
 <mapper namespace="com.xiaosuokeji.server.dao.order.PaymentDao">
 
 	<insert id="save" parameterType="payment" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO yq_payment(id,orderNo,merchant_id,amount,remark,creator)
-		VALUES (#{id},#{orderno},#{merchantId},#{amount},#{remark},#{creator})
+		INSERT INTO yq_payment(orderNo,merchant_id,amount,remark,creator,refund_time)
+		VALUES (#{orderno},#{merchantId},#{amount},#{remark},#{creator},#{refundTime})
 	</insert>
 
 	<delete id="remove" parameterType="payment">
@@ -32,52 +32,46 @@
 			<if test="creator!=null">
 				,creator=#{creator}
 			</if>
+			<if test="refundTime!=null">
+				,refund_time=#{refundTime}
+			</if>
 			,update_time=NOW()
 		</trim>
 		WHERE id=#{id}
 	</update>
 
 	<select id="get" parameterType="payment" resultType="payment">
-		SELECT *
-		FROM yq_payment
-		WHERE id=#{id}
+		SELECT a.*,b.name as merchantName
+		FROM yq_payment a JOIN yq_merchant b ON a.merchant_id=b.id
+		WHERE a.id=#{id}
 	</select>
 
 	<sql id="listCondition">
-		FROM yq_payment
+		FROM yq_payment a JOIN yq_merchant b ON a.merchant_id=b.id
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="id!=null">
-				AND id=#{id}
+				AND a.id=#{id}
 			</if>
 			<if test="orderno!=null and orderno!=''">
-				AND orderNo=#{orderno}
-			</if>
-			<if test="dynamic!=null and dynamic.orderno!=null and dynamic.orderno!=''">
-				AND orderNo LIKE CONCAT('%',#{dynamic.orderno},'%')
+				AND a.orderNo LIKE CONCAT('%',#{orderno},'%')
 			</if>
 			<if test="merchantId!=null">
-				AND merchant_id=#{merchantId}
+				AND a.merchant_id=#{merchantId}
 			</if>
-			<if test="amount!=null">
-				AND amount=#{amount}
+			<if test="merchantName!=null and merchantName!=''">
+				AND b.name LIKE CONCAT('%',#{merchantName},'%')
 			</if>
-			<if test="remark!=null and remark!=''">
-				AND remark=#{remark}
+			<if test="dynamic!=null and dynamic.startTime!=null and dynamic.startTime!=''">
+				AND DATE(a.refund_time) &gt;= #{dynamic.startTime}
 			</if>
-			<if test="dynamic!=null and dynamic.remark!=null and dynamic.remark!=''">
-				AND remark LIKE CONCAT('%',#{dynamic.remark},'%')
-			</if>
-			<if test="creator!=null and creator!=''">
-				AND creator=#{creator}
-			</if>
-			<if test="dynamic!=null and dynamic.creator!=null and dynamic.creator!=''">
-				AND creator LIKE CONCAT('%',#{dynamic.creator},'%')
+			<if test="dynamic!=null and dynamic.endTime!=null and dynamic.endTime!=''">
+				AND DATE(a.refund_time) &lt;= #{dynamic.endTime}
 			</if>
 		</trim>
 	</sql>
 
 	<select id="list" parameterType="payment" resultType="payment">
-		SELECT *
+		SELECT a.*,b.name AS merchantName
 		<include refid="listCondition"/>
 		<include refid="XSBaseMapper.sort"/>
 		<include refid="XSBaseMapper.limit"/>

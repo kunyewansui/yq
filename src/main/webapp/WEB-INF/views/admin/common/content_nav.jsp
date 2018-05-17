@@ -146,16 +146,16 @@
                             <span>订单</span>
                         </a>
                         <ul class="nav nav-sub">
-                            <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
+                            <sec:authorize access="hasAnyRole(${xs:getPermissions('order_manage')})">
                                 <li class="${index eq ""?"active":""}">
-                                    <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
+                                    <a href="<%=request.getContextPath()%>/admin/order/order">
                                         <span>订单管理</span>
                                     </a>
                                 </li>
                             </sec:authorize>
-                            <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing_feedback')})">
-                                <li class="${index eq ""?"active":""}">
-                                    <a href="<%=request.getContextPath()%>/admin/marketing/feedback">
+                            <sec:authorize access="hasAnyRole(${xs:getPermissions('order_payment')})">
+                                <li class="${index eq "order_payment"?"active":""}">
+                                    <a href="<%=request.getContextPath()%>/admin/order/payment">
                                         <span>还款管理</span>
                                     </a>
                                 </li>
