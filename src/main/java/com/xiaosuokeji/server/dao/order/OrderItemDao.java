@@ -1,6 +1,8 @@
 package com.xiaosuokeji.server.dao.order;
 
 import com.xiaosuokeji.server.model.order.OrderItem;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -9,15 +11,9 @@ import java.util.List;
  */
 public interface OrderItemDao {
 
-	int save(OrderItem orderItem);
+    int batchInsert(List<OrderItem> orderItemList);
 
-	int remove(OrderItem orderItem);
-
-	int update(OrderItem orderItem);
-
-	OrderItem get(OrderItem orderItem);
+	int batchDelete(@Param("orderNo") String orderNo);
 
 	List<OrderItem> list(OrderItem orderItem);
-
-	Long count(OrderItem orderItem);
 }

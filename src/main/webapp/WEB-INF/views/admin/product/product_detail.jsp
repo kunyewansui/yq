@@ -25,12 +25,12 @@
 
 <div class="app-content ">
     <div class="app-content-body">
-        <div class="bg-light lter b-b wrapper-md ">
-            <h1 class="m-n font-thin h3 inline">产品详情</h1>
-            <a href="javascript:history.go(-1);" class="btn btn-default pull-right">返回</a>
-            <button class="btn btn-primary pull-right" style="margin-right: 5px" id="createSubmit">
+        <div class="nav bg-light lter b-b padder-md">
+            <a href="javascript:location.reload();" class="btn navbar-btn xs-nav text-base">产品详情</a>
+            <a href="javascript:history.go(-1);" class="btn btn-default pull-right m-sm">返回</a>
+            <a class="btn btn-primary pull-right m-sm m-r-n-xs" id="createSubmit">
                 保存
-            </button>
+            </a>
         </div>
         <div class="wrapper-md row">
             <div class="col-xs-12">

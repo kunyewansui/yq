@@ -1,6 +1,7 @@
 package com.xiaosuokeji.server.model.order;
 
 import com.xiaosuokeji.server.model.base.BaseModel;
+import com.xiaosuokeji.server.model.product.Product;
 
 import java.math.BigDecimal;
 
@@ -18,7 +19,7 @@ public class OrderItem extends BaseModel {
 	/**
 	 * 订单号
 	 */
-	private String orderno;
+	private String orderNo;
 
 	/**
 	 * 产品
@@ -45,6 +46,8 @@ public class OrderItem extends BaseModel {
 	 */
 	private String remark;
 
+	private Product product;
+
 	public interface Save {}
 
 	public interface Update {}
@@ -57,12 +60,12 @@ public class OrderItem extends BaseModel {
 		this.id = id;
 	}
 
-	public String getOrderno() {
-		return orderno;
+	public String getOrderNo() {
+		return orderNo;
 	}
-	
-	public void setOrderno(String orderno) {
-		this.orderno = orderno;
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
 
 	public Long getProductId() {
@@ -79,6 +82,14 @@ public class OrderItem extends BaseModel {
 	
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	public BigDecimal getPrice() {

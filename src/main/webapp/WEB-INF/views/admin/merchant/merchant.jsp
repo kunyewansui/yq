@@ -25,8 +25,8 @@
 
 <div class="app-content ">
     <div class="app-content-body">
-        <div class="bg-light lter b-b wrapper-md ">
-            <h1 class="m-n font-thin h3 inline">产品管理</h1>
+        <div class="nav bg-light lter b-b padder-md">
+            <a href="javascript:location.reload();" class="btn navbar-btn xs-nav text-base">客户管理</a>
         </div>
         <div class="wrapper-md">
             <div class="col-xs-12 col-md-12 col-lg-12">
@@ -123,10 +123,10 @@
         showDeleteModel(null, function () {
             doPost("<%=request.getContextPath()%>/admin/merchant/merchant/remove", {id: id}, function (data) {
                 if (data.status) {
+                    bootoast({message: "删除成功！"});
                     setTimeout(function () {
-                        bootoast({message: "删除成功！"});
                         window.location.reload(true);
-                    }, 380);
+                    }, 680);
                 } else {
                     alert(data.msg);
                 }

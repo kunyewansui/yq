@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,7 +28,7 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;
 
-	@RequestMapping(value = "/admin/order/order", method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String index(Model model, Order order) {
 		if(order.getPage() == null) {
 			order.setPage(1L);
@@ -37,29 +38,34 @@ public class OrderController {
 		return "admin/order/order";
 	}
 
-	@RequestMapping(value = "/admin/order/order/get", method = RequestMethod.POST)
-	@ResponseBody
-	public XSServiceResult get(Order order) throws XSBusinessException {
-		return XSServiceResult.build().data(orderService.get(order));
+	@RequestMapping(value = "/detail", method = RequestMethod.GET)
+	public String get(Model model, Order order) throws XSBusinessException {
+		model.addAttribute("order", orderService.get(order));
+		return "admin/order/order_detail";
 	}
 
-	@RequestMapping(value = "/admin/order/order/save", method = RequestMethod.POST)
+	@RequestMapping(value = "/toadd", method = RequestMethod.GET)
+	public String toadd() throws Exception {
+		return "admin/order/order_add";
+	}
+
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	@ResponseBody
-	public XSServiceResult save(@Validated(Order.Save.class) Order order) throws XSBusinessException {
+	public XSServiceResult save(@RequestBody @Validated(Order.Save.class) Order order) throws XSBusinessException {
 		orderService.save(order);
 		return XSServiceResult.build();
 	}
 
-	@RequestMapping(value = "/admin/order/order/remove", method = RequestMethod.POST)
+	@RequestMapping(value = "/remove", method = RequestMethod.POST)
 	@ResponseBody
 	public XSServiceResult remove(Order order) throws XSBusinessException {
 		orderService.remove(order);
 		return XSServiceResult.build();
 	}
 
-	@RequestMapping(value = "/admin/order/order/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
-	public XSServiceResult update(@Validated(Order.Update.class) Order order) throws XSBusinessException {
+	public XSServiceResult update(@RequestBody @Validated(Order.Update.class) Order order) throws XSBusinessException {
 		orderService.update(order);
 		return XSServiceResult.build();
 	}

@@ -147,7 +147,7 @@
                         </a>
                         <ul class="nav nav-sub">
                             <sec:authorize access="hasAnyRole(${xs:getPermissions('order_manage')})">
-                                <li class="${index eq ""?"active":""}">
+                                <li class="${index eq "order_manage"?"active":""}">
                                     <a href="<%=request.getContextPath()%>/admin/order/order">
                                         <span>订单管理</span>
                                     </a>

@@ -4,84 +4,33 @@
 
 <mapper namespace="com.xiaosuokeji.server.dao.order.OrderItemDao">
 
-	<insert id="save" parameterType="orderItem" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO yq_order_item(id,orderNo,product_id,quantity,price,total,remark)
-		VALUES (#{id},#{orderno},#{productId},#{quantity},#{price},#{total},#{remark})
+	<insert id="batchInsert" parameterType="orderItem" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO yq_order_item(order_no,product_id,quantity,price,total,remark) VALUES
+		<foreach collection="list" item="item" separator=",">
+			(#{orderNo},#{productId},#{quantity},#{price},#{total},#{remark})
+		</foreach>
 	</insert>
 
-	<delete id="remove" parameterType="orderItem">
+	<delete id="batchDelete">
 		DELETE FROM yq_order_item
-		WHERE id=#{id}
+		WHERE order_no=#{orderNo}
 	</delete>
 
-	<update id="update" parameterType="orderItem">
-		UPDATE yq_order_item
-		<trim prefix="SET" prefixOverrides=",">
-			<if test="orderno!=null">
-				,orderNo=#{orderno}
-			</if>
-			<if test="productId!=null">
-				,product_id=#{productId}
-			</if>
-			<if test="quantity!=null">
-				,quantity=#{quantity}
-			</if>
-			<if test="price!=null">
-				,price=#{price}
-			</if>
-			<if test="total!=null">
-				,total=#{total}
-			</if>
-			<if test="remark!=null">
-				,remark=#{remark}
-			</if>
-			,update_time=NOW()
-		</trim>
-		WHERE id=#{id}
-	</update>
-
-	<select id="get" parameterType="orderItem" resultType="orderItem">
-		SELECT *
-		FROM yq_order_item
-		WHERE id=#{id}
-	</select>
-
-	<sql id="listCondition">
-		FROM yq_order_item
+	<select id="list" parameterType="orderItem" resultMap="orderItemMap">
+		SELECT a.*, b.name as p_name,d.name AS p_cateName,b.code AS p_code,b.image AS p_image
+		FROM yq_order_item a
+		JOIN yq_product b ON a.product_id=b.id
+		LEFT JOIN yq_category d ON b.cate_id=d.id
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
-			<if test="id!=null">
-				AND id=#{id}
-			</if>
-			<if test="orderno!=null and orderno!=''">
-				AND orderNo=#{orderno}
-			</if>
-			<if test="dynamic!=null and dynamic.orderno!=null and dynamic.orderno!=''">
-				AND orderNo LIKE CONCAT('%',#{dynamic.orderno},'%')
-			</if>
-			<if test="productId!=null">
-				AND product_id=#{productId}
-			</if>
-			<if test="quantity!=null">
-				AND quantity=#{quantity}
-			</if>
-			<if test="price!=null">
-				AND price=#{price}
-			</if>
-			<if test="total!=null">
-				AND total=#{total}
+			<if test="orderNo!=null and orderNo!=''">
+				AND a.order_no=#{orderNo}
 			</if>
 		</trim>
-	</sql>
-
-	<select id="list" parameterType="orderItem" resultType="orderItem">
-		SELECT *
-		<include refid="listCondition"/>
-		<include refid="XSBaseMapper.sort"/>
-		<include refid="XSBaseMapper.limit"/>
+		ORDER BY a.id DESC
 	</select>
 
-	<select id="count" parameterType="orderItem" resultType="long">
-		SELECT COUNT(*)
-		<include refid="listCondition"/>
-	</select>
+	<resultMap id="orderItemMap" type="orderItem" autoMapping="true">
+		<association property="product" javaType="product" autoMapping="true" columnPrefix="p_"/>
+	</resultMap>
+
 </mapper>

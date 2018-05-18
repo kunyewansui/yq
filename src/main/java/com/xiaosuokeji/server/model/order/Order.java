@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xiaosuokeji.server.model.base.BaseModel;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 订单
@@ -21,16 +23,20 @@ public class Order extends BaseModel {
 	/**
 	 * 订单号
 	 */
-	private String orderno;
+	private String orderNo;
 
 	/**
 	 * 客户
 	 */
+	@NotNull(message = "商户不能为空", groups = Save.class)
 	private Long merchantId;
+
+	private String merchantName;
 
 	/**
 	 * 订单金额
 	 */
+	@NotNull(message = "订单金额不能为空", groups = Save.class)
 	private BigDecimal amount;
 
 	/**
@@ -50,6 +56,8 @@ public class Order extends BaseModel {
 	 */
 	private String creator;
 
+	private List<OrderItem> orderItemList;
+
 	public interface Save {}
 
 	public interface Update {}
@@ -62,12 +70,12 @@ public class Order extends BaseModel {
 		this.id = id;
 	}
 
-	public String getOrderno() {
-		return orderno;
+	public String getOrderNo() {
+		return orderNo;
 	}
-	
-	public void setOrderno(String orderno) {
-		this.orderno = orderno;
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
 
 	public Long getMerchantId() {
@@ -105,7 +113,23 @@ public class Order extends BaseModel {
 	public String getCreator() {
 		return creator;
 	}
-	
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
+	}
+
+	public List<OrderItem> getOrderItemList() {
+		return orderItemList;
+	}
+
+	public void setOrderItemList(List<OrderItem> orderItemList) {
+		this.orderItemList = orderItemList;
+	}
+
 	public void setCreator(String creator) {
 		this.creator = creator;
 	}

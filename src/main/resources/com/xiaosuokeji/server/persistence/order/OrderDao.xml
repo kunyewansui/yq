@@ -5,8 +5,8 @@
 <mapper namespace="com.xiaosuokeji.server.dao.order.OrderDao">
 
 	<insert id="save" parameterType="order" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO yq_order(id,orderNo,merchant_id,amount,status,delivery_date,creator)
-		VALUES (#{id},#{orderno},#{merchantId},#{amount},#{status},#{deliveryDate},#{creator})
+		INSERT INTO yq_order(order_no,merchant_id,amount,status,delivery_date,creator)
+		VALUES (#{orderNo},#{merchantId},#{amount},#{status},#{deliveryDate},#{creator})
 	</insert>
 
 	<delete id="remove" parameterType="order">
@@ -17,8 +17,8 @@
 	<update id="update" parameterType="order">
 		UPDATE yq_order
 		<trim prefix="SET" prefixOverrides=",">
-			<if test="orderno!=null">
-				,orderNo=#{orderno}
+			<if test="orderNo!=null">
+				,order_no=#{orderNo}
 			</if>
 			<if test="merchantId!=null">
 				,merchant_id=#{merchantId}
@@ -41,49 +41,40 @@
 	</update>
 
 	<select id="get" parameterType="order" resultType="order">
-		SELECT *
-		FROM yq_order
-		WHERE id=#{id}
+		SELECT a.*, b.name as merchantName
+		FROM yq_order a LEFT JOIN yq_merchant b on a.merchant_id=b.id
+		WHERE a.id=#{id}
 	</select>
 
 	<sql id="listCondition">
-		FROM yq_order
+		FROM yq_order a LEFT JOIN yq_merchant b on a.merchant_id=b.id
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
-			<if test="id!=null">
-				AND id=#{id}
+			<if test="orderNo!=null and orderNo!=''">
+				AND a.order_no LIKE CONCAT('%',#{orderNo},'%')
 			</if>
-			<if test="orderno!=null and orderno!=''">
-				AND orderNo=#{orderno}
-			</if>
-			<if test="dynamic!=null and dynamic.orderno!=null and dynamic.orderno!=''">
-				AND orderNo LIKE CONCAT('%',#{dynamic.orderno},'%')
-			</if>
-			<if test="merchantId!=null">
-				AND merchant_id=#{merchantId}
-			</if>
-			<if test="amount!=null">
-				AND amount=#{amount}
+			<if test="merchantName!=null">
+				AND b.name LIKE CONCAT('%',#{merchantName},'%')
 			</if>
 			<if test="status!=null">
-				AND status=#{status}
+				AND a.status=#{status}
 			</if>
 			<if test="dynamic!=null and dynamic.deliveryDateBegin!=null and dynamic.deliveryDateBegin!=''">
-				AND DATE(delivery_date) &gt;= #{dynamic.deliveryDateBegin}
+				AND DATE(a.delivery_date) &gt;= #{dynamic.deliveryDateBegin}
 			</if>
 			<if test="dynamic!=null and dynamic.deliveryDateEnd!=null and dynamic.deliveryDateEnd!=''">
-				AND DATE(delivery_date) &lt;= #{dynamic.deliveryDateBegin}
+				AND DATE(a.delivery_date) &lt;= #{dynamic.deliveryDateBegin}
 			</if>
-			<if test="creator!=null and creator!=''">
-				AND creator=#{creator}
+			<if test="dynamic!=null and dynamic.startTime!=null and dynamic.startTime!=''">
+				AND DATE(a.create_time) &gt;= #{dynamic.startTime}
 			</if>
-			<if test="dynamic!=null and dynamic.creator!=null and dynamic.creator!=''">
-				AND creator LIKE CONCAT('%',#{dynamic.creator},'%')
+			<if test="dynamic!=null and dynamic.endTime!=null and dynamic.endTime!=''">
+				AND DATE(a.create_time) &lt;= #{dynamic.endTime}
 			</if>
 		</trim>
 	</sql>
 
 	<select id="list" parameterType="order" resultType="order">
-		SELECT *
+		SELECT a.*,b.name AS merchantName
 		<include refid="listCondition"/>
 		<include refid="XSBaseMapper.sort"/>
 		<include refid="XSBaseMapper.limit"/>

@@ -23,10 +23,10 @@
 
 <div class="app-content ">
     <div class="app-content-body">
-        <div class="bg-light lter b-b wrapper-md ">
-            <h1 class="m-n font-thin h3 inline">产品分类</h1>
+         <div class="nav bg-light lter b-b padder-md">
+            <a href="javascript:location.reload();" class="btn navbar-btn xs-nav text-base">产品分类</a>
             <sec:authorize access="hasAnyRole(${xs:getPermissions('product_category_create')})">
-                <button class="btn btn-success pull-right" type="button" onclick="showCreateModal()">新增</button>
+                <button class="btn btn-success pull-right m-sm" type="button" onclick="showCreateModal()">新增</button>
             </sec:authorize>
         </div>
         <div class="wrapper-md">
@@ -189,10 +189,10 @@
             $form.serialize(),
             function (data) {
                 if (data.status) {
+                    updateTree(false, false);
                     setTimeout(function () {
-                        updateTree(false, false);
                         bootoast({message: "更新成功！", timeout: 1});
-                    }, 380);
+                    }, 680);
                 } else {
                     alert(data.msg);
                 }
@@ -297,10 +297,10 @@
                         $createSubmit.attr("disabled", false);
                         if (data.status) {
                             $("#createModel").modal("hide");
+                            updateTree(false,false);
                             setTimeout(function () {
                                 bootoast({message: "新增成功！", timeout: 1});
-                                updateTree(false,false);
-                            }, 380);
+                            }, 680);
                         } else {
                             alert(data.msg);
                         }

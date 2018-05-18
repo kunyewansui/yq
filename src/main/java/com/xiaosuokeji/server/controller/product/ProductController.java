@@ -6,6 +6,7 @@ import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.json.XSJackson;
 import com.xiaosuokeji.framework.model.XSServiceResult;
+import com.xiaosuokeji.server.model.merchant.Merchant;
 import com.xiaosuokeji.server.model.product.Product;
 import com.xiaosuokeji.server.service.product.CategoryService;
 import com.xiaosuokeji.server.service.product.ProductService;
@@ -42,6 +43,15 @@ public class ProductController {
 		model.addAttribute("pageModel", productService.listAndCount(product));
 		model.addAttribute("cateTree", XSJackson.toJsonString(categoryService.tree(0L)));
 		return "admin/product/product";
+	}
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ResponseBody
+	public XSServiceResult list(Product product) throws XSBusinessException {
+		if(product.getPage() == null) {
+			product.setPage(1L);
+		}
+		return XSServiceResult.build().data(productService.listAndCount(product));
 	}
 
 	@RequestMapping(value = "/toadd", method = RequestMethod.GET)
