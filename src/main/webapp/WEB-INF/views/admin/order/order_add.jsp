@@ -43,8 +43,6 @@
                         <div class="col-xs-4 col-md-4 col-lg-3 ">
                             <input name="merchantName" type="text" class="form-control" onclick="showMerchant();" readonly>
                         </div>
-                    </div>
-                    <div class="form-group">
                         <div class="col-xs-2 col-md-2 col-lg-1   no-padder text-right">
                             <label class="control-label">交货日期：</label>
                         </div>
@@ -52,75 +50,402 @@
                             <input type="text" name="deliveryDate" class="form-control datepicker" readonly>
                         </div>
                     </div>
-                    <div class="well">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Format data &amp; cell templating</div>
-                        <table st-table="rowCollectionBasic" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>first name</th>
-                                <th>last name</th>
-                                <th>birth date</th>
-                                <th>balance</th>
-                                <th>email</th>
-                                <th width="50"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!-- ngRepeat: row in rowCollectionBasic --><tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
-                                <td class="ng-binding">LAURENT</td>
-                                <td class="ng-binding">Renard</td>
-                                <td class="ng-binding">May 21, 1987</td>
-                                <td class="ng-binding">$102.00</td>
-                                <td>
-                                    <button class="btn btn-xs" data-placement="top" data-content="whatever@gmail.com" bs-popover="" type="button">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
-                                    <a ng-href="mailto:whatever@gmail.com" href="mailto:whatever@gmail.com">email</a></td>
-                                <td>
-                                    <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
-                                        <i class="fa fa-times">
-                                        </i>
-                                    </button>
-                                </td>
-                            </tr><!-- end ngRepeat: row in rowCollectionBasic --><tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
-                                <td class="ng-binding">BLANDINE</td>
-                                <td class="ng-binding">Faivre</td>
-                                <td class="ng-binding">Apr 25, 1987</td>
-                                <td class="ng-binding">-$2,323.22</td>
-                                <td>
-                                    <button class="btn btn-xs" data-placement="top" data-content="oufblandou@gmail.com" bs-popover="" type="button">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
-                                    <a ng-href="mailto:oufblandou@gmail.com" href="mailto:oufblandou@gmail.com">email</a></td>
-                                <td>
-                                    <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
-                                        <i class="fa fa-times">
-                                        </i>
-                                    </button>
-                                </td>
-                            </tr><!-- end ngRepeat: row in rowCollectionBasic --><tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
-                                <td class="ng-binding">FRANCOISE</td>
-                                <td class="ng-binding">Frere</td>
-                                <td class="ng-binding">Aug 27, 1955</td>
-                                <td class="ng-binding">$42,343.00</td>
-                                <td>
-                                    <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
-                                    <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
-                                <td>
-                                    <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
-                                        <i class="fa fa-times">
-                                        </i>
-                                    </button>
-                                </td>
-                            </tr><!-- end ngRepeat: row in rowCollectionBasic -->
-                            </tbody>
-                        </table>
+                    <div class="m-lg bg-white" style="padding: 50px; background: #f6f8f8;">
+                        <div class="wrapper-md bg-white" style="box-shadow: 0 0 60px rgba(0,0,0,0.1);height: 600px;">
+                            <div class="col-xs-8">
+                                <h3>订单项选择</h3>
+                                <div class="xs-scrollbar m-t-md" style="height: 470px;overflow: auto;">
+                                    <table class="table" >
+                                        <thead>
+                                        <tr>
+                                            <th>first name</th>
+                                            <th>last name</th>
+                                            <th>birth date</th>
+                                            <th>balance</th>
+                                            <th>email</th>
+                                            <th width="50"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">LAURENT</td>
+                                            <td class="ng-binding">Renard</td>
+                                            <td class="ng-binding">May 21, 1987</td>
+                                            <td class="ng-binding">$102.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="whatever@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:whatever@gmail.com" href="mailto:whatever@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">BLANDINE</td>
+                                            <td class="ng-binding">Faivre</td>
+                                            <td class="ng-binding">Apr 25, 1987</td>
+                                            <td class="ng-binding">-$2,323.22</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="oufblandou@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:oufblandou@gmail.com" href="mailto:oufblandou@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="row in rowCollectionBasic" class="ng-scope">
+                                            <td class="ng-binding">FRANCOISE</td>
+                                            <td class="ng-binding">Frere</td>
+                                            <td class="ng-binding">Aug 27, 1955</td>
+                                            <td class="ng-binding">$42,343.00</td>
+                                            <td>
+                                                <button class="btn btn-xs" data-placement="top" data-content="raymondef@gmail.com" bs-popover="" type="button">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a ng-href="mailto:raymondef@gmail.com" href="mailto:raymondef@gmail.com">email</a></td>
+                                            <td>
+                                                <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                                                    <i class="fa fa-times">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div style="box-shadow: 0 0 60px rgba(0,0,0,0.1);margin-top:30px;padding-left:40px;height: 510px;border-left: 1px solid #dcdcdc">
+                                    <div class="form-group">
+                                        <input type="hidden" name="merchantId">
+                                        <div class="col-xs-2  no-padder text-right">
+                                            <label class="control-label">产品款号：</label>
+                                        </div>
+                                        <div class="col-xs-8 ">
+                                            <label class="control-label">BN82651</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-2 no-padder text-right">
+                                            <label class="control-label">产品图片：</label>
+                                        </div>
+                                        <div class="col-xs-8">
+                                            <img src="<%=request.getContextPath()%>/assets/admin/img/demo_pic.png" style="width: 200px" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-2  no-padder text-right">
+                                            <label class="control-label">档口库存：</label>
+                                        </div>
+                                        <div class="col-xs-3 ">
+                                            <label class="control-label">200</label>
+                                        </div>
+                                        <div class="col-xs-2  no-padder text-right">
+                                            <label class="control-label">工厂库存：</label>
+                                        </div>
+                                        <div class="col-xs-3 ">
+                                            <label class="control-label">400</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-2  no-padder text-right">
+                                            <label class="control-label">总库存：</label>
+                                        </div>
+                                        <div class="col-xs-3 ">
+                                            <label class="control-label">500</label>
+                                        </div>
+                                    </div>
+                                    <div class="line line-dashed b-b line-lg"></div>
+                                    <div class="form-group">
+                                        <div class="col-xs-2  no-padder text-right">
+                                            <label class="control-label">总金额：</label>
+                                        </div>
+                                        <div class="col-xs-3 ">
+                                            <label class="control-label">￥20000</label>
+                                        </div>
+                                    </div>
+                                    <div class="line line-dashed b-b line-lg"></div>
+                                    <div class="form-group">
+                                        <div class="col-xs-2  no-padder text-right">
+                                            <label class="control-label">总件数：</label>
+                                        </div>
+                                        <div class="col-xs-3 ">
+                                            <label class="control-label">200件</label>
+                                        </div>
+                                        <div class="col-xs-2  no-padder text-right">
+                                            <label class="control-label">实际金额：</label>
+                                        </div>
+                                        <div class="col-xs-3 ">
+                                            <input type="number" name="amount" class="form-control" value="19000">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    </div>
-
                 </form>
             </div>
         </div>
