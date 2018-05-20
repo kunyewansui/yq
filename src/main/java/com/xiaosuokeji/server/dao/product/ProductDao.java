@@ -17,6 +17,8 @@ public interface ProductDao {
 
 	Product get(Product product);
 
+	Product getByCode(Product product);
+
 	List<Product> list(Product product);
 
 	Long count(Product product);

@@ -405,3 +405,27 @@ Date.prototype.format = function (fmt) {
     return fmt;
 }
 
+/**
+ * 将对象渲染到模板
+ * @param {String} template 对应的目标
+ * @param {Object} obj 目标对象
+ * @return {String} 渲染后的模板
+ */
+function renderTemplate (template, obj) {
+    return template.replace(/[{]{2}([^}]+)[}]{2}/g, function($0, $1) {
+        return obj[$1] || '';
+    });
+};
+
+/**
+ * 获取通配符里的内容
+ * @param template
+ * @returns {Array}
+ */
+function getTemplateParams (template) {
+    var a = [];
+    template.replace(/[{]{2}([^}]+)[}]{2}/g, function($0, $1) {
+        return a.push($1);
+    });
+    return a;
+};

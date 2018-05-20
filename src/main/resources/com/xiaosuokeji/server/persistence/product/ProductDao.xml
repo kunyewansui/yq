@@ -55,6 +55,12 @@
 		WHERE id=#{id}
 	</select>
 
+	<select id="getByCode" parameterType="product" resultType="product">
+		SELECT *
+		FROM yq_product
+		WHERE `code`=#{code}
+	</select>
+
 	<sql id="listCondition">
 		FROM yq_product a LEFT JOIN yq_category b ON a.cate_id=b.id
 		<trim prefix="WHERE" prefixOverrides="AND|OR">

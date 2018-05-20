@@ -83,4 +83,12 @@ public class ProductService {
 		}
 		return XSPageModel.build(productDao.list(product), productDao.count(product));
 	}
+
+    public Product getByCode(Product product) throws XSBusinessException {
+		Product existent = productDao.getByCode(product);
+		if (existent == null) {
+			throw new XSBusinessException(ProductConsts.PRODUCT_NOT_EXIST);
+		}
+		return existent;
+    }
 }
