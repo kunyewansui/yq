@@ -127,7 +127,7 @@
                                 </td>
                                 <td>
                                     <sec:authorize access="hasAnyRole(${xs:getPermissions('order_manage_update')})">
-                                    <a href="<%=request.getContextPath()%>/admin/order/order/detail?id=${item.orderNo}"
+                                    <a href="<%=request.getContextPath()%>/admin/order/order/detail?id=${item.id}"
                                        class="btn btn-warning btn-xs">
                                         查看详情
                                     </a>

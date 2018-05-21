@@ -38,6 +38,7 @@ public class ProductService {
 		}
 
 		try {
+			product.setCode(product.getCode().trim());
 			productDao.save(product);
 		} catch (DuplicateKeyException e) {
 			throw new XSBusinessException(ProductConsts.PRODUCT_CODE_EXISTED);
@@ -55,6 +56,7 @@ public class ProductService {
 			product.setPics(XSJackson.toJsonString(product.getPicList()));
 		}
 		try {
+			if(product.getCode()!=null) product.setCode(product.getCode().trim());
 			productDao.update(product);
 		} catch (DuplicateKeyException e) {
 			throw new XSBusinessException(ProductConsts.PRODUCT_CODE_EXISTED);

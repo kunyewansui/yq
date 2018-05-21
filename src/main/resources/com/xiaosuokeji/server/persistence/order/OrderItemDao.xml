@@ -4,10 +4,10 @@
 
 <mapper namespace="com.xiaosuokeji.server.dao.order.OrderItemDao">
 
-	<insert id="batchInsert" parameterType="orderItem" useGeneratedKeys="true" keyProperty="id">
+	<insert id="batchInsert">
 		INSERT INTO yq_order_item(order_no,product_id,quantity,price,total,remark) VALUES
 		<foreach collection="list" item="item" separator=",">
-			(#{orderNo},#{productId},#{quantity},#{price},#{total},#{remark})
+			(#{item.orderNo},#{item.productId},#{item.quantity},#{item.price},#{item.total},#{item.remark})
 		</foreach>
 	</insert>
 
@@ -17,7 +17,7 @@
 	</delete>
 
 	<select id="list" parameterType="orderItem" resultMap="orderItemMap">
-		SELECT a.*, b.name as p_name,d.name AS p_cateName,b.code AS p_code,b.image AS p_image
+		SELECT a.*, b.id AS p_id,b.name as p_name,d.name AS p_cateName,b.code AS p_code,b.image AS p_image,b.shop_stock AS p_shop_stock,b.factory_stock AS factory_stock
 		FROM yq_order_item a
 		JOIN yq_product b ON a.product_id=b.id
 		LEFT JOIN yq_category d ON b.cate_id=d.id
@@ -26,7 +26,7 @@
 				AND a.order_no=#{orderNo}
 			</if>
 		</trim>
-		ORDER BY a.id DESC
+		ORDER BY a.id ASC
 	</select>
 
 	<resultMap id="orderItemMap" type="orderItem" autoMapping="true">

@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="xs" uri="http://code.xiaosuokeji.com/tags/jsp/xs" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: gustinlau
@@ -11,7 +12,7 @@
 <!DOCTYPE html>
 <html lang="cmn-hans">
 <head>
-    <title>新增订单</title>
+    <title>订单详情</title>
     <%@include file="../common/head.jsp" %>
     <%@include file="../common/validate.jsp" %>
     <%@include file="../common/datepicker.jsp" %>
@@ -145,10 +146,10 @@
 <div class="app-content ">
     <div class="app-content-body">
         <div class="nav bg-light lter b-b padder-md">
-            <a href="javascript:location.reload();" class="btn navbar-btn xs-nav text-base">新增订单</a>
+            <a href="javascript:location.reload();" class="btn navbar-btn xs-nav text-base">订单详情</a>
             <a href="javascript:history.go(-1);" class="btn btn-default pull-right m-sm">返回</a>
-            <a class="btn btn-success pull-right m-sm m-r-n-xs" id="createSubmit">
-                确定
+            <a class="btn btn-primary pull-right m-sm m-r-n-xs" id="createSubmit">
+                保存
             </a>
         </div>
         <div class="wrapper-md row">
@@ -160,18 +161,43 @@
                         </div>
                         <div class="wrapper-md">
                             <div class="form-group">
-                                <div class="col-xs-2 col-md-2 col-lg-1  no-padder text-right">
+                                <input type="hidden" name="id" value="${order.id}">
+                                <div class="col-xs-2 col-md-2 col-lg-2  no-padder text-right">
+                                    <label class="control-label">订单号：</label>
+                                </div>
+                                <div class="col-xs-4 col-md-4 col-lg-3 ">
+                                    <input type="text" class="form-control" value="${order.orderNo}" disabled>
+                                </div>
+                                <div class="col-xs-2 col-md-2 col-lg-2  no-padder text-right">
+                                    <label class="control-label">订单状态：</label>
+                                </div>
+                                <div class="col-xs-4 col-md-4 col-lg-3 ">
+                                    <select name="status" class="form-control">
+                                        <xs:dictOptions key="orderStatus" value="${order.status}"/>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-2 col-md-2 col-lg-2 no-padder text-right">
                                     <label class="control-label required">客户名：</label>
                                 </div>
                                 <div class="col-xs-4 col-md-4 col-lg-3 ">
-                                    <input type="hidden" name="merchantId">
-                                    <input name="merchantName" type="text" class="form-control" onclick="showMerchant();" readonly>
+                                    <input type="hidden" name="merchantId" value="${order.merchantId}">
+                                    <input name="merchantName" type="text" class="form-control" value="${order.merchantName}" onclick="showMerchant();" readonly>
                                 </div>
-                                <div class="col-xs-2 col-md-2 col-lg-2  no-padder text-right">
+                                <div class="col-xs-2 col-md-2 col-lg-2 no-padder text-right">
                                     <label class="control-label">交货日期：</label>
                                 </div>
                                 <div class="col-xs-4 col-md-4 col-lg-3 ">
-                                    <input type="text" name="deliveryDate" class="form-control datepicker" readonly>
+                                    <input type="text" name="deliveryDate" class="form-control datepicker" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${order.deliveryDate}" />" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-2 col-md-2 col-lg-2  no-padder text-right">
+                                    <label class="control-label">订单创建人：</label>
+                                </div>
+                                <div class="col-xs-4 col-md-4 col-lg-3 ">
+                                    <input type="text" class="form-control" value="${order.creator}" disabled>
                                 </div>
                             </div>
                         </div>
@@ -205,11 +231,31 @@
                                 <div class="item-content xs-scrollbar">
                                     <table id="itemTable" class="xs-table xs-table-hover" style="margin-top: -1px;">
                                         <tbody>
-                                            <tr class="no-data-item" onclick="$('input[name=searchCode]').focus();">
-                                                <td colspan="6" class="text-muted">
-                                                    请输入款号添加产品
-                                                </td>
-                                            </tr>
+                                            <c:if test="${order.orderItemList.size() eq 0}">
+                                                <tr class="no-data-item" onclick="$('input[name=searchCode]').focus();">
+                                                    <td colspan="6" class="text-muted">
+                                                        请输入款号添加产品
+                                                    </td>
+                                                </tr>
+                                            </c:if>
+                                            <c:forEach items="${order.orderItemList}" var="item">
+                                                <tr class="new-item" id="${item.product.code}">
+                                                    <td>${item.product.code}</td>
+                                                    <td><input type="number" name="price" class="form-control" value="${item.price}" placeholder="元" onchange="completeItemResult(event);"></td>
+                                                    <td><input type="number" name="quantity" class="form-control" value="${item.quantity}" placeholder="件" onchange="completeItemResult(event);"></td>
+                                                    <td class="itemTotal">￥${item.total}</td>
+                                                    <td><input type="text" name="remark" class="form-control" value="${item.remark}"></td>
+                                                    <td>
+                                                        <input type="hidden" name="productId" value="${item.product.id}">
+                                                        <input type="hidden" name="productImage" value="${item.product.image}">
+                                                        <input type="hidden" name="productShopStock" value="${item.product.shopStock}">
+                                                        <input type="hidden" name="productFactoryStock" value="${item.product.factoryStock}">
+                                                        <button type="button" class="btn btn-xs btn-default" onclick="removeItem('${item.product.code}');">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
@@ -269,7 +315,7 @@
                                     <div class="col-xs-8 ">
                                         <div class="input-group">
                                             <span class="input-group-addon">￥</span>
-                                            <input type="number" name="amount" class="form-control" value="0">
+                                            <input type="number" name="amount" class="form-control" value="${order.amount}">
                                         </div>
                                         <span class="help-block text-muted">（订单最终以该金额为准）</span>
                                     </div>
@@ -302,6 +348,7 @@
 </script>
 <script>
     <%--订单项操作start--%>
+    init();
     //初始化图片放大镜
     PostbirdImgGlass.init({
         domSelector: ".img-container",
@@ -399,6 +446,19 @@
         completeResult();
     }
 
+    function init() {
+        var count = 0;
+        var amount = 0;
+        $("#itemTable tbody tr:not(.no-data-item)").each(function () {
+            var b = Number($(this).find("input[name=quantity]").val());
+            count += b;
+            var c = Number($(this).find("input[name=price]").val());
+            amount += c*b;
+        });
+        $("#originQuantity").html(count);
+        $("#originAmount").html(amount.toFixed(2)+"&nbsp;元");
+    }
+
     function completeResult() {
         var count = 0;
         var amount = 0;
@@ -468,7 +528,7 @@
             }
             $createSubmit.attr("disabled", true);
             $.ajax({
-                url: "<%=request.getContextPath()%>/admin/order/order/save",
+                url: "<%=request.getContextPath()%>/admin/order/order/update",
                 type: "POST",
                 data: JSON.stringify(params),
                 dataType: "json",

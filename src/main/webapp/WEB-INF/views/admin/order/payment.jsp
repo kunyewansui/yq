@@ -448,7 +448,6 @@
     $(document).on("click", "#MerTable tbody tr", function () {
         var _id = $(this).find("td").eq(0).text();
         var _name = $(this).find("td").eq(1).text();
-        console.log(_name)
         var $model;
         if(merCallBacktype == 0){
             $model = $("#createModel");
