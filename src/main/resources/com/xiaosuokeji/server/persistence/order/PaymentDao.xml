@@ -42,18 +42,21 @@
 
 	<select id="get" parameterType="payment" resultType="payment">
 		SELECT a.*,b.name as merchantName
-		FROM yq_payment a JOIN yq_merchant b ON a.merchant_id=b.id
+		FROM yq_payment a JOIN LEFT yq_merchant b ON a.merchant_id=b.id
 		WHERE a.id=#{id}
 	</select>
 
 	<sql id="listCondition">
-		FROM yq_payment a JOIN yq_merchant b ON a.merchant_id=b.id
+		FROM yq_payment a JOIN LEFT yq_merchant b ON a.merchant_id=b.id
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="id!=null">
 				AND a.id=#{id}
 			</if>
 			<if test="orderno!=null and orderno!=''">
-				AND a.orderNo LIKE CONCAT('%',#{orderno},'%')
+				AND a.orderNo=#{orderno}
+			</if>
+			<if test="dynamic!=null and dynamic.orderno!=null and dynamic.orderno!=''">
+				AND a.orderNo LIKE CONCAT('%',#{dynamic.orderno},'%')
 			</if>
 			<if test="merchantId!=null">
 				AND a.merchant_id=#{merchantId}

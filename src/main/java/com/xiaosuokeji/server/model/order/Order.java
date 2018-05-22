@@ -40,6 +40,13 @@ public class Order extends BaseModel {
 	private BigDecimal amount;
 
 	/**
+	 * 预付款
+	 */
+	@NotNull(message = "预付款不能为空", groups = Save.class)
+	private BigDecimal imprest;
+
+
+	/**
 	 * 订单状态，0-交易中，1-已完成，2-已关闭
 	 */
 	private Integer status;
@@ -55,6 +62,11 @@ public class Order extends BaseModel {
 	 * 订单创建人
 	 */
 	private String creator;
+
+	/**
+	 * 备注
+	 */
+	private String remark;
 
 	private List<OrderItem> orderItemList;
 
@@ -120,6 +132,22 @@ public class Order extends BaseModel {
 
 	public void setMerchantName(String merchantName) {
 		this.merchantName = merchantName;
+	}
+
+	public BigDecimal getImprest() {
+		return imprest;
+	}
+
+	public void setImprest(BigDecimal imprest) {
+		this.imprest = imprest;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	public List<OrderItem> getOrderItemList() {

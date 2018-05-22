@@ -6,8 +6,11 @@ import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.merchant.Merchant;
+import com.xiaosuokeji.server.model.order.Order;
 import com.xiaosuokeji.server.model.order.Payment;
 import com.xiaosuokeji.server.service.merchant.MerchantService;
+import com.xiaosuokeji.server.service.order.OrderService;
+import com.xiaosuokeji.server.service.order.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +31,10 @@ public class MerchantController {
 
 	@Autowired
 	private MerchantService merchantService;
+	@Autowired
+	private PaymentService paymentService;
+	@Autowired
+	private OrderService orderService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String index(Model model, Merchant merchant) {
@@ -69,6 +76,7 @@ public class MerchantController {
 	@RequestMapping(value = "/remove", method = RequestMethod.POST)
 	@ResponseBody
 	public XSServiceResult remove(Merchant merchant) throws XSBusinessException {
+		//TODO 客户有欠款不能删，有订单进行中不能删
 		merchantService.remove(merchant);
 		return XSServiceResult.build();
 	}

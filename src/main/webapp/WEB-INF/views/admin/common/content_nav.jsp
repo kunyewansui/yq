@@ -59,7 +59,7 @@
                     <sec:authorize access="hasAnyRole(${xs:getPermissions('marketing')})">
                         <li>
                             <a class="auto">
-                                <i class="glyphicon glyphicon-briefcase text-danger"></i>
+                                <i class="fa fa-assistive-listening-systems text-danger"></i>
                                 <span>营销</span>
                             </a>
                             <ul class="nav nav-sub">
@@ -73,10 +73,10 @@
                             </ul>
                         </li>
                     </sec:authorize>
-                    <sec:authorize access="hasAnyRole(${xs:getPermissions('system')})">
+                    <sec:authorize access="hasAnyRole(${xs:getPermissions('system')})" >
                         <li>
                             <a class="auto">
-                                <i class="glyphicon glyphicon-wrench text-info-lter"></i>
+                                <i class="glyphicon glyphicon-wrench text-warning-lter"></i>
                                 <span>系统</span>
                             </a>
                             <ul class="nav nav-sub">
@@ -139,66 +139,105 @@
                             </ul>
                         </li>
                     </sec:authorize>
-
-                    <li>
-                        <a class="auto">
-                            <i class="glyphicon glyphicon-file text-warning"></i>
-                            <span>订单</span>
-                        </a>
-                        <ul class="nav nav-sub">
-                            <sec:authorize access="hasAnyRole(${xs:getPermissions('order_manage')})">
-                                <li class="${index eq "order_manage"?"active":""}">
-                                    <a href="<%=request.getContextPath()%>/admin/order/order">
-                                        <span>订单管理</span>
-                                    </a>
-                                </li>
-                            </sec:authorize>
-                            <sec:authorize access="hasAnyRole(${xs:getPermissions('order_payment')})">
-                                <li class="${index eq "order_payment"?"active":""}">
-                                    <a href="<%=request.getContextPath()%>/admin/order/payment">
-                                        <span>还款管理</span>
-                                    </a>
-                                </li>
-                            </sec:authorize>
-                        </ul>
-                    </li>
-                    <li>
-                        <a class="auto">
-                            <i class="glyphicon glyphicon-user text-success"></i>
-                            <span>客户</span>
-                        </a>
-                        <ul class="nav nav-sub">
-                            <sec:authorize access="hasAnyRole(${xs:getPermissions('merchant_manage')})">
-                                <li class="${index eq "merchant_manage"?"active":""}">
-                                    <a href="<%=request.getContextPath()%>/admin/merchant/merchant">
-                                        <span>客户管理</span>
-                                    </a>
-                                </li>
-                            </sec:authorize>
-                        </ul>
-                    </li>
-                    <li>
-                        <a class="auto">
-                            <i class="glyphicon glyphicon-hdd text-info-dker"></i>
-                            <span>产品</span>
-                        </a>
-                        <ul class="nav nav-sub">
-                            <sec:authorize access="hasAnyRole(${xs:getPermissions('product_manage')})">
-                                <li class="${index eq "product_manage"?"active":""}">
-                                    <a href="<%=request.getContextPath()%>/admin/product/product">
-                                        <span>产品管理</span>
-                                    </a>
-                                </li>
-                            </sec:authorize>
-                            <sec:authorize access="hasAnyRole(${xs:getPermissions('product_category')})">
-                                <li class="${index eq "product_category"?"active":""}">
-                                    <a href="<%=request.getContextPath()%>/admin/product/category">
-                                        <span>产品类型</span>
-                                    </a>
-                                </li>
-                            </sec:authorize>
-                        </ul>
-                    </li>
+                    <sec:authorize access="hasAnyRole(${xs:getPermissions('storage')})">
+                        <li>
+                            <a class="auto">
+                                <i class="fa fa-truck text-info-lter"></i>
+                                <span>仓库</span>
+                            </a>
+                            <ul class="nav nav-sub">
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('storage_manage')})">
+                                    <li class="${index eq "storage_manage"?"active":""}">
+                                        <a href="<%=request.getContextPath()%>/admin/storage/storage">
+                                            <span>仓库管理</span>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
+                            </ul>
+                        </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasAnyRole(${xs:getPermissions('order')})">
+                        <li>
+                            <a class="auto">
+                                <i class="glyphicon glyphicon-file text-success-lter"></i>
+                                <span>订单</span>
+                            </a>
+                            <ul class="nav nav-sub">
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('order_manage')})">
+                                    <li class="${index eq "order_manage"?"active":""}">
+                                        <a href="<%=request.getContextPath()%>/admin/order/order">
+                                            <span>订单管理</span>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('order_payment')})">
+                                    <li class="${index eq "order_payment"?"active":""}">
+                                        <a href="<%=request.getContextPath()%>/admin/order/payment">
+                                            <span>还款管理</span>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
+                            </ul>
+                        </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasAnyRole(${xs:getPermissions('report')})">
+                        <li>
+                            <a class="auto">
+                                <i class="glyphicon glyphicon-list-alt text-info-dker"></i>
+                                <span>报表</span>
+                            </a>
+                            <ul class="nav nav-sub">
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('report_manage')})">
+                                    <li class="${index eq "report_manage"?"active":""}">
+                                        <a href="<%=request.getContextPath()%>/admin/report/report">
+                                            <span>报表管理</span>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
+                            </ul>
+                        </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasAnyRole(${xs:getPermissions('merchant')})">
+                        <li>
+                            <a class="auto">
+                                <i class="glyphicon glyphicon-user text-warning-dker"></i>
+                                <span>客户</span>
+                            </a>
+                            <ul class="nav nav-sub">
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('merchant_manage')})">
+                                    <li class="${index eq "merchant_manage"?"active":""}">
+                                        <a href="<%=request.getContextPath()%>/admin/merchant/merchant">
+                                            <span>客户管理</span>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
+                            </ul>
+                        </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasAnyRole(${xs:getPermissions('product')})">
+                        <li>
+                            <a class="auto">
+                                <i class="fa fa-futbol-o text-primary-lter"></i>
+                                <span>产品</span>
+                            </a>
+                            <ul class="nav nav-sub">
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('product_manage')})">
+                                    <li class="${index eq "product_manage"?"active":""}">
+                                        <a href="<%=request.getContextPath()%>/admin/product/product">
+                                            <span>产品管理</span>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('product_category')})">
+                                    <li class="${index eq "product_category"?"active":""}">
+                                        <a href="<%=request.getContextPath()%>/admin/product/category">
+                                            <span>产品类型</span>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
+                            </ul>
+                        </li>
+                    </sec:authorize>
                 </ul>
             </nav>
         </div>

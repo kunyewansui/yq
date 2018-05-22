@@ -5,6 +5,7 @@ import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.order.Order;
+import com.xiaosuokeji.server.model.order.Payment;
 import com.xiaosuokeji.server.service.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,15 @@ public class OrderController {
 		model.addAttribute("search", order);
 		model.addAttribute("pageModel", orderService.listAndCount(order));
 		return "admin/order/order";
+	}
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ResponseBody
+	public XSServiceResult list(Order order) throws XSBusinessException {
+		if(order.getPage() == null) {
+			order.setPage(1L);
+		}
+		return XSServiceResult.build().data(orderService.listAndCount(order));
 	}
 
 	@RequestMapping(value = "/detail", method = RequestMethod.GET)

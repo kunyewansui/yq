@@ -18,124 +18,6 @@
     <%@include file="../common/datepicker.jsp" %>
     <%@include file="../common/page.jsp" %>
     <%@include file="../common/imgGlass.jsp" %>
-    <style>
-        .display-none {
-            visibility: hidden;
-        }
-        .xs-table td, .xs-table th {
-            width: 18%;
-            overflow: hidden;
-            padding: 10px;
-            text-align: center;
-        }
-        .xs-table td:nth-child(2), .xs-table th:nth-child(2) {
-            width: 17%;
-        }
-        .xs-table td:nth-child(3), .xs-table th:nth-child(3) {
-            width: 17%;
-        }
-        .xs-table td:nth-child(4), .xs-table th:nth-child(4) {
-            width: 17%;
-        }
-        .xs-table td:nth-child(5), .xs-table th:nth-child(5) {
-            width: 30%;
-        }
-        .xs-table td:last-child, .xs-table th:last-child {
-            width: 50px;
-            overflow: hidden;
-            padding: 0;
-            text-align: center;
-        }
-        .xs-table {
-            table-layout:fixed;
-            width: 100%;
-            border:1px solid #eaeff0;
-            border-collapse: collapse;
-        }
-        .xs-table td {
-            border:1px solid #eaeff0;
-            height: 40px;
-        }
-        .xs-table .info {
-            background: #f2f2f2;
-        }
-        .xs-table.xs-table-hover tr:hover {
-            background: #f2f2f2;
-        }
-        .new-item {
-            max-height: 0;
-            opacity: 0;
-            transform: scale(0);
-            animation: growHeight 0.5s ease forwards;
-        }
-        .del-item {
-            -webkit-animation: removed-item-animation .5s cubic-bezier(.65,-0.02,.72,.29);
-            -o-animation: removed-item-animation .5s cubic-bezier(.65,-0.02,.72,.29);
-            animation: removed-item-animation .5s cubic-bezier(.65,-0.02,.72,.29)
-        }
-        @keyframes growHeight {
-            to {
-                max-height: 50px;
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        @-webkit-keyframes removed-item-animation {
-            0%{
-                opacity:1;
-                -webkit-transform:translateX(0);
-                -ms-transform:translateX(0);
-                -o-transform:translateX(0);
-                transform:translateX(0);
-            }
-            100%{
-                opacity:0;
-                -webkit-transform:translateX(-500px);
-                -ms-transform:translateX(-500px);
-                -o-transform:translateX(-500px);
-                transform:translateX(-500px);
-            }
-        }
-        .text-money {
-            font-size: 18px;
-            font-weight: bold;
-            color:#f00;
-        }
-        .text-quantity {
-            font-size: 16px;
-            font-weight: bold;
-            color:#00b7ee;
-        }
-        .total-fee {
-            padding-top: 9px;
-        }
-        .img-container {
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
-        }
-        .left-container {
-            margin-top:30px;
-            padding-left:30px;
-            height: 510px;
-            border-left: 1px solid #eee;
-            box-shadow: -12px 1px 23px -12px rgba(0,0,0,0.1);
-        }
-        .item-content {
-            height: 420px;
-            overflow: auto;
-        }
-        .item-wrapper {
-            background-color: #fff;
-            margin: 0 20px 20px 20px;
-            height: 600px;
-            box-shadow: 0 0 60px rgba(0,0,0,0.1);
-        }
-        .item-wrapper.base {
-            margin: 10px 20px;
-            height: auto;
-        }
-    </style>
 </head>
 <body>
 <%@include file="../common/header.jsp" %>
@@ -162,7 +44,7 @@
                         <div class="wrapper-md">
                             <div class="form-group">
                                 <input type="hidden" name="id" value="${order.id}">
-                                <div class="col-xs-2 col-md-2 col-lg-2  no-padder text-right">
+                                <div class="col-xs-2 col-md-2 col-lg-1  no-padder text-right">
                                     <label class="control-label">订单号：</label>
                                 </div>
                                 <div class="col-xs-4 col-md-4 col-lg-3 ">
@@ -178,7 +60,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-xs-2 col-md-2 col-lg-2 no-padder text-right">
+                                <div class="col-xs-2 col-md-2 col-lg-1 no-padder text-right">
                                     <label class="control-label required">客户名：</label>
                                 </div>
                                 <div class="col-xs-4 col-md-4 col-lg-3 ">
@@ -193,11 +75,25 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <div class="col-xs-2 col-md-2 col-lg-1  no-padder text-right">
+                                    <label class="control-label required">预付款：</label>
+                                </div>
+                                <div class="col-xs-4 col-md-4 col-lg-3 ">
+                                    <input name="imprest" type="number" value="${order.imprest}" class="form-control">
+                                </div>
                                 <div class="col-xs-2 col-md-2 col-lg-2  no-padder text-right">
                                     <label class="control-label">订单创建人：</label>
                                 </div>
                                 <div class="col-xs-4 col-md-4 col-lg-3 ">
                                     <input type="text" class="form-control" value="${order.creator}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-2 col-md-2 col-lg-1  no-padder text-right">
+                                    <label class="control-label">备注：</label>
+                                </div>
+                                <div class="col-xs-4 col-md-4 col-lg-8 ">
+                                    <textarea name="remark" rows="2" class="form-control">${order.remark}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -241,10 +137,10 @@
                                             <c:forEach items="${order.orderItemList}" var="item">
                                                 <tr class="new-item" id="${item.product.code}">
                                                     <td>${item.product.code}</td>
-                                                    <td><input type="number" name="price" class="form-control" value="${item.price}" placeholder="元" onchange="completeItemResult(event);"></td>
-                                                    <td><input type="number" name="quantity" class="form-control" value="${item.quantity}" placeholder="件" onchange="completeItemResult(event);"></td>
+                                                    <td><input type="number" name="price" class="form-control" value="${item.price}" placeholder="元" oninput="completeItemResult(event);"></td>
+                                                    <td><input type="number" name="quantity" class="form-control" value="${item.quantity}" placeholder="件" oninput="completeItemResult(event);"></td>
                                                     <td class="itemTotal">￥${item.total}</td>
-                                                    <td><input type="text" name="remark" class="form-control" value="${item.remark}"></td>
+                                                    <td><input type="text" name="productRemark" class="form-control" value="${item.remark}"></td>
                                                     <td>
                                                         <input type="hidden" name="productId" value="${item.product.id}">
                                                         <input type="hidden" name="productImage" value="${item.product.image}">
@@ -263,7 +159,7 @@
                         </div>
                         <div class="col-xs-4">
                             <div class="left-container">
-                                <div class="product-detail display-none">
+                                <div class="product-detail xs-hide">
                                     <div class="form-group">
                                         <input type="hidden" name="merchantId">
                                         <div class="col-xs-3  no-padder text-right">
@@ -331,10 +227,10 @@
 <script id="itemTemplate" type="text/html">
     <tr class="new-item" id="{{code}}">
         <td>{{code}}</td>
-        <td><input type="number" name="price" class="form-control" placeholder="元" onchange="completeItemResult(event);"></td>
-        <td><input type="number" name="quantity" class="form-control" placeholder="件" onchange="completeItemResult(event);"></td>
+        <td><input type="number" name="price" class="form-control" placeholder="元" oninput="completeItemResult(event);"></td>
+        <td><input type="number" name="quantity" class="form-control" placeholder="件" oninput="completeItemResult(event);"></td>
         <td class="itemTotal">￥0</td>
-        <td><input type="text" name="remark" class="form-control"></td>
+        <td><input type="text" name="productRemark" class="form-control"></td>
         <td>
             <input type="hidden" name="productId" value="{{id}}">
             <input type="hidden" name="productImage" value="{{image}}">
@@ -418,14 +314,14 @@
                 } else {
                     _this.remove();
                 }
-                $(".product-detail").addClass("display-none");
+                $(".product-detail").addClass("xs-hide");
                 //重新计算总金额
                 completeResult();
             });
     }
 
     function showProduct(code) {
-        $(".product-detail").removeClass("display-none");
+        $(".product-detail").removeClass("xs-hide");
         var _this = $("#"+code);
 
         $("#productCode").html(code);
@@ -487,6 +383,10 @@
                 required: true,
                 notEmpty: true
             },
+            imprest: {
+                required: true,
+                notEmpty: true
+            },
             amount: {
                 required: true,
                 notEmpty: true
@@ -496,6 +396,10 @@
             merchantName: {
                 required: "客户名不能为空",
                 notEmpty: "客户名不能为空"
+            },
+            imprest: {
+                required: "预付款不能为空",
+                notEmpty: "预付款不能为空"
             },
             amount: {
                 required: "订单金额不能为空",
@@ -520,12 +424,12 @@
                         return false;
                     }
                     product.total = (Number(product.quantity)*Number(product.price)).toFixed(2);
-                    product.remark = _this.find("input[name=remark]").val();
+                    product.remark = _this.find("input[name=productRemark]").val();
                     orderItemList.push(product);
                 })
                 if(!flag) return;
-                params.orderItemList = orderItemList;
             }
+            params.orderItemList = orderItemList;
             $createSubmit.attr("disabled", true);
             $.ajax({
                 url: "<%=request.getContextPath()%>/admin/order/order/update",

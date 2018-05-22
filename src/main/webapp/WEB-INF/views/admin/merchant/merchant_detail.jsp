@@ -14,6 +14,7 @@
     <title>客户详情</title>
     <%@include file="../common/head.jsp" %>
     <%@include file="../common/validate.jsp" %>
+    <%@include file="../common/page.jsp" %>
 </head>
 <body>
 <%@include file="../common/header.jsp" %>
@@ -24,14 +25,16 @@
 <div class="app-content ">
     <div class="app-content-body">
         <div class="nav bg-light lter b-b padder-md">
-            <a href="javascript:location.reload();" class="btn navbar-btn xs-nav text-base">客户详情</a>
+            <a class="xs-nav text-base xs-active">基本信息</a>
+            <a class="xs-nav text-base">还款记录</a>
+            <a class="xs-nav text-base">订货记录</a>
             <a href="javascript:history.go(-1);" class="btn btn-default pull-right m-sm">返回</a>
             <a class="btn btn-primary pull-right m-sm m-r-n-xs" id="createSubmit">
                 保存
             </a>
         </div>
-        <div class="wrapper-md row">
-            <div class="col-xs-12">
+        <div class="wrapper-md">
+            <div class="js-panel">
                 <form class="form-horizontal" id="createForm" name="createForm">
                     <input type="hidden" name="id" value="${merchant.id}">
                     <div class="form-group">
@@ -87,10 +90,131 @@
                     </div>
                 </form>
             </div>
+            <div class="js-panel display-none">
+                <div class="panel panel-default m-b-none">
+                    <table id="paymentPageTable" class="table text-center table-bordered table-striped m-b-none">
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>还款金额</th>
+                            <th>还款时间</th>
+                            <th>备注</th>
+                            <th>记录人</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="paymentPagination" class="xs-pagination"></div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="js-panel display-none">
+                <div class="panel panel-default m-b-none">
+                    <table id="orderPageTable" class="table text-center table-bordered table-striped m-b-none">
+                        <thead>
+                        <tr>
+                            <th>订单号</th>
+                            <th>订单金额</th>
+                            <th>创建时间</th>
+                            <th>状态</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="orderPagination" class="xs-pagination"></div>
+            </div>
         </div>
     </div>
 </div>
+
+<%--还款记录模板--%>
+<script id="paymentTableTemplate" type="text/html">
+    <tr>
+        <td>{{id}}</td>
+        <td>{{amount}}</td>
+        <td>{{refundTime}}</td>
+        <td>{{remark}}</td>
+        <td>{{creator}}</td>
+    </tr>
+</script>
+
+<%--订单模板--%>
+<script id="orderTableTemplate" type="text/html">
+    <tr>
+        <td>{{orderNo}}</td>
+        <td>{{amount}}</td>
+        <td>{{createTime}}</td>
+        <td>{{status}}</td>
+    </tr>
+</script>
 <script>
+    $(function () {
+        $("#paymentPagination").pagination({
+            callback: function (current) {
+                var params = {};
+                params.merchantId = ${merchant.id};
+                params.page = current;
+                doGet("<%=request.getContextPath()%>/admin/order/payment/list", params, function (data) {
+                    if (data.status) {
+                        $("#paymentPagination").pagination("setPage", current, Math.ceil( data.data.total/10));
+                        var opt = {
+                            "amount": function (val) {
+                                return "￥"+val;
+                            }
+                        }
+                        renderData("#paymentPageTable", data.data.list, "#paymentTableTemplate" , opt);
+                    } else {
+                        alert(data.msg);
+                    }
+                })
+            }
+        }).pagination("trigger");
+
+        $("#orderPagination").pagination({
+            callback: function (current) {
+                var params = {};
+                params.merchantId = ${merchant.id};
+                params.page = current;
+                doGet("<%=request.getContextPath()%>/admin/order/order/list", params, function (data) {
+                    if (data.status) {
+                        $("#orderPagination").pagination("setPage", current, Math.ceil( data.data.total/10));
+                        var opt = {
+                            "amount": function (val) {
+                                return "￥"+val;
+                            },
+                            "status": function (val) {
+                                var html = ""
+                                if(val == '0'){
+                                    html = "<span class=\"text-info\">交易中</span>";
+                                }else if(val == '1'){
+                                    html = "<span class=\"text-success\">已完成</span>";
+                                }else if(val == '2'){
+                                    html = "<span class=\"text-danger\">已关闭</span>";
+                                }
+                                return html;
+                            }
+                        }
+                        renderData("#orderPageTable", data.data.list, "#orderTableTemplate" , opt);
+                    } else {
+                        alert(data.msg);
+                    }
+                })
+            }
+        }).pagination("trigger");
+
+        $(".xs-nav").on("click", function () {
+            var index = $(this).index();
+            index == 0 ? $("#createSubmit").removeClass("display-none"):$("#createSubmit").addClass("display-none");
+            $(".xs-nav").removeClass("xs-active");
+            $(this).addClass("xs-active");
+            $(".js-panel").addClass("display-none");
+            $(".js-panel").eq(index).removeClass("display-none");
+        })
+    })
+
     var $createForm = $("form[name=createForm]");
     var $createSubmit = $("#createSubmit");
     $createSubmit.on("click", function () {

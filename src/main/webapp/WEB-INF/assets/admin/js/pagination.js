@@ -129,7 +129,7 @@
         var html = "";
         if(typeof data === 'undefined' || data.length==0){
             var cols = $(ele+" thead tr th").length;
-            html = "<tr><td colspan='"+cols+"'>无数据</td></tr>";
+            html = "<tr><td class='text-muted' colspan='"+cols+"'>暂无数据</td></tr>";
         }else {
             $.each(data, function (i, item) {
                 var itemData = {};

@@ -1,0 +1,122 @@
+/*
+ * 订单详情
+ */
+.xs-hide {
+    visibility: hidden;
+}
+.display-none {
+    display: none;
+}
+.xs-table td, .xs-table th {
+    width: 18%;
+    overflow: hidden;
+    padding: 10px;
+    text-align: center;
+}
+.xs-table td:nth-child(2), .xs-table th:nth-child(2) {
+    width: 17%;
+}
+.xs-table td:nth-child(3), .xs-table th:nth-child(3) {
+    width: 17%;
+}
+.xs-table td:nth-child(4), .xs-table th:nth-child(4) {
+    width: 17%;
+}
+.xs-table td:nth-child(5), .xs-table th:nth-child(5) {
+    width: 30%;
+}
+.xs-table td:last-child, .xs-table th:last-child {
+    width: 50px;
+    overflow: hidden;
+    padding: 0;
+    text-align: center;
+}
+.xs-table {
+    table-layout:fixed;
+    width: 100%;
+    border:1px solid #eaeff0;
+    border-collapse: collapse;
+}
+.xs-table td {
+    border:1px solid #eaeff0;
+    height: 40px;
+}
+.xs-table .info {
+    background: #f2f2f2;
+}
+.xs-table.xs-table-hover tr:hover {
+    background: #f2f2f2;
+}
+.new-item {
+    max-height: 0;
+    opacity: 0;
+    transform: scale(0);
+    animation: growHeight 0.5s ease forwards;
+}
+.del-item {
+    -webkit-animation: removed-item-animation .5s cubic-bezier(.65,-0.02,.72,.29);
+    -o-animation: removed-item-animation .5s cubic-bezier(.65,-0.02,.72,.29);
+    animation: removed-item-animation .5s cubic-bezier(.65,-0.02,.72,.29)
+}
+@keyframes growHeight {
+    to {
+        max-height: 50px;
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+@-webkit-keyframes removed-item-animation {
+    0%{
+        opacity:1;
+        -webkit-transform:translateX(0);
+        -ms-transform:translateX(0);
+        -o-transform:translateX(0);
+        transform:translateX(0);
+    }
+    100%{
+        opacity:0;
+        -webkit-transform:translateX(-500px);
+        -ms-transform:translateX(-500px);
+        -o-transform:translateX(-500px);
+        transform:translateX(-500px);
+    }
+}
+.text-money {
+    font-size: 18px;
+    font-weight: bold;
+    color:#f00;
+}
+.text-quantity {
+    font-size: 16px;
+    font-weight: bold;
+    color:#00b7ee;
+}
+.total-fee {
+    padding-top: 9px;
+}
+.img-container {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+.left-container {
+    margin-top:30px;
+    padding-left:30px;
+    height: 510px;
+    border-left: 1px solid #eee;
+    box-shadow: -12px 1px 23px -12px rgba(0,0,0,0.1);
+}
+.item-content {
+    height: 420px;
+    overflow: auto;
+}
+.item-wrapper {
+    background-color: #fff;
+    margin: 0 20px 20px 20px;
+    height: 600px;
+    box-shadow: 0 0 60px rgba(0,0,0,0.1);
+}
+.item-wrapper.base {
+    margin: 10px 20px;
+    height: auto;
+}

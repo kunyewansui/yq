@@ -76,8 +76,8 @@
                         <th>编号</th>
                         <th>商户名称</th>
                         <th>还款金额</th>
-                        <th>备注</th>
                         <th>还款时间</th>
+                        <th>备注</th>
                         <th>记录人</th>
                         <th>操作</th>
                     </tr>
@@ -96,8 +96,8 @@
         <td>{{id}}</td>
         <td>{{merchantName}}</td>
         <td>{{amount}}</td>
-        <td>{{remark}}</td>
         <td>{{refundTime}}</td>
+        <td>{{remark}}</td>
         <td>{{creator}}</td>
         <td>
             <sec:authorize access="hasAnyRole(${xs:getPermissions('order_payment_update')})">
@@ -490,9 +490,6 @@
                         var opt = {
                             "amount": function (val) {
                                 return "￥"+val;
-                            },
-                            "createTime": function (val) {
-                               return val.replace(/(\d{4}).(\d{1,2}).(\d{1,2}).+/mg, '$1-$2-$3'); //日期格式转换
                             }
                         }
                         renderData("#pageTable", data.data.list, "#tableTemplate" , opt);

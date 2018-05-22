@@ -5,8 +5,8 @@
 <mapper namespace="com.xiaosuokeji.server.dao.order.OrderDao">
 
 	<insert id="save" parameterType="order" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO yq_order(order_no,merchant_id,amount,status,delivery_date,creator)
-		VALUES (#{orderNo},#{merchantId},#{amount},#{status},#{deliveryDate},#{creator})
+		INSERT INTO yq_order(order_no,merchant_id,amount,status,delivery_date,creator,imprest,remark)
+		VALUES (#{orderNo},#{merchantId},#{amount},#{status},#{deliveryDate},#{creator},#{imprest},#{remark})
 	</insert>
 
 	<delete id="remove" parameterType="order">
@@ -35,6 +35,12 @@
 			<if test="creator!=null">
 				,creator=#{creator}
 			</if>
+			<if test="imprest!=null">
+				,imprest=#{imprest}
+			</if>
+			<if test="remark!=null">
+				,remark=#{remark}
+			</if>
 			,update_time=NOW()
 		</trim>
 		WHERE id=#{id}
@@ -51,6 +57,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="orderNo!=null and orderNo!=''">
 				AND a.order_no LIKE CONCAT('%',#{orderNo},'%')
+			</if>
+			<if test="merchantId!=null">
+				AND a.merchant_id=#{merchantId}
 			</if>
 			<if test="merchantName!=null">
 				AND b.name LIKE CONCAT('%',#{merchantName},'%')

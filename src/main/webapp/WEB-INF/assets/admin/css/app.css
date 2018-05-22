@@ -5417,10 +5417,12 @@ table.xs-orderTable thead .sorting_desc_disabled {
     background-image: url("../img/sort_desc_disabled.png");
 }
 .xs-nav {
+    display: inline-block;
     padding: 0 0 14px 0;
     margin: 19px 12px 0 12px;
 }
 .xs-nav.xs-active {
+    color: #23b7e5;
     border-bottom: 2px solid #23b7e5;
 }
 .xs-nav:hover {
