@@ -2,6 +2,7 @@ package com.xiaosuokeji.server.util;
 
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSStatusPair;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -9,8 +10,11 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,6 +52,49 @@ public class ExcelUtil {
             throw new XSBusinessException(XSStatusPair.build(null, "EXCEL的文件格式有,只支持.xls和.xlsx"));
         }
         return wb;
+    }
+
+    public static String getCellValue(Cell cell) {
+        String value = "";
+        // 以下是判断数据的类型
+        switch (cell.getCellTypeEnum()) {
+
+            case NUMERIC:
+                value = cell.getNumericCellValue() + "";
+                if (HSSFDateUtil.isCellDateFormatted(cell)) {
+                    Date date = cell.getDateCellValue();
+                    if (date != null) {
+                        value = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                    } else {
+                        value = "";
+                    }
+                } else {
+                    value = new DecimalFormat("0").format(cell.getNumericCellValue());
+                }
+                break;
+            case STRING: // 字符串
+                value = cell.getStringCellValue();
+                break;
+            case BOOLEAN: // Boolean
+                value = cell.getBooleanCellValue() + "";
+                break;
+            case FORMULA: // 公式
+                value = cell.getCellFormula() + "";
+                break;
+            case BLANK: // 空值
+                value = "";
+                break;
+            case _NONE: // 空值
+                value = "";
+                break;
+            case ERROR: // 故障
+                value = "非法字符";
+                break;
+            default:
+                value = "未知类型";
+                break;
+        }
+        return value;
     }
 
     /**

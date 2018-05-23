@@ -115,6 +115,13 @@
                                         </a>
                                     </li>
                                 </sec:authorize>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('system_country')})">
+                                    <li class="${index eq "system_country"?"active":""}">
+                                        <a href="<%=request.getContextPath()%>/admin/system/country">
+                                            <span>国家管理</span>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('system_log')})">
                                     <li class="${index eq "system_log"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/system/secStaffLog">

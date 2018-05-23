@@ -47,4 +47,14 @@ public class serviceTest {
     }
 
 
+    @Test
+    public void test2() throws XSBusinessException {
+        String str = "津巴布韦共和国 Republic of Zimbabwe";
+        String[] split = str.split("\\s+", 2);
+        System.out.println(split[0]);
+        System.out.println(split[1]);
+
+    }
+
+
 }
