@@ -25,5 +25,4 @@ public interface CountryDao {
 
     Long count(Country country);
 
-    int batchUpdate(List<Country> list);
 }

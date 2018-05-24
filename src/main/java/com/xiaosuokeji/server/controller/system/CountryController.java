@@ -1,10 +1,8 @@
 package com.xiaosuokeji.server.controller.system;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xiaosuokeji.framework.annotation.XSExceptionHandler;
 import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
-import com.xiaosuokeji.framework.json.XSJackson;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.system.Country;
 import com.xiaosuokeji.server.service.system.CountryService;
@@ -14,11 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.UnsupportedEncodingException;
 
 /**
  * 国家Controller
@@ -81,10 +76,4 @@ public class CountryController {
         return XSServiceResult.build().data(countryService.listCombo(country));
     }
 
-    @RequestMapping(value = "/admin/system/country/import", method = RequestMethod.POST)
-    @ResponseBody
-    public XSServiceResult importTemplate(@RequestParam MultipartFile myfile) throws Exception {
-        countryService.importTemplate(myfile);
-        return XSServiceResult.build();
-    }
 }

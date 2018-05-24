@@ -42,12 +42,12 @@
 
 	<select id="get" parameterType="payment" resultType="payment">
 		SELECT a.*,b.name as merchantName
-		FROM yq_payment a JOIN LEFT yq_merchant b ON a.merchant_id=b.id
+		FROM yq_payment a LEFT JOIN yq_merchant b ON a.merchant_id=b.id
 		WHERE a.id=#{id}
 	</select>
 
 	<sql id="listCondition">
-		FROM yq_payment a JOIN LEFT yq_merchant b ON a.merchant_id=b.id
+		FROM yq_payment a LEFT JOIN yq_merchant b ON a.merchant_id=b.id
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="id!=null">
 				AND a.id=#{id}

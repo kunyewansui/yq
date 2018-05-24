@@ -108,11 +108,11 @@
             <if test="land!=null">
                 AND land=#{land}
             </if>
-            <if test="dynamic!=null and dynamic.code!=null and dynamic.code!=''">
-                AND code LIKE CONCAT('%',#{dynamic.code},'%')
-            </if>
             <if test="dynamic!=null and dynamic.phoneCode!=null and dynamic.phoneCode!=''">
                 AND phone_code LIKE CONCAT('%',#{dynamic.phoneCode},'%')
+            </if>
+            <if test="dynamic!=null and dynamic.code!=null and dynamic.code!=''">
+                AND code LIKE CONCAT('%',#{dynamic.code},'%')
             </if>
             <if test="dynamic!=null and dynamic.code2!=null and dynamic.code2!=''">
                 AND code2 LIKE CONCAT('%',#{dynamic.code2},'%')
@@ -146,11 +146,5 @@
         SELECT COUNT(*)
         <include refid="listCondition"/>
     </select>
-
-    <update id="batchUpdate" parameterType="java.util.List">
-        <foreach collection="list" item="item" separator=";">
-            update sc_country SET en_name = #{item.enName},code = #{item.code},code2=#{item.code2},code3=#{item.code3},full_name=#{item.fullName},en_full_name=#{item.enFullName} where `name` = #{item.name}
-        </foreach>
-    </update>
 
 </mapper>

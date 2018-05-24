@@ -36,6 +36,29 @@
                             <input name="dynamic[name]" type="text" class="form-control" placeholder="模糊查询"
                                    value="${search.dynamic.name}">
                         </div>
+                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                            <label class="control-label">英文缩写：</label>
+                        </div>
+                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
+                            <input name="dynamic[code3]" type="text" class="form-control" placeholder="模糊查询"
+                                   value="${search.dynamic.code3}">
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
+                            <label class="control-label">大洲：</label>
+                        </div>
+                        <div class="col-xs-8 col-md-4 col-lg-3 m-b-md">
+                            <select name="land" class="form-control" data-value="${search.land}">
+                                <option value="">全部</option>
+                                <xs:dictOptions key="land"/>
+                            </select>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                            <label class="control-label">电话区号：</label>
+                        </div>
+                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
+                            <input name="dynamic[phoneCode]" type="text" class="form-control" placeholder="模糊查询"
+                                   value="${search.dynamic.phoneCode}">
+                        </div>
                         <div class="col-xs-4 col-md-2 col-lg-1   no-padder m-b-md text-right">
                             <label class="control-label">状态：</label>
                         </div>
@@ -44,13 +67,6 @@
                                 <option value="">全部</option>
                                 <xs:dictOptions key="countryStatus"/>
                             </select>
-                        </div>
-                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
-                            <label class="control-label">电话区号：</label>
-                        </div>
-                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <input name="dynamic[code]" type="text" class="form-control" placeholder="模糊查询"
-                                   value="${search.dynamic.code}">
                         </div>
                     </div>
                     <div class="form-group m-t-n-md">
@@ -68,8 +84,6 @@
                             <input class="btn btn-info pull-right" value="搜索" type="submit">
                             <input class="btn btn-default pull-right  m-r-sm" value="重置" type="button"
                                    onclick="$('#searchForm').xsClean()">
-                            <input id="kunye" type="file" onclick="templateUpdate(this);"/>
-                            <a class="btn btn-danger" onclick="kunyetest();return false;">kunye</a>
                         </div>
                     </div>
                 </form>
@@ -79,7 +93,9 @@
                         <tr>
                             <th>编号</th>
                             <th>名称</th>
+                            <th>英文缩写</th>
                             <th>电话区号</th>
+                            <th>大洲</th>
                             <th>顺序</th>
                             <th>状态</th>
                             <th>操作</th>
@@ -88,14 +104,18 @@
                         <tbody>
                         <c:if test="${pageModel.list.size() eq 0}">
                             <tr>
-                                <td colspan="7">无数据</td>
+                                <td colspan="8">无数据</td>
                             </tr>
                         </c:if>
                         <c:forEach items="${pageModel.list}" var="item">
                             <tr>
                                 <td>${item.id}</td>
                                 <td>${item.name}</td>
-                                <td>${item.code}</td>
+                                <td>${item.code3}</td>
+                                <td>${item.phoneCode}</td>
+                                <td>
+                                    <xs:dictDesc key="land" value="${item.land}" />
+                                </td>
                                 <td>${item.seq}</td>
                                 <td><xs:dictDesc key="countryStatus" value="${item.status}"/></td>
                                 <td>
@@ -137,33 +157,6 @@
     </div>
 </div>
 
-<script>
-    function templateUpdate(file) {
-        var formData = new FormData();
-        formData.append("myfile",file.files[0]);
-        $.ajax({
-            url: "<%=request.getContextPath()%>/admin/system/country/import",
-            type: "POST",
-            data: formData,
-            dataType: "json",
-            contentType : false,
-            processData : false,
-            cache: false,
-            success: function (data) {
-                if (data.status) {
-                    bootoast({message: "导入成功！"});
-                } else {
-                    alert(data.msg);
-                }
-            }
-        });
-    }
-
-    function kunyetest(){
-        $("#kunye").click();
-    }
-</script>
-
 <sec:authorize access="hasAnyRole(${xs:getPermissions('system_country_create')})">
     <div class="modal fade" id="createModel" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="document">
@@ -178,15 +171,7 @@
                     <div class="modal-body">
                         <div class="form-group row">
                             <div class="col-xs-3 text-right">
-                                <label class="control-label required">编号：</label>
-                            </div>
-                            <div class="col-xs-9">
-                                <input name="id" type="number" min="0" step="1" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-xs-3 text-right">
-                                <label class="control-label required">名称：</label>
+                                <label class="control-label required">中文简称：</label>
                             </div>
                             <div class="col-xs-9">
                                 <input name="name" type="text" maxlength="191" class="form-control">
@@ -194,10 +179,78 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-xs-3 text-right">
+                                <label class="control-label required">中文全称：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input name="fullName" type="text" maxlength="191" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">英文简称：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input name="enName" type="text" maxlength="191" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">英文全称：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input name="enFullName" type="text" maxlength="191" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
                                 <label class="control-label required">电话区号：</label>
                             </div>
                             <div class="col-xs-9">
+                                <input name="phoneCode" type="text" maxlength="255" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">数字代码：</label>
+                            </div>
+                            <div class="col-xs-9">
                                 <input name="code" type="text" maxlength="255" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">两字符简称：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input name="code2" type="text" maxlength="255" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">三字符简称：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input name="code3" type="text" maxlength="255" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">大洲：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <select name="land" class="form-control">
+                                    <xs:dictOptions key="land" value="0"/>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">状态：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <select name="status" class="form-control">
+                                    <xs:dictOptions key="countryStatus" value="1"/>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -211,7 +264,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-xs-3 text-right">
-                                <label class="control-label required">拼音：</label>
+                                <label class="control-label">拼音：</label>
                             </div>
                             <div class="col-xs-9">
                                 <input name="pinyin" type="text" maxlength="255" class="form-control">
@@ -231,49 +284,77 @@
         var $createSubmit = $("#createSubmit");
         var createValidator = $createForm.validate({
             rules: {
-                id: {
-                    required: true
-                },
                 name: {
                     required: true,
-                    notEmpty: true,
-                    maxlength: 191
+                    notEmpty: true
+                },
+                enName: {
+                    required: true,
+                    notEmpty: true
+                },
+                fullName: {
+                    required: true,
+                    notEmpty: true
+                },
+                enFullName: {
+                    required: true,
+                    notEmpty: true
+                },
+                phoneCode: {
+                    required: true,
+                    notEmpty: true
                 },
                 code: {
                     required: true,
-                    notEmpty: true,
-                    maxlength: 255
+                    notEmpty: true
+                },
+                code2: {
+                    required: true,
+                    notEmpty: true
+                },
+                code3: {
+                    required: true,
+                    notEmpty: true
                 },
                 seq: {
                     required: true
-                },
-                pinyin: {
-                    required: true,
-                    notEmpty: true,
-                    maxlength: 255
                 }
             },
             messages: {
-                id: {
-                    required: "编号不能为空"
-                },
                 name: {
-                    required: "名称不能为空",
-                    notEmpty: "名称不能为空",
-                    maxlength: "名称最多191个字"
+                    required: "不能为空",
+                    notEmpty: "不能为空"
+                },
+                enName: {
+                    required: "不能为空",
+                    notEmpty: "不能为空"
+                },
+                fullName: {
+                    required: "不能为空",
+                    notEmpty: "不能为空"
+                },
+                enFullName: {
+                    required: "不能为空",
+                    notEmpty: "不能为空"
+                },
+                phoneCode: {
+                    required: "不能为空",
+                    notEmpty: "不能为空"
                 },
                 code: {
-                    required: "电话区号不能为空",
-                    notEmpty: "电话区号不能为空",
-                    maxlength: "电话区号最多255个字"
+                    required: "不能为空",
+                    notEmpty: "不能为空"
+                },
+                code2: {
+                    required: "不能为空",
+                    notEmpty: "不能为空"
+                },
+                code3: {
+                    required: "不能为空",
+                    notEmpty: "不能为空"
                 },
                 seq: {
-                    required: "顺序不能为空"
-                },
-                pinyin: {
-                    required: "拼音不能为空",
-                    notEmpty: "拼音不能为空",
-                    maxlength: "拼音最多255个字"
+                    required: "不能为空"
                 }
             },
             submitHandler: function () {
@@ -326,7 +407,7 @@
                         <input type="hidden" name="id">
                         <div class="form-group row">
                             <div class="col-xs-3 text-right">
-                                <label class="control-label required">名称：</label>
+                                <label class="control-label required">中文简称：</label>
                             </div>
                             <div class="col-xs-9">
                                 <input name="name" type="text" maxlength="191" class="form-control">
@@ -334,10 +415,78 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-xs-3 text-right">
+                                <label class="control-label required">中文全称：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input name="fullName" type="text" maxlength="191" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">英文简称：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input name="enName" type="text" maxlength="191" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">英文全称：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input name="enFullName" type="text" maxlength="191" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
                                 <label class="control-label required">电话区号：</label>
                             </div>
                             <div class="col-xs-9">
+                                <input name="phoneCode" type="text" maxlength="255" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">数字代码：</label>
+                            </div>
+                            <div class="col-xs-9">
                                 <input name="code" type="text" maxlength="255" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">两字符简称：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input name="code2" type="text" maxlength="255" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">三字符简称：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <input name="code3" type="text" maxlength="255" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">大洲：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <select name="land" class="form-control">
+                                    <xs:dictOptions key="land" value="0"/>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-3 text-right">
+                                <label class="control-label required">状态：</label>
+                            </div>
+                            <div class="col-xs-9">
+                                <select name="status" class="form-control">
+                                    <xs:dictOptions key="countryStatus" value="1"/>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -351,7 +500,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-xs-3 text-right">
-                                <label class="control-label required">拼音：</label>
+                                <label class="control-label">拼音：</label>
                             </div>
                             <div class="col-xs-9">
                                 <input name="pinyin" type="text" maxlength="255" class="form-control">
@@ -371,49 +520,77 @@
         var $updateSubmit = $("#updateSubmit");
         var updateValidator = $updateForm.validate({
             rules: {
-                id: {
-                    required: true
-                },
                 name: {
                     required: true,
-                    notEmpty: true,
-                    maxlength: 191
+                    notEmpty: true
+                },
+                enName: {
+                    required: true,
+                    notEmpty: true
+                },
+                fullName: {
+                    required: true,
+                    notEmpty: true
+                },
+                enFullName: {
+                    required: true,
+                    notEmpty: true
+                },
+                phoneCode: {
+                    required: true,
+                    notEmpty: true
                 },
                 code: {
                     required: true,
-                    notEmpty: true,
-                    maxlength: 255
+                    notEmpty: true
+                },
+                code2: {
+                    required: true,
+                    notEmpty: true
+                },
+                code3: {
+                    required: true,
+                    notEmpty: true
                 },
                 seq: {
                     required: true
-                },
-                pinyin: {
-                    required: true,
-                    notEmpty: true,
-                    maxlength: 255
                 }
             },
             messages: {
-                id: {
-                    required: "编号不能为空"
-                },
                 name: {
-                    required: "名称不能为空",
-                    notEmpty: "名称不能为空",
-                    maxlength: "名称最多191个字"
+                    required: "不能为空",
+                    notEmpty: "不能为空"
+                },
+                enName: {
+                    required: "不能为空",
+                    notEmpty: "不能为空"
+                },
+                fullName: {
+                    required: "不能为空",
+                    notEmpty: "不能为空"
+                },
+                enFullName: {
+                    required: "不能为空",
+                    notEmpty: "不能为空"
+                },
+                phoneCode: {
+                    required: "不能为空",
+                    notEmpty: "不能为空"
                 },
                 code: {
-                    required: "电话区号不能为空",
-                    notEmpty: "电话区号不能为空",
-                    maxlength: "电话区号最多255个字"
+                    required: "不能为空",
+                    notEmpty: "不能为空"
+                },
+                code2: {
+                    required: "不能为空",
+                    notEmpty: "不能为空"
+                },
+                code3: {
+                    required: "不能为空",
+                    notEmpty: "不能为空"
                 },
                 seq: {
-                    required: "顺序不能为空"
-                },
-                pinyin: {
-                    required: "拼音不能为空",
-                    notEmpty: "拼音不能为空",
-                    maxlength: "拼音最多255个字"
+                    required: "不能为空"
                 }
             },
             submitHandler: function () {

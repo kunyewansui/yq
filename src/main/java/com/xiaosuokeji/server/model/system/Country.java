@@ -3,7 +3,6 @@ package com.xiaosuokeji.server.model.system;
 import com.xiaosuokeji.framework.annotation.XSAutoDesc;
 import com.xiaosuokeji.server.model.base.BaseModel;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
 
@@ -14,10 +13,8 @@ import javax.validation.constraints.NotNull;
 public class Country extends BaseModel {
 
     /**
-     * id
+     * 编号
      */
-    @NotNull(message = "编号不能为空", groups = Save.class)
-    @Range(min = 1L, message = "编号范围为1-9223372036854775807", groups = {Save.class})
     private Long id;
 
     /**
@@ -52,14 +49,14 @@ public class Country extends BaseModel {
      * 两字符简称
      */
     @NotNull(message = "两字符简称不能为空", groups = Save.class)
-    @Length(min = 1, max = 255, message = "两字符简称长度为1-255个字符", groups = {Save.class, Update.class})
+    @Length(min = 2, max = 2, message = "两字符简称长度为2个字符", groups = {Save.class, Update.class})
     private String code2;
 
     /**
      * 三字符简称
      */
     @NotNull(message = "三字符简称不能为空", groups = Save.class)
-    @Length(min = 1, max = 255, message = "三字符简称长度为1-255个字符", groups = {Save.class, Update.class})
+    @Length(min = 3, max = 3, message = "三字符简称长度为3个字符", groups = {Save.class, Update.class})
     private String code3;
 
     /**
@@ -94,8 +91,6 @@ public class Country extends BaseModel {
     /**
      * 拼音
      */
-    @NotNull(message = "拼音不能为空", groups = Save.class)
-    @Length(min = 1, max = 255, message = "拼音长度为1-255个字符", groups = {Save.class, Update.class})
     private String pinyin;
 
     public interface Save {}
