@@ -29,7 +29,7 @@ public class Product extends BaseModel {
 	/**
 	 * 类型
 	 */
-	@NotNull(message = "产品类型不能为空", groups = {Save.class, Update.class})
+	@NotNull(message = "产品类型不能为空", groups = {Save.class})
 	private Long cateId;
 
 	private String cateName;
@@ -44,19 +44,19 @@ public class Product extends BaseModel {
 	/**
 	 * 档口库存
 	 */
-	@NotNull(message = "档口库存不能为空", groups = {Save.class, Update.class})
+	@NotNull(message = "档口库存不能为空", groups = {Save.class})
 	private Long shopStock;
 
 	/**
 	 * 工厂库存
 	 */
-	@NotNull(message = "工厂库存不能为空", groups = {Save.class, Update.class})
+	@NotNull(message = "工厂库存不能为空", groups = {Save.class})
 	private Long factoryStock;
 
 	/**
 	 * 成本
 	 */
-	@NotNull(message = "成本不能为空", groups = {Save.class, Update.class})
+	@NotNull(message = "成本不能为空", groups = {Save.class})
 	private BigDecimal cost;
 
 	/**
@@ -72,8 +72,13 @@ public class Product extends BaseModel {
 	/**
 	 * 出厂价
 	 */
-	@NotNull(message = "出厂价不能为空", groups = {Save.class, Update.class})
+	@NotNull(message = "出厂价不能为空", groups = {Save.class})
 	private BigDecimal manuPrice;
+
+	/**
+	 * 版本
+	 */
+	private Integer version;
 
 	private List<Long> cateList;
 
@@ -173,6 +178,14 @@ public class Product extends BaseModel {
 
 	public BigDecimal getManuPrice() {
 		return manuPrice;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	public String getCateName() {

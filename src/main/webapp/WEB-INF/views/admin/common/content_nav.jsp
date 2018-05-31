@@ -156,7 +156,7 @@
                                 <sec:authorize access="hasAnyRole(${xs:getPermissions('storage_manage')})">
                                     <li class="${index eq "storage_manage"?"active":""}">
                                         <a href="<%=request.getContextPath()%>/admin/storage/storage">
-                                            <span>仓库管理</span>
+                                            <span>库存管理</span>
                                         </a>
                                     </li>
                                 </sec:authorize>

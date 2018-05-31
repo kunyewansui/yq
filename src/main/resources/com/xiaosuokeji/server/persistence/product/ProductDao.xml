@@ -49,6 +49,20 @@
 		WHERE id=#{id}
 	</update>
 
+	<update id="updateStock" parameterType="product">
+		UPDATE yq_product
+		<trim prefix="SET" prefixOverrides=",">
+			<if test="shopStock!=null">
+				,shop_stock=shop_stock+#{shopStock}
+			</if>
+			<if test="factoryStock!=null">
+				,factory_stock=factory_stock+#{factoryStock}
+			</if>
+			,update_time=NOW(),version=version+1
+		</trim>
+		WHERE id=#{id} and version=#{version}
+	</update>
+
 	<select id="get" parameterType="product" resultType="product">
 		SELECT *
 		FROM yq_product
@@ -96,4 +110,49 @@
 		SELECT COUNT(*)
 		<include refid="listCondition"/>
 	</select>
+
+	<select id="storageList" parameterType="product" resultType="product">
+		SELECT a.*,b.name AS cateName
+		<include refid="storageListCondition"/>
+		<include refid="XSBaseMapper.sort"/>
+		<include refid="XSBaseMapper.limit"/>
+	</select>
+
+	<select id="storageCount" parameterType="product" resultType="long">
+		SELECT COUNT(*)
+		<include refid="storageListCondition"/>
+	</select>
+
+	<sql id="storageListCondition">
+		FROM yq_product a LEFT JOIN yq_category b ON a.cate_id=b.id
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="name!=null and name!=''">
+				AND (a.`name` LIKE CONCAT('%',#{name},'%') OR a.code LIKE CONCAT('%',#{name},'%'))
+			</if>
+		</trim>
+	</sql>
+
+	<select id="statisticsStorage" resultType="java.util.Map">
+		SELECT
+			COUNT(*) AS totalCount,
+			<if test="type==0">
+				SUM(shop_stock + factory_stock) AS totalStock
+			</if>
+			<if test="type==1">
+				SUM(shop_stock) as shopStock
+			</if>
+			<if test="type==2">
+				SUM(factory_stock) as factoryStock
+			</if>
+		FROM yq_product
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="type==0 or type==1">
+				OR shop_stock > 0
+			</if>
+			<if test="type==0 or type==2">
+				OR factory_stock > 0
+			</if>
+		</trim>
+	</select>
+
 </mapper>

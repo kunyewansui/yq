@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 产品ServiceImpl
@@ -63,6 +64,22 @@ public class ProductService {
 		}
 	}
 
+	public void updateStock(Product product) throws XSBusinessException {
+		Product p = get(product);
+		if(product.getShopStock()!=null){
+			if(p.getShopStock()+product.getShopStock()<0){
+				throw new XSBusinessException(ProductConsts.PRODUCT_STOCK_LACK);
+			}
+		}
+		if(product.getFactoryStock()!=null){
+			if(p.getFactoryStock()+product.getFactoryStock()<0){
+				throw new XSBusinessException(ProductConsts.PRODUCT_STOCK_LACK);
+			}
+		}
+		product.setVersion(p.getVersion());
+		productDao.updateStock(product);
+	}
+
 	public Product get(Product product) throws XSBusinessException {
 		Product existent = productDao.get(product);
 		if (existent == null) {
@@ -93,4 +110,20 @@ public class ProductService {
 		}
 		return existent;
     }
+
+	public XSPageModel<Product> StoragelistAndCount(Product product) {
+		if(CollectionUtils.isBlank(product.getSort())){
+			product.setDefaultSort("a.id", "DESC");
+		}
+		return XSPageModel.build(productDao.storageList(product), productDao.storageCount(product));
+	}
+
+	/**
+	 * 统计档口和工厂的库存情况
+	 * @param type 0-全部，1-档口，2-工厂
+	 */
+	public Map<String, Object> statisticsStorage(Integer type){
+		return productDao.statisticsStorage(type);
+	}
+
 }

@@ -19,8 +19,12 @@ $(function () {
 
             a.on('click', function (event) {
                 event.preventDefault();
-                $("a.auto").parent("li").removeClass("active");
-                $(this).parent("li").addClass("active");
+                if($(this).parent("li").hasClass("active")){
+                    $("a.auto").parent("li").removeClass("active");
+                }else{
+                    $("a.auto").parent("li").removeClass("active");
+                    $(this).parent("li").addClass("active");
+                }
             });
 
             $this.find("li.active").each(function () {

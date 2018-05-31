@@ -253,7 +253,7 @@
             var params = $createForm.xsJson();
             $createSubmit.attr("disabled", true);
             doPost('<%=request.getContextPath()%>/admin/merchant/merchant/update', $createForm.serialize(), function (data) {
-                    $createSubmit.attr("disabled", true);
+                    $createSubmit.attr("disabled", false);
                     if (data.status) {
                         history.go(-1);
                     } else {
