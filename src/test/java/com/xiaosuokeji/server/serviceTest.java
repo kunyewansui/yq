@@ -1,13 +1,16 @@
 package com.xiaosuokeji.server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.json.XSJackson;
 import com.xiaosuokeji.server.model.image.Image;
 import com.xiaosuokeji.server.model.image.ImageCategory;
 import com.xiaosuokeji.server.model.order.Payment;
+import com.xiaosuokeji.server.model.product.Product;
 import com.xiaosuokeji.server.service.article.ArticleService;
 import com.xiaosuokeji.server.service.image.ImageService;
 import com.xiaosuokeji.server.service.order.PaymentService;
+import com.xiaosuokeji.server.service.product.ProductService;
 import com.xiaosuokeji.server.service.system.DictDataService;
 import com.xiaosuokeji.server.service.system.SystemConfigService;
 import com.xiaosuokeji.server.util.CollectionUtils;
@@ -30,6 +33,8 @@ public class serviceTest {
 
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private ProductService productService;
 
     @Test
     public void test() throws XSBusinessException {
@@ -53,6 +58,25 @@ public class serviceTest {
         String[] split = str.split("\\s+", 2);
         System.out.println(split[0]);
         System.out.println(split[1]);
+
+    }
+    @Test
+    public void generateProduct() {
+        for(int i=28;i<200;i++){
+            Product product = new Product();
+            product.setCode("BK"+((int)(10000*Math.random())+10000));
+            product.setCost(BigDecimal.valueOf(100.01));
+            product.setManuPrice(BigDecimal.valueOf(200.00));
+            product.setName("产品"+(1000+i));
+            product.setCateId((long)(10*Math.random())+1);
+            product.setShopStock((long)(1000*Math.random()));
+            product.setFactoryStock((long)(100*Math.random())*10);
+            product.setImage("http://aocai-home.oss-cn-shenzhen.aliyuncs.com/yq/product/201805070714231525691663030.jpg");
+            product.setPicList(CollectionUtils.toList("http://aocai-home.oss-cn-shenzhen.aliyuncs.com/ldbk/officer/201803210605081521626708728.jpg","http://aocai-home.oss-cn-shenzhen.aliyuncs.com/ldbk/officer/201803210605081521626708728.jpg"));
+            try {
+                productService.save(product);
+            } catch (Exception e) { }
+        }
 
     }
 

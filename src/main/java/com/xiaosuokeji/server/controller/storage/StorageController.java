@@ -9,6 +9,7 @@ import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.product.Product;
 import com.xiaosuokeji.server.service.product.CategoryService;
 import com.xiaosuokeji.server.service.product.ProductService;
+import com.xiaosuokeji.server.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,7 @@ public class StorageController {
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String index(Model model, @RequestParam(defaultValue = "0") Integer type) throws JsonProcessingException {
+		if(type != 1 && type !=2) type=0;
 		model.addAttribute("statistics", productService.statisticsStorage(type));
 		model.addAttribute("type", type);
 		return "admin/storage/storage";
@@ -44,13 +46,34 @@ public class StorageController {
 		if(product.getPage() == null) {
 			product.setPage(1L);
 		}
+		if(!CollectionUtils.isBlank(product.getDynamic()) && product.getDynamic().get("type")!=null){
+			int type = Integer.parseInt(product.getDynamic().get("type"));
+			if (type == 1) {
+				product.setDefaultSort("a.shop_stock", "DESC");
+			} else if (type ==2) {
+				product.setDefaultSort("a.factory_stock", "DESC");
+			}
+		}
 		return XSServiceResult.build().data(productService.StoragelistAndCount(product));
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/shop/update", method = RequestMethod.POST)
 	@ResponseBody
-	public XSServiceResult update(Product product) throws XSBusinessException {
-		productService.updateStock(product);
+	public XSServiceResult shopupdate(Product product) throws XSBusinessException {
+		Product p = new Product();
+		p.setId(product.getId());
+		p.setShopStock(product.getStock());
+		productService.updateStock(p);
+		return XSServiceResult.build();
+	}
+
+	@RequestMapping(value = "/factory/update", method = RequestMethod.POST)
+	@ResponseBody
+	public XSServiceResult factoryupdate(Product product) throws XSBusinessException {
+		Product p = new Product();
+		p.setId(product.getId());
+		p.setFactoryStock(product.getStock());
+		productService.updateStock(p);
 		return XSServiceResult.build();
 	}
 }

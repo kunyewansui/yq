@@ -417,7 +417,8 @@ Date.prototype.format = function (fmt) {
  */
 function renderTemplate (template, obj) {
     return template.replace(/[{]{2}([^}]+)[}]{2}/g, function($0, $1) {
-        return obj[$1] || '';
+        if(typeof obj[$1] === 'undefined') return '';
+        return obj[$1];
     });
 };
 

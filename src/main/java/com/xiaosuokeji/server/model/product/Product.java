@@ -80,6 +80,8 @@ public class Product extends BaseModel {
 	 */
 	private Integer version;
 
+	private Long stock;//库存，正数为入库，负数为出库
+
 	private List<Long> cateList;
 
 	private List<String> picList;
@@ -155,7 +157,15 @@ public class Product extends BaseModel {
 	public BigDecimal getCost() {
 		return cost;
 	}
-	
+
+	public Long getStock() {
+		return stock;
+	}
+
+	public void setStock(Long stock) {
+		this.stock = stock;
+	}
+
 	public void setCost(BigDecimal cost) {
 		this.cost = cost;
 	}
