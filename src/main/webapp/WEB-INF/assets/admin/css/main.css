@@ -120,3 +120,11 @@
     margin: 0 20px;
     height: auto;
 }
+
+.b-r-n {
+    border-radius: 0;
+}
+
+.close-padder {
+    padding: 6px 0 6px 10px;
+}

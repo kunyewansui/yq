@@ -61,11 +61,11 @@
                         <div class="col-xs-8 col-md-4 col-lg-7 m-b-md">
                             <div class="row">
                                 <div class="col-xs-10 col-md-4 col-lg-4 ">
-                                    <input type="text" name="dynamic[startTime]" class="form-control datepicker" readonly>
+                                    <input type="text" name="dynamic[startTime]" class="form-control datepicker" value="${search.dynamic.startTime}" readonly>
                                 </div>
                                 <label class="pull-left control-label" style="width: 15px">至</label>
                                 <div class="col-xs-10 col-md-4 col-lg-4 ">
-                                    <input type="text" name="dynamic[endTime]" class="form-control datepicker" readonly>
+                                    <input type="text" name="dynamic[endTime]" class="form-control datepicker" value="${search.dynamic.endTime}" readonly>
                                 </div>
                                 <a class="pull-left control-label text-info js-date-quick" data-days="6">近7天</a>
                                 <a class="pull-left control-label m-l-sm text-info js-date-quick"
@@ -150,18 +150,6 @@
     </div>
 </div>
 <%@include file="../common/deleteConfirm.jsp" %>
-<script>
-    //快速选时间
-    $(".js-date-quick").on("click", function () {
-        var day = $(this).attr("data-days");
-        var t = new Date();
-        var inputs = $(this).parent().find("input.datepicker");
-        inputs.eq(1).val(t.format("yyyy-MM-dd"));
-        var t_s = t.getTime();
-        t.setTime(t_s - 24 * 60 * 60 * 1000 * day);
-        inputs.eq(0).val(t.format("yyyy-MM-dd"));
-    });
-</script>
 
 <sec:authorize access="hasAnyRole(${xs:getPermissions('order_manage_remove')})">
 <script>

@@ -160,6 +160,13 @@
                                         </a>
                                     </li>
                                 </sec:authorize>
+                                <sec:authorize access="hasAnyRole(${xs:getPermissions('storage_log')})">
+                                    <li class="${index eq "storage_log"?"active":""}">
+                                        <a href="<%=request.getContextPath()%>/admin/storage/log">
+                                            <span>库存日志</span>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
                             </ul>
                         </li>
                     </sec:authorize>

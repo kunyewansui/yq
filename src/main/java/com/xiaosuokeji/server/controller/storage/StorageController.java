@@ -33,10 +33,11 @@ public class StorageController {
 	 * @param type 0-全部，1-档口，2-工厂
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String index(Model model, @RequestParam(defaultValue = "0") Integer type) throws JsonProcessingException {
+	public String index(Model model, Product product, @RequestParam(defaultValue = "0") Integer type) throws JsonProcessingException {
 		if(type != 1 && type !=2) type=0;
 		model.addAttribute("statistics", productService.statisticsStorage(type));
 		model.addAttribute("type", type);
+		model.addAttribute("search", product);
 		return "admin/storage/storage";
 	}
 

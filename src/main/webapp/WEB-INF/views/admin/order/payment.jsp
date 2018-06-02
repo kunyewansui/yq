@@ -468,16 +468,6 @@
 </script>
 
 <script>
-    //快速选时间
-    $(".js-date-quick").on("click", function () {
-        var day = $(this).attr("data-days");
-        var t = new Date();
-        var inputs = $(this).parent().find("input.datepicker");
-        inputs.eq(1).val(t.format("yyyy-MM-dd"));
-        var t_s = t.getTime();
-        t.setTime(t_s - 24 * 60 * 60 * 1000 * day);
-        inputs.eq(0).val(t.format("yyyy-MM-dd"));
-    });
 
     $(function () {
         $("#pagination").pagination({

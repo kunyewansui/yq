@@ -9,9 +9,16 @@ import com.xiaosuokeji.server.constant.product.ProductConsts;
 import com.xiaosuokeji.server.dao.product.ProductDao;
 import com.xiaosuokeji.server.model.product.Category;
 import com.xiaosuokeji.server.model.product.Product;
+import com.xiaosuokeji.server.model.product.StorageLog;
+import com.xiaosuokeji.server.model.security.SecStaff;
+import com.xiaosuokeji.server.service.security.SecResourceService;
 import com.xiaosuokeji.server.util.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,10 +33,14 @@ import java.util.Map;
 @Service
 public class ProductService {
 
+	private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
+
 	@Autowired
 	private ProductDao productDao;
 	@Autowired
 	private CategoryService categoryService;
+	@Autowired
+	private StorageLogService storageLogService;
 
 	public void save(Product product) throws XSBusinessException, JsonProcessingException {
 		if(!CollectionUtils.isBlank(product.getPicList())){
@@ -78,6 +89,24 @@ public class ProductService {
 		}
 		product.setVersion(p.getVersion());
 		productDao.updateStock(product);
+		//库存日志记录
+		StorageLog storageLog = new StorageLog();
+		storageLog.setProductId(product.getId());
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		SecStaff secStaff = (SecStaff) authentication.getPrincipal();
+		storageLog.setStaffId(secStaff.getId());
+		if(product.getShopStock()!=null){
+			storageLog.setType(0);
+			storageLog.setStock(product.getShopStock());
+		}else{
+			storageLog.setType(1);
+			storageLog.setStock(product.getFactoryStock());
+		}
+		try {
+			storageLogService.save(storageLog);
+		} catch (XSBusinessException e) {
+			logger.info("storage logging error!");
+		}
 	}
 
 	public Product get(Product product) throws XSBusinessException {

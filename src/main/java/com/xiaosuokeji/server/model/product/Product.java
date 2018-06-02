@@ -90,6 +90,13 @@ public class Product extends BaseModel {
 
 	public interface Update {}
 
+	public Product() {
+	}
+
+	public Product(Long id) {
+		this.id = id;
+	}
+
 	public Long getId() {
 		return id;
 	}

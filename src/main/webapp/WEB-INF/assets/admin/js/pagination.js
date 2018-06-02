@@ -101,10 +101,11 @@
                     })
 
             },
-            trigger: function () {
+            trigger: function (t) {
                 var a = this,
                     e = this.opts.callback;
-                 e && "function" == typeof e && e(1)
+                if(typeof t == 'undefined') t = 1;
+                 e && "function" == typeof e && e(t)
             }
         },
         t.fn.pagination = function(t, a, e) {
