@@ -19,6 +19,7 @@ public class PaymentService {
 	private PaymentDao paymentDao;
 
 	public void save(Payment payment) throws XSBusinessException {
+		//TODO 客户的欠款相应减少
 		paymentDao.save(payment);
 	}
 

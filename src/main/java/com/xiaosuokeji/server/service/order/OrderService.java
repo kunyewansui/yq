@@ -40,6 +40,7 @@ public class OrderService {
 			order.getOrderItemList().stream().forEach(a -> a.setOrderNo(order.getOrderNo()));
 			orderItemDao.batchInsert(order.getOrderItemList());
 		}
+		//TODO 客户欠款增加
 	}
 
 	@Transactional

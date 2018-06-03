@@ -55,6 +55,12 @@
 			<if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
 				AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
 			</if>
+			<if test="dynamic!=null and dynamic.debt!=null and dynamic.debt==0">
+				AND debt=0
+			</if>
+			<if test="dynamic!=null and dynamic.debt!=null and dynamic.debt==1">
+				AND debt>0
+			</if>
 			<if test="sex!=null">
 				AND sex=#{sex}
 			</if>
