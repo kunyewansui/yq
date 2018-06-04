@@ -24,32 +24,32 @@
             <div class="col-xs-3 no-padder">
                 <div class="col-xs-12">
                     <div class="panel padder-v m-b text-center">
-                        <div class="h1 text-info font-thin h1">521</div>
-                        <span class="text-muted text-xs">New items</span>
+                        <div class="h1 text-info font-thin h1">${orderAmount}</div>
+                        <span class="text-muted text-xs">月销售额</span>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="block panel padder-v bg-info m-b text-center">
+                        <span class="text-white font-thin h1 block">${orderCount}</span>
+                        <span class="text-muted text-xs">月订单笔数</span>
                     </div>
                 </div>
                 <div class="col-xs-12">
                     <div class="hbox bg-primary text-center m-b">
                         <div class="col wrapper">
-                            <div class="font-thin text-info h1">129</div>
-                            <span class="text-muted text-xs">Feeds</span>
+                            <div class="font-thin text-info h1">${paymentAmount}</div>
+                            <span class="text-muted text-xs">总尾款</span>
                         </div>
                         <div class="col wrapper bg-info">
-                            <div class="font-thin text-warning h1">2,560</div>
-                            <span class="text-muted text-xs">VIP</span>
+                            <div class="font-thin text-warning h1">${paymentCount}</div>
+                            <span class="text-muted text-xs">尾款客户数</span>
                         </div>
-                    </div>
-                </div>
-                <div class="col-xs-12">
-                    <div class="block panel padder-v bg-info m-b text-center">
-                        <span class="text-white font-thin h1 block">432</span>
-                        <span class="text-muted text-xs">Comments</span>
                     </div>
                 </div>
                 <div class="col-xs-12">
                     <div class="panel padder-v m-b text-center">
-                        <div class="font-thin h1">129</div>
-                        <span class="text-muted text-xs">Feeds</span>
+                        <div class="font-thin h1">${repayment}</div>
+                        <span class="text-muted text-xs">月还款总额</span>
                     </div>
                 </div>
             </div>
@@ -64,16 +64,12 @@
                         公告栏
                     </div>
                     <div class="panel-body xs-scrollbar" style="height: 284px;overflow: auto;">
-                        <p class="text-muted text-center">暂无任何公告</p>
-                        <p>暂无任何公告</p>
-                        <p>暂无任何公告</p>
-                        <p>暂无任何公告</p>
-                        <p>暂无任何公告</p>
-                        <p>暂无任何公告</p>
-                        <p>暂无任何公告</p>
-                        <p>暂无任何公告</p>
-                        <p>暂无任何公告</p>
-                        <p>暂无任何公告</p>
+                        <c:if test="${noticeBoard eq null}">
+                            <p class="text-muted text-center">暂无任何公告</p>
+                        </c:if>
+                        <c:if test="${noticeBoard ne null}">
+                            ${noticeBoard.content}
+                        </c:if>
                     </div>
                 </div>
             </div>
@@ -165,7 +161,7 @@
         },
         legend: {
             selectedMode: 'multiple',
-            data:['实际贷款流水','申请贷款流水']
+            data:['实际贷款流水']
         },
         dataZoom: [
             {
@@ -175,7 +171,7 @@
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: [1,2,3,4,5,6,7]
+            data: ${result.labels}
         },
         yAxis: {
             type: 'value',
@@ -189,19 +185,7 @@
                 type: 'line',
                 name: '实际贷款流水',
                 areaStyle: {normal: {}},
-                data: [4,5,1,12,9,3,2],
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'top'
-                    }
-                }
-            },
-            {
-                type: 'line',
-                name: '申请贷款流水',
-                areaStyle: {normal: {}},
-                data: [1,2,3,4,5,6,7],
+                data: ${result.actualDatasets},
                 label: {
                     normal: {
                         show: true,

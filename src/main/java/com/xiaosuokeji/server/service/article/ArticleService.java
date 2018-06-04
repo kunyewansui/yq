@@ -88,4 +88,8 @@ public class ArticleService {
         article.setDefaultSort("a.seq", "DESC");
         return articleDao.listCombo(article);
     }
+
+    public List<Article> list(Article article){
+        return articleDao.list(article);
+    }
 }
