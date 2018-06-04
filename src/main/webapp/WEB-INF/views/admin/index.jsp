@@ -29,9 +29,15 @@
                     </div>
                 </div>
                 <div class="col-xs-12">
-                    <div class="block panel padder-v bg-primary m-b text-center">
-                        <span class="text-white font-thin h1 block">930</span>
-                        <span class="text-muted text-xs">Uploads</span>
+                    <div class="hbox bg-primary text-center m-b">
+                        <div class="col wrapper">
+                            <div class="font-thin text-info h1">129</div>
+                            <span class="text-muted text-xs">Feeds</span>
+                        </div>
+                        <div class="col wrapper bg-info">
+                            <div class="font-thin text-warning h1">2,560</div>
+                            <span class="text-muted text-xs">VIP</span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-xs-12">
@@ -57,18 +63,28 @@
                     <div class="panel-heading pos-rlt b-b b-light">
                         公告栏
                     </div>
-                    <div class="panel-body" style="height: 284px;">
-                        <div>暂无任何公告</div>
+                    <div class="panel-body xs-scrollbar" style="height: 284px;overflow: auto;">
+                        <p class="text-muted text-center">暂无任何公告</p>
+                        <p>暂无任何公告</p>
+                        <p>暂无任何公告</p>
+                        <p>暂无任何公告</p>
+                        <p>暂无任何公告</p>
+                        <p>暂无任何公告</p>
+                        <p>暂无任何公告</p>
+                        <p>暂无任何公告</p>
+                        <p>暂无任何公告</p>
+                        <p>暂无任何公告</p>
                     </div>
                 </div>
             </div>
             <div class="col-xs-6 no-padder">
                 <div class="panel">
                     <div class="panel-heading b-b b-light">
-                        <span class="badge bg-warning pull-right">10</span>
+                        <span class="badge bg-danger pull-right">4</span>
                         <span>消息栏</span>
                     </div>
-                    <ul class="list-group list-group-lg no-bg auto">
+                    <div class="panel-body text-muted text-center">暂无信息</div>
+                    <ul class="list-group list-group-lg no-bg auto xs-scrollbar" style="height: 284px;overflow: auto;">
                         <li class="list-group-item clearfix">
                             <span class="pull-left thumb-sm avatar m-r">
                               <img src="<%=request.getContextPath()%>/assets/admin/img/a1.png" alt="...">
@@ -77,6 +93,16 @@
                             <span class="clear">
                               <span>Chris Fox</span>
                               <small class="text-muted clear text-ellipsis">What's up, buddy</small>
+                            </span>
+                        </li>
+                        <li class="list-group-item clearfix">
+                            <span class="pull-left thumb-sm avatar m-r">
+                              <img src="<%=request.getContextPath()%>/assets/admin/img/a1.png" alt="...">
+                              <i class="on b-white bottom"></i>
+                            </span>
+                            <span class="clear">
+                              <span>Amanda Conlan</span>
+                              <small class="text-muted clear text-ellipsis">Come online and we need talk about the plans that we have discussed</small>
                             </span>
                         </li>
                         <li class="list-group-item clearfix">
@@ -120,7 +146,7 @@
     var myChart = echarts.init(document.getElementById('main'));
 
     option = {
-        color: ['#3398DB','#ff351a'],
+        color: ['#7266ba','#23b7e5'],
         title : {
             text: '月销售流水情况',
             textStyle: {
@@ -163,7 +189,7 @@
                 type: 'line',
                 name: '实际贷款流水',
                 areaStyle: {normal: {}},
-                data: [1,2,3,4,5,6,7],
+                data: [4,5,1,12,9,3,2],
                 label: {
                     normal: {
                         show: true,

@@ -255,7 +255,16 @@
         var code = $.trim($("input[name=searchCode]").val());
         if(typeof code !== 'undefined' && code != ""){
             //检查是否已经添加
-            if($("#"+code).length>0) return;
+            if($("#"+code).length>0){
+                //锚点定位
+                $("#itemTable").parent().animate(
+                    {scrollTop: $("#"+code).offset().top},
+                    {duration: 500,easing: "swing"}
+                );
+                //获取焦点
+                $("#"+code+" input").eq(0).focus();
+                return;
+            }
             _this.attr("disabled", true);
             doGet('<%=request.getContextPath()%>/admin/product/product/getByCode', {code:code}, function (data) {
                 _this.attr("disabled", false);

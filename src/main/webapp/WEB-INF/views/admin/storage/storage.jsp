@@ -218,24 +218,24 @@
             <div class="modal-body" style="min-height: 560px">
                 <form class="form-horizontal" id="merSearchForm">
                     <div class="form-group">
-                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
-                            <label class="control-label">操作：</label>
-                        </div>
-                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
-                            <select name="action" class="form-control">
-                                <option value="">全部</option>
-                                <option value="0">入库</option>
-                                <option value="1">出库</option>
-                            </select>
-                        </div>
-                        <div class="col-xs-4 col-md-2 col-lg-1  no-padder m-b-md text-right">
+                        <div class="col-xs-1 no-padder m-b-md text-right">
                             <label class="control-label">仓库：</label>
                         </div>
-                        <div class="col-xs-8 col-md-4 col-lg-3  m-b-md">
+                        <div class="col-xs-3 m-b-md">
                             <select name="type" class="form-control">
                                 <option value="">全部</option>
                                 <option value="0">档口</option>
                                 <option value="1">工厂</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-1 no-padder m-b-md text-right">
+                            <label class="control-label">操作：</label>
+                        </div>
+                        <div class="col-xs-3 m-b-md">
+                            <select name="action" class="form-control">
+                                <option value="">全部</option>
+                                <option value="0">入库</option>
+                                <option value="1">出库</option>
                             </select>
                         </div>
                         <div class="col-xs-8 col-md-4 col-lg-4 ">
