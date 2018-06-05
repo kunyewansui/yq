@@ -5,8 +5,11 @@ import com.xiaosuokeji.framework.model.XSPageModel;
 import com.xiaosuokeji.server.constant.merchant.MerchantConsts;
 import com.xiaosuokeji.server.dao.merchant.MerchantDao;
 import com.xiaosuokeji.server.model.merchant.Merchant;
+import com.xiaosuokeji.server.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 商户ServiceImpl
@@ -43,5 +46,12 @@ public class MerchantService {
 	public XSPageModel<Merchant> listAndCount(Merchant merchant) {
 		merchant.setDefaultSort("id", "DESC");
 		return XSPageModel.build(merchantDao.list(merchant), merchantDao.count(merchant));
+	}
+
+	public List<Merchant> debtList() {
+		Merchant merchant = new Merchant();
+		merchant.setDynamic(CollectionUtils.toMap("debt", "1"));
+		merchant.setLimit(null);
+		return merchantDao.list(merchant);
 	}
 }

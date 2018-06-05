@@ -20,4 +20,5 @@ public interface MerchantDao {
 	List<Merchant> list(Merchant merchant);
 
 	Long count(Merchant merchant);
+
 }

@@ -84,4 +84,5 @@
 		SELECT COUNT(*)
 		<include refid="listCondition"/>
 	</select>
+
 </mapper>

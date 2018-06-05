@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   Staff: GustinLau
@@ -16,6 +17,7 @@
 </head>
 <body>
 <%@include file="./common/header.jsp" %>
+<c:set var="index" value="index"/>
 <%@include file="./common/content_nav.jsp" %>
 
 <div class="app-content ">
@@ -24,32 +26,42 @@
             <div class="col-xs-3 no-padder">
                 <div class="col-xs-12">
                     <div class="panel padder-v m-b text-center">
-                        <div class="h1 text-info font-thin h1">${orderAmount}</div>
-                        <span class="text-muted text-xs">月销售额</span>
+                        <span class="text-muted text-xs">本月销售额</span>
+                        <div class="h1 text-info font-thin h1">
+                            <fmt:formatNumber type="number" groupingUsed="false" maxFractionDigits="0" value="${orderAmount}"/>
+                        </div>
                     </div>
                 </div>
                 <div class="col-xs-12">
                     <div class="block panel padder-v bg-info m-b text-center">
-                        <span class="text-white font-thin h1 block">${orderCount}</span>
-                        <span class="text-muted text-xs">月订单笔数</span>
+                        <span class="text-muted text-xs">本月订单笔数</span>
+                        <span class="text-white font-thin h1 block">
+                            <fmt:formatNumber type="number" groupingUsed="false" maxFractionDigits="0" value="${orderCount}"/>
+                        </span>
                     </div>
                 </div>
                 <div class="col-xs-12">
                     <div class="hbox bg-primary text-center m-b">
                         <div class="col wrapper">
-                            <div class="font-thin text-info h1">${paymentAmount}</div>
                             <span class="text-muted text-xs">总尾款</span>
+                            <div class="font-thin text-info h1">
+                                <fmt:formatNumber type="number" groupingUsed="false" maxFractionDigits="0" value="${paymentAmount}"/>
+                            </div>
                         </div>
                         <div class="col wrapper bg-info">
-                            <div class="font-thin text-warning h1">${paymentCount}</div>
-                            <span class="text-muted text-xs">尾款客户数</span>
+                            <span class="text-muted text-xs">欠款客户数</span>
+                            <div class="font-thin text-warning h1">
+                                <fmt:formatNumber type="number" groupingUsed="false" maxFractionDigits="0" value="${paymentCount}"/>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-xs-12">
                     <div class="panel padder-v m-b text-center">
-                        <div class="font-thin h1">${repayment}</div>
-                        <span class="text-muted text-xs">月还款总额</span>
+                        <span class="text-muted text-xs">本月还款总额</span>
+                        <div class="font-thin h1">
+                            <fmt:formatNumber type="number" groupingUsed="false" maxFractionDigits="0" value="${repayAmount}"/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -60,7 +72,7 @@
             </div>
             <div class="col-xs-6 ">
                 <div class="panel">
-                    <div class="panel-heading pos-rlt b-b b-light">
+                    <div class="panel-heading pos-rlt b-b b-light font-bold">
                         公告栏
                     </div>
                     <div class="panel-body xs-scrollbar" style="height: 284px;overflow: auto;">
@@ -75,63 +87,31 @@
             </div>
             <div class="col-xs-6 no-padder">
                 <div class="panel">
-                    <div class="panel-heading b-b b-light">
-                        <span class="badge bg-danger pull-right">4</span>
+                    <div class="panel-heading b-b b-light font-bold">
+                        <span class="badge bg-danger pull-right">${messages.size() eq 0?"":messages.size()}</span>
                         <span>消息栏</span>
                     </div>
-                    <div class="panel-body text-muted text-center">暂无信息</div>
-                    <ul class="list-group list-group-lg no-bg auto xs-scrollbar" style="height: 284px;overflow: auto;">
-                        <li class="list-group-item clearfix">
-                            <span class="pull-left thumb-sm avatar m-r">
-                              <img src="<%=request.getContextPath()%>/assets/admin/img/a1.png" alt="...">
-                              <i class="on b-white bottom"></i>
-                            </span>
-                            <span class="clear">
-                              <span>Chris Fox</span>
-                              <small class="text-muted clear text-ellipsis">What's up, buddy</small>
-                            </span>
-                        </li>
-                        <li class="list-group-item clearfix">
-                            <span class="pull-left thumb-sm avatar m-r">
-                              <img src="<%=request.getContextPath()%>/assets/admin/img/a1.png" alt="...">
-                              <i class="on b-white bottom"></i>
-                            </span>
-                            <span class="clear">
-                              <span>Amanda Conlan</span>
-                              <small class="text-muted clear text-ellipsis">Come online and we need talk about the plans that we have discussed</small>
-                            </span>
-                        </li>
-                        <li class="list-group-item clearfix">
-                            <span class="pull-left thumb-sm avatar m-r">
-                              <img src="<%=request.getContextPath()%>/assets/admin/img/a1.png" alt="...">
-                              <i class="on b-white bottom"></i>
-                            </span>
-                            <span class="clear">
-                              <span>Amanda Conlan</span>
-                              <small class="text-muted clear text-ellipsis">Come online and we need talk about the plans that we have discussed</small>
-                            </span>
-                        </li>
-                        <li class="list-group-item clearfix">
-                            <span class="pull-left thumb-sm avatar m-r">
-                              <img src="<%=request.getContextPath()%>/assets/admin/img/a1.png" alt="...">
-                              <i class="busy b-white bottom"></i>
-                            </span>
-                            <span class="clear">
-                              <span>Dan Doorack</span>
-                              <small class="text-muted clear text-ellipsis">Hey, Some good news</small>
-                            </span>
-                        </li>
-                        <li class="list-group-item clearfix">
-                            <span class="pull-left thumb-sm avatar m-r">
-                              <img src="<%=request.getContextPath()%>/assets/admin/img/a1.png" alt="...">
-                              <i class="away b-white bottom"></i>
-                            </span>
-                            <span class="clear">
-                              <span>Lauren Taylor</span>
-                              <small class="text-muted clear text-ellipsis">Nice to talk with you.</small>
-                            </span>
-                        </li>
-                    </ul>
+                    <c:if test="${messages.size() eq 0}">
+                        <div class="panel-body text-muted text-center">暂无消息</div>
+                    </c:if>
+                    <div class="list-group xs-scrollbar" style="height: 284px;overflow: auto;">
+                        <c:forEach items="${messages}" var="item">
+                            <a href="<%=request.getContextPath()%>/admin/merchant/merchant/detail?id=${item.id}" class="list-group-item clearfix" style="border-bottom: 1px solid #edf1f2;">
+                                <span class="pull-left thumb-sm avatar m-r">
+                                  <img src="<%=request.getContextPath()%>/assets/admin/img/a1.png" alt="头像">
+                                  <i class="on b-white bottom"></i>
+                                </span>
+                                <span class="clear">
+                                  <span>${item.name}</span>
+                                  <small class="text-muted clear text-ellipsis">
+                                      欠款
+                                      <fmt:formatNumber type="number" groupingUsed="false" maxFractionDigits="0" value="${item.debt}"/>
+                                      元
+                                  </small>
+                                </span>
+                            </a>
+                        </c:forEach>
+                    </div>
                 </div>
             </div>
         </div>
@@ -142,13 +122,14 @@
     var myChart = echarts.init(document.getElementById('main'));
 
     option = {
-        color: ['#7266ba','#23b7e5'],
+        color: ['#23b7e5'],
         title : {
-            text: '月销售流水情况',
+            text: '本月销售流水情况',
             textStyle: {
                 fontWeight: 400,
                 color: '#23b7e5'
-            }
+            },
+            x: 'center'
         },
         tooltip : {
             trigger: 'axis',
@@ -160,8 +141,9 @@
             }
         },
         legend: {
-            selectedMode: 'multiple',
-            data:['实际贷款流水']
+            selectedMode: 'single',
+            data:['实际流水'],
+            x: 'left'
         },
         dataZoom: [
             {
@@ -171,20 +153,22 @@
         xAxis: {
             type: 'category',
             boundaryGap: false,
+            name: "日期",
             data: ${result.labels}
         },
         yAxis: {
             type: 'value',
             name: '流水',
             axisLabel: {
-                formatter: '{value} 万元'
+                formatter: '{value} 元'
             }
         },
         series: [
             {
                 type: 'line',
-                name: '实际贷款流水',
+                name: '实际流水',
                 areaStyle: {normal: {}},
+                smooth: true,
                 data: ${result.actualDatasets},
                 label: {
                     normal: {

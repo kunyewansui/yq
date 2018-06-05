@@ -28,6 +28,7 @@ public class StatisticsService {
 
     public Map<String, String> orderFlow() throws ParseException, JsonProcessingException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd");
         Calendar startDate = Calendar.getInstance();
         startDate.set(Calendar.DAY_OF_MONTH,1);
         Calendar endDate = Calendar.getInstance();
@@ -38,11 +39,11 @@ public class StatisticsService {
         List<BigDecimal> actualDatasets = new ArrayList<>();
         while (!startDate.after(endDate)) {
             String date = sdf.format(startDate.getTime());
-            labels.add(date);
+            labels.add(sdf1.format(startDate.getTime()));
             int i = 0;
             for (;i < list.size(); i++) {
                 if (list.get(i).get("label").equals(date)) {
-                    actualDatasets.add(((BigDecimal)list.get(i).get("amount")).divide(BigDecimal.valueOf(10000)));
+                    actualDatasets.add(((BigDecimal)list.get(i).get("amount")));
                     break;
                 }
             }

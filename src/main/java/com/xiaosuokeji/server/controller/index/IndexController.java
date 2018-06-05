@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xiaosuokeji.server.model.article.Article;
 import com.xiaosuokeji.server.model.article.ArticleCategory;
 import com.xiaosuokeji.server.service.article.ArticleService;
+import com.xiaosuokeji.server.service.merchant.MerchantService;
 import com.xiaosuokeji.server.service.statistics.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextImpl;
@@ -28,6 +29,8 @@ public class IndexController {
     private StatisticsService statisticsService;
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private MerchantService merchantService;
 
     @RequestMapping(value = "admin/index", method = RequestMethod.GET)
     public String index(Model model) throws ParseException, JsonProcessingException {
@@ -51,6 +54,8 @@ public class IndexController {
         article.setLimit(1L);
         artlist = articleService.list(article);
         model.addAttribute("noticeBoard", artlist.size()==0?null:artlist.get(0));
+
+        model.addAttribute("messages", merchantService.debtList());
         return "admin/index";
     }
 

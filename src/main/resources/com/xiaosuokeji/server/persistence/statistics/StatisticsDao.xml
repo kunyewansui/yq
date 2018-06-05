@@ -19,7 +19,7 @@
     </select>
 
     <select id="monthlyOrder" resultType="java.util.Map">
-        SELECT SUM(amount) AS orderAmount, COUNT(id) AS orderCount FROM yq_order
+        SELECT IFNULL(SUM(amount), 0) AS orderAmount, COUNT(id) AS orderCount FROM yq_order
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="startTime!=null and startTime!=''">
                 AND DATE(create_time) &gt;= #{startTime}
@@ -31,13 +31,13 @@
     </select>
 
     <select id="monthPayment" resultType="java.util.Map">
-        SELECT SUM(debt) AS paymentAmount, COUNT(id) AS paymentCount
+        SELECT IFNULL(SUM(debt), 0) AS paymentAmount, COUNT(id) AS paymentCount
         FROM yq_merchant
         WHERE debt > 0
     </select>
 
     <select id="monthlyRepay" resultType="java.util.Map">
-        SELECT SUM(amount) AS repayAmount FROM yq_payment
+        SELECT IFNULL(SUM(amount), 0) AS repayAmount FROM yq_payment
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="startTime!=null and startTime!=''">
                 AND DATE(refund_time) &gt;= #{startTime}
