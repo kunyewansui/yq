@@ -5,7 +5,6 @@ import com.xiaosuokeji.framework.annotation.XSLog;
 import com.xiaosuokeji.framework.exception.XSBusinessException;
 import com.xiaosuokeji.framework.model.XSServiceResult;
 import com.xiaosuokeji.server.model.order.Order;
-import com.xiaosuokeji.server.model.order.Payment;
 import com.xiaosuokeji.server.service.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,9 +48,15 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/detail", method = RequestMethod.GET)
-	public String get(Model model, Order order) throws XSBusinessException {
+	public String detail(Model model, Order order) throws XSBusinessException {
 		model.addAttribute("order", orderService.get(order));
 		return "admin/order/order_detail";
+	}
+
+	@RequestMapping(value = "/toedit", method = RequestMethod.GET)
+	public String get(Model model, Order order) throws XSBusinessException {
+		model.addAttribute("order", orderService.get(order));
+		return "admin/order/order_edit";
 	}
 
 	@RequestMapping(value = "/toadd", method = RequestMethod.GET)

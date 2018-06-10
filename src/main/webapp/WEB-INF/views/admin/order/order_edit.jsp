@@ -12,7 +12,7 @@
 <!DOCTYPE html>
 <html lang="cmn-hans">
 <head>
-    <title>订单详情</title>
+    <title>订单编辑</title>
     <%@include file="../common/head.jsp" %>
     <%@include file="../common/validate.jsp" %>
     <%@include file="../common/datepicker.jsp" %>
@@ -28,7 +28,7 @@
 <div class="app-content ">
     <div class="app-content-body">
         <div class="nav bg-light lter b-b padder-md">
-            <a href="javascript:location.reload();" class="btn navbar-btn xs-nav text-base">订单详情</a>
+            <a href="javascript:location.reload();" class="btn navbar-btn xs-nav text-base">订单编辑</a>
             <a href="javascript:history.go(-1);" class="btn btn-default pull-right m-sm">返回</a>
             <a class="btn btn-primary pull-right m-sm m-r-n-xs" id="createSubmit">
                 保存

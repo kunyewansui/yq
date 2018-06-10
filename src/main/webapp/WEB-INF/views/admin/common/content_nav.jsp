@@ -194,23 +194,6 @@
                             </ul>
                         </li>
                     </sec:authorize>
-                    <sec:authorize access="hasAnyRole(${xs:getPermissions('report')})">
-                        <li>
-                            <a class="auto">
-                                <i class="glyphicon glyphicon-list-alt text-info-dker"></i>
-                                <span>报表</span>
-                            </a>
-                            <ul class="nav nav-sub">
-                                <sec:authorize access="hasAnyRole(${xs:getPermissions('report_manage')})">
-                                    <li class="${index eq "report_manage"?"active":""}">
-                                        <a href="<%=request.getContextPath()%>/admin/report/report">
-                                            <span>报表管理</span>
-                                        </a>
-                                    </li>
-                                </sec:authorize>
-                            </ul>
-                        </li>
-                    </sec:authorize>
                     <sec:authorize access="hasAnyRole(${xs:getPermissions('merchant')})">
                         <li>
                             <a class="auto">
