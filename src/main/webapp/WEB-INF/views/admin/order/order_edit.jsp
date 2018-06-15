@@ -449,7 +449,7 @@
                 cache: false,
                 success: function (data) {
                     if (data.status) {
-                        bootoast({message: "新增成功！"});
+                        bootoast({message: "保存成功！"});
                         setTimeout(function () {
                             history.go(-1);
                         }, 680);

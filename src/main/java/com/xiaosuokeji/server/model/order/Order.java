@@ -33,6 +33,8 @@ public class Order extends BaseModel {
 
 	private String merchantName;
 
+	private String merchantMobile;
+
 	/**
 	 * 订单金额
 	 */
@@ -80,6 +82,14 @@ public class Order extends BaseModel {
 	
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getMerchantMobile() {
+		return merchantMobile;
+	}
+
+	public void setMerchantMobile(String merchantMobile) {
+		this.merchantMobile = merchantMobile;
 	}
 
 	public String getOrderNo() {

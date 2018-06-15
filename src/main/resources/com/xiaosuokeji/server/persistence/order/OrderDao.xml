@@ -47,7 +47,7 @@
 	</update>
 
 	<select id="get" parameterType="order" resultType="order">
-		SELECT a.*, b.name as merchantName
+		SELECT a.*, b.name as merchantName,b.mobile as merchantMobile
 		FROM yq_order a LEFT JOIN yq_merchant b on a.merchant_id=b.id
 		WHERE a.id=#{id}
 	</select>
