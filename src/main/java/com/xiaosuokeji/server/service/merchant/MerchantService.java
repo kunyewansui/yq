@@ -9,6 +9,7 @@ import com.xiaosuokeji.server.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -53,5 +54,16 @@ public class MerchantService {
 		merchant.setDynamic(CollectionUtils.toMap("debt", "1"));
 		merchant.setLimit(null);
 		return merchantDao.list(merchant);
+	}
+
+    public void updateDebt(Long merchantId, BigDecimal debt) throws XSBusinessException {
+		Merchant merchant = new Merchant();
+		merchant.setId(merchantId);
+		merchant.setDebt(debt);
+		Merchant existent = merchantDao.get(merchant);
+		if(existent.getDebt().add(debt).compareTo(BigDecimal.ZERO)<0){
+			throw new XSBusinessException(MerchantConsts.MERCHANT_DEBT_FLOW);
+		}
+		merchantDao.updateDebt(merchant);
 	}
 }

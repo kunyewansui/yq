@@ -214,7 +214,7 @@
                     <sec:authorize access="hasAnyRole(${xs:getPermissions('product')})">
                         <li>
                             <a class="auto">
-                                <i class="fa fa-futbol-o text-primary-lter"></i>
+                                <i class="fa fa-futbol-o text-danger-lter"></i>
                                 <span>产品</span>
                             </a>
                             <ul class="nav nav-sub">

@@ -14,6 +14,7 @@ public interface MerchantDao {
 	int remove(Merchant merchant);
 
 	int update(Merchant merchant);
+	int updateDebt(Merchant merchant);
 
 	Merchant get(Merchant merchant);
 

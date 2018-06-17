@@ -30,50 +30,36 @@
         <div class="wrapper-md row">
             <div class="col-xs-12">
                 <form class="form-horizontal" id="createForm" name="createForm">
-                    <div class="wrapper-md item-wrapper" style="width: 1000px;margin: 0 auto;height: auto;">
+                    <div class="wrapper-md item-wrapper" style="width: 800px;margin: 0 auto;height: auto;">
                         <div class="padder-md">
                             <h3 class="text-center">订单信息</h3>
                         </div>
                         <div class="line b-b"></div>
                         <div class="wrapper-md">
                             <div class="form-group">
-                                <div class="col-xs-2  no-padder text-right">
-                                    <label class="control-label">订单号：</label>
-                                </div>
-                                <div class="col-xs-3 ">
-                                    <label class="control-label">${order.orderNo}</label>
-                                </div>
-                                <div class="col-xs-1  no-padder text-right">
-                                    <label class="control-label">客户：</label>
-                                </div>
-                                <div class="col-xs-3 ">
-                                    <label class="control-label">${order.merchantName}</label>
-                                </div>
-                                <div class="col-xs-1  no-padder text-right">
-                                    <label class="control-label">客户手机：</label>
-                                </div>
-                                <div class="col-xs-2 ">
-                                    <label class="control-label">${order.merchantMobile}</label>
+                                <div class="col-xs-12">
+                                    <div class="col-xs-5">
+                                        <label class="control-label">订单号：${order.orderNo}</label>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <label class="control-label">客户：${order.merchantName}</label>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <label class="control-label">手机：${order.merchantMobile}</label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-xs-2 no-padder text-right">
-                                    <label class="control-label">下单日期：</label>
-                                </div>
-                                <div class="col-xs-3 ">
-                                    <label class="control-label"><fmt:formatDate pattern="yyyy-MM-dd" value="${order.createTime}" /></label>
-                                </div>
-                                <div class="col-xs-1 no-padder text-right">
-                                    <label class="control-label">交货日期：</label>
-                                </div>
-                                <div class="col-xs-3 ">
-                                    <label class="control-label"><fmt:formatDate pattern="yyyy-MM-dd" value="${order.deliveryDate}" /></label>
-                                </div>
-                                <div class="col-xs-1 no-padder text-right">
-                                    <label class="control-label">预付款：</label>
-                                </div>
-                                <div class="col-xs-2 ">
-                                    <label class="control-label"><fmt:formatNumber value="${order.imprest}" type="currency" minFractionDigits="0"/></label>
+                                <div class="col-xs-12">
+                                    <div class="col-xs-4">
+                                        <label class="control-label">下单日期：<fmt:formatDate pattern="yyyy-MM-dd" value="${order.createTime}" /></label>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <label class="control-label">交货日期：<fmt:formatDate pattern="yyyy-MM-dd" value="${order.deliveryDate}" /></label>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <label class="control-label">预付款：<fmt:formatNumber value="${order.imprest}" type="currency" minFractionDigits="0"/></label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="panel m-t-xl">
@@ -95,7 +81,7 @@
                                         </tr>
                                     </c:if>
                                     <c:forEach items="${order.orderItemList}" var="item">
-                                        <tr class="new-item" id="${item.product.code}">
+                                        <tr class="" id="${item.product.code}">
                                             <td style="text-align: left;"><img src="${item.product.image}" class="thumb"><span class="text-md font-bold m-l-md">${item.product.code}</span></td>
                                             <td class="price" data-value="${item.price}" style="font-family: Century Gothic,arial,tahoma; font-weight: bold;color: #000;"><fmt:formatNumber value="${item.price}" type="currency" minFractionDigits="0"/></td>
                                             <td class="quantity">${item.quantity}</td>
@@ -111,7 +97,7 @@
                                         <label class="control-label">总件数：</label>
                                     </div>
                                     <div class="col-xs-5 ">
-                                        <label class="control-label" id="originQuantity">0件</label>
+                                        <label class="control-label text-quantity" id="originQuantity">0件</label>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -119,7 +105,7 @@
                                         <label class="control-label total-fee" style="padding-top: 12px">订单金额：</label>
                                     </div>
                                     <div class="col-xs-5 ">
-                                        <label class="control-label" style="font-family: Century Gothic,arial,tahoma; font-weight: bold;color: #222;font-size: 20px;" id="originAmount"></label>
+                                        <label class="control-label  text-money" id="originAmount"></label>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -127,16 +113,20 @@
                                         <label class="control-label" style="padding-top: 12px">实付金额：</label>
                                     </div>
                                     <div class="col-xs-5">
-                                        <label class="control-label" style="font-family: Century Gothic,arial,tahoma; font-weight: bold;color: #222;font-size: 20px;"><fmt:formatNumber value="${order.amount}" groupingUsed="false" minFractionDigits="0"/>&nbsp;元</label>
+                                        <label class="control-label  text-money" ><fmt:formatNumber value="${order.amount}" groupingUsed="false" minFractionDigits="0"/>&nbsp;元</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="form-group m-t">
-                                <div class="text-muted">备注：</div>
-                                <p class="text-muted">【订单】：${order.remark}</p>
+                                <p class="text-muted" style="padding-left: 7px;">备注：</p>
+                                <c:if test="${order.remark ne '' and order.remark ne null}">
+                                    <p class="text-muted">【订单】：${order.remark}</p>
+                                </c:if>
                                 <c:forEach items="${order.orderItemList}" var="item">
-                                    <p class="text-muted">【${item.product.code}】：${item.remark}</p>
+                                    <c:if test="${item.remark ne ''}">
+                                        <p class="text-muted">【${item.product.code}】：${item.remark}</p>
+                                    </c:if>
                                 </c:forEach>
                             </div>
                         </div>

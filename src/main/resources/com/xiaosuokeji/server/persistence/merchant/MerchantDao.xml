@@ -40,6 +40,10 @@
 		WHERE id=#{id}
 	</update>
 
+	<update id="updateDebt" parameterType="merchant">
+		UPDATE yq_merchant SET debt=debt+#{debt}, update_time=NOW()	WHERE id=#{id}
+	</update>
+
 	<select id="get" parameterType="merchant" resultType="merchant">
 		SELECT *
 		FROM yq_merchant

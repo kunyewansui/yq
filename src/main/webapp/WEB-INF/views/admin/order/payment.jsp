@@ -255,7 +255,7 @@
                                 <label class="control-label required">商户名：</label>
                             </div>
                             <div class="col-xs-8">
-                                <input name="merchantName" type="text" class="form-control" onclick="showMerchant(1);" readonly>
+                                <input name="merchantName" type="text" class="form-control" onclick="showMerchant(1);" readonly disabled>
                             </div>
                         </div>
                         <div class="form-group row">
