@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="col-xs-4 col-md-4 col-lg-3 ">
                                     <input type="hidden" name="merchantId" value="${order.merchantId}">
-                                    <input name="merchantName" type="text" class="form-control" value="${order.merchantName}" onclick="showMerchant();" readonly>
+                                    <input name="merchantName" type="text" class="form-control" value="${order.merchantName}" onclick="showMerchant();" readonly disabled>
                                 </div>
                                 <div class="col-xs-2 col-md-2 col-lg-2 no-padder text-right">
                                     <label class="control-label">交货日期：</label>
